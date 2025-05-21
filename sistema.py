@@ -1,5 +1,6 @@
-from rich.console import Console
+import animacoes
 from rich.panel import Panel
+from rich.console import Console
 from rich.columns import Columns
 
 
@@ -37,41 +38,6 @@ class Arma: # ?
 
 # Testes
 xp = "==========================================60%======----------------------------"
-ogro = """[bold green]
-               __,='`````'=/__
-                |          |
-              '//  (o) \(o) \ `'         _,-,
-              //|     ,_)   (`\      ,-'`_,-|
-            ,-~~~\  `'==='  /-,      \==```` \__
-           /        `----'     `\     \       \/
-        ,-`                  ,   \  ,.-\       |
-       /      ,               \,-`\`_,-`\_,..--'|                          
-      ,`    ,/,              ,>,   )     \--`````|                            🔥
-      (      `\`---'`  `-,-'`_,<   \      \_,.--'`           
-       `.      `--. _,-'`_,-`  |    |
-        [`-.___   <`_,-'`------(    /
-        (`` _,-\   \ --`````````|--`
-         >-`_,-`\,-` ,          |
-       <`_,'     ,  /\          /
-        `  \/\,-/ `/  \/`\_/V\_/
-           (  ._. )    ( .__. )
-           |      |    |      |
-            \,---_|    |_---./
-            ooOO(_)    (_)OOoo
-"""
-
-esqueleto = """[bold green]
-  <=======]}======
-    --.   /|
-   _\"/_.'/
- .'._._,.'
- :/ \{}/
-(L  /--',----._
-    |          \\
-   : /-\ .'-'\ / |
-   \\, ||    \|
-     \/ ||    ||
-"""
 texto_vazio = "\n\n\n\n\n\n\n\n\n"
-colunas = Columns([ogro, texto_vazio + esqueleto], padding=(0, 30))
+colunas = Columns([animacoes.ogro, texto_vazio + animacoes.esqueleto], padding=(0, 30))
 console.print(Panel(colunas, title=f"[bold green] {xp}", border_style="purple"))
