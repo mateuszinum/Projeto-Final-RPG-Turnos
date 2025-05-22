@@ -282,7 +282,7 @@ class Jogo:
                 else:
                     print()#Mensagem dizendo que nao tem pocao
                     acao = self.obter_acao_personagem()
-                    
+                    continue
 
     def obter_acao_personagem(self):
         print()#Mensagem perguntando oq ele quer fazer, atacar, esquivar, contra atacar ou tomar poca e depois retorna essa escolha
