@@ -14,6 +14,7 @@ class Personagem:
         self.vida_atual = vida
         self.ataque = ataque
         self.defesa = defesa
+        self.defesa_base = defesa
         self.velocidade = velocidade
         self.xp_atual = 0
         self.xp_max = 100 * (level ** 1.5)
@@ -25,7 +26,11 @@ class Personagem:
     def ataca(self):
         acertou = random.choices([True, False], weights=[90, 10])[0]
         if acertou:
-            critico = random.choices([True, False], weights=[self.arma.critico, 100 - self.arma.critico])[0]
+            bonus_critico = int(self.ataque * 0.3)
+
+            chance_critico_total = min(100, self.arma.critico + bonus_critico)
+
+            critico = random.choices([True, False], weights=[chance_critico_total, 100 - chance_critico_total])[0]
             if critico:
                 return (self.ataque + self.arma.dano) * 2, critico
                 # Retorna o dano, e o True, pra na msg vc poder falar que critou e mostrar o dano
@@ -52,19 +57,26 @@ class Personagem:
     
     def usar_pocao(self):
         if self.pocoes > 0:
-            if (self.vida_atual + 50) > self.vida_max:
+            if (self.vida_atual + self.vida_max * 0.3) > self.vida_max:
                 self.vida_atual = self.vida_max
 
             else:
-                self.vida_atual += 50
+                self.vida_atual += self.vida_max * 0.3
             self.pocoes -= 1
             return True
         
         else:
             return False
 
+    def defender_se(self):
+        self.defesa += self.defesa * 0.5
+        return True
+
+
     def receber_dano(self, dano):
-        self.vida_atual -= dano - self.defesa
+        redução = self.defesa * 0.5
+        dano_final = max(0, dano * (1 - redução/100))
+        self.vida_atual -= dano_final
 
     def receber_xp(self, xp):
         pontos = 0
@@ -118,7 +130,8 @@ class Jogo:
             'atacar': 1,
             'esquivar': 2,
             'contra_atacar': 3,
-            'tomar_pocao': 4
+            'tomar_pocao': 4,
+            'defender': 5
         }
     def executar(self):
         while True:
@@ -130,6 +143,7 @@ class Jogo:
 
                     break
                 
+
                 self.acao_inimigo(self.inimigo, self.personagem, resultado)
 
                 if self.inimigo.vida_atual <= 0:
@@ -189,6 +203,9 @@ class Jogo:
                             self.personagem.upar_personagem()
 
                     break
+
+            if resultado['acao'] == 5:
+                self.personagem.defesa = self.personagem.defesa_base
                 
         self.personagem.vida_atual = self.personagem.vida_max
 
@@ -240,13 +257,20 @@ class Jogo:
                 else:
                     print()#Mensagem dizendo que o inimigo atacou e o personagem falhou em contra atacar
             else:
-                if critou:
-                    print()#Mensagem dizendo que o inimigo atacou e critou
+                chance_bloqueio = min(40, personagem.defesa * 0.2)
 
+                bloqueou = random.choices([True, False], weights=[chance_bloqueio, 100 - chance_bloqueio])[0]
+
+                if not bloqueou:
+                    if critou:
+                        print()#Mensagem dizendo que o inimigo atacou e critou
+
+                    else:
+                        print()#Mensagem dizendo que o inimigo atacou
+
+                    personagem.vida_atual -= dano
                 else:
-                    print()#Mensagem dizendo que o inimigo atacou
-
-                personagem.vida_atual -= dano
+                    print()#Mensagem dizendo que o personagem bloqueou o ataque com sua defesa
 
     def acao_personagem(self, acao):
         while True:
@@ -285,6 +309,10 @@ class Jogo:
                     print()#Mensagem dizendo que nao tem pocao
                     acao = self.obter_acao_personagem()
                     continue
+            
+            elif acao == 5:
+                resultado['sucesso'] = self.personagem.defender_se()
+                return resultado
 
     def obter_acao_personagem(self):
         print()#Mensagem perguntando oq ele quer fazer, atacar, esquivar, contra atacar ou tomar poca e depois retorna essa escolha
