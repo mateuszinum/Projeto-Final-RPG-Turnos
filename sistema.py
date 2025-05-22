@@ -114,18 +114,23 @@ class Jogo:
     def __init__(self, personagem, inimigo):
         self.personagem = personagem
         self.inimigo = inimigo
-
+        self.acao_jogador = {
+            'atacar': 1,
+            'esquivar': 2,
+            'contra_atacar': 3,
+            'tomar_pocao': 4
+        }
     def executar(self):
         while True:
             if self.personagem.velocidade >= self.inimigo.velocidade:
-                acao_esquiva, esquivou, acao_contra_ataca, contra_atacou = self.acao_personagem(self.personagem, self.inimigo)
+                resultado = self.executar_acao_personagem()
 
                 if self.inimigo.vida_atual <= 0:
                     print()#Mensagem falando que o inimigo foi derrotado
 
                     break
-
-                self.acao_inimigo(self.inimigo, self.personagem, acao_esquiva, esquivou, acao_contra_ataca, contra_atacou)
+                
+                self.acao_inimigo(self.inimigo, self.personagem, resultado)
 
                 if self.inimigo.vida_atual <= 0:
                     print()#Mensagem falando que o inimigo foi derrotado
@@ -135,7 +140,7 @@ class Jogo:
                     if upou:
                         #Mensagem falando que o personagem upou
                         for i in range(0, pontos):
-                            personagem.upar_personagem()
+                            self.personagem.upar_personagem()
                             
                     break
 
@@ -145,9 +150,14 @@ class Jogo:
                     break
 
             else:
-                acao_esquiva = esquivou = acao_contra_ataca = contra_atacou = False
+                resultado = {
+                    "acao": 1,
+                    "sucesso": False,
+                    "critico": False,
+                    "dano": 0   
+                }
 
-                self.acao_inimigo(self.inimigo, self.personagem, acao_esquiva, esquivou, acao_contra_ataca, contra_atacou)
+                self.acao_inimigo(self.inimigo, self.personagem, resultado)
 
                 if self.inimigo.vida_atual <= 0:
                     print()#Mensagem falando que o inimigo foi derrotado
@@ -166,7 +176,7 @@ class Jogo:
 
                     break
                 
-                acao_esquiva, esquivou, acao_contra_ataca, contra_atacou = self.acao_personagem(self.personagem, self.inimigo)
+                resultado = self.executar_acao_personagem()
 
                 if self.inimigo.vida_atual <= 0:
                     print()#Mensagem falando que o inimigo foi derrotado
@@ -180,23 +190,47 @@ class Jogo:
 
                     break
 
-    def acao_inimigo(inimigo, personagem, acao_esquiva, esquivou, acao_contra_ataca, contra_atacou):
+    def executar_acao_personagem(self):
+        acao = self.obter_acao_personagem()
+        resultado = self.acao_personagem(acao)
+
+        if resultado['acao'] == self.acao_jogador['atacar']:
+            if resultado["sucesso"]:
+                msg = "Você acertou o ataque"
+
+                if resultado["critico"]:
+                    msg += " CRÍTICO"
+
+                msg += f", causando {resultado['dano']} de dano."
+
+            else:
+                msg = "Você errou o ataque."
+
+            print()#Printar a msg bunitin, se vc quiser pode mudar o texto do jeito que quiser, mas tenta usar essa logica q eu usei ai
+        
+        elif resultado['acao'] == self.acao_jogador['tomar_pocao']:
+            print()#Mensagem dizendo que tomou a pocao com sucesso
+
+        return resultado
+            
+    def acao_inimigo(self, inimigo, personagem, resultado):
         dano, critou = inimigo.ataca()
         if dano != 0:
-            if acao_esquiva:
-                if esquivou:
+            if resultado['acao'] == self.acao_jogador['esquivar']:
+                if resultado['sucesso']:
                     print()#Mensagem dizendo que o inimigo atacou mas o personagem conseguiu esquivar
 
                 else:
                     if critou:
                         print()#Mensagem dizendo que o inimigo atacou e critou e o personagem nao conseguiu esquivar
+                    
                     else:
                         print()#Mensagem dizendo que o inimigo atacou e o personagem nao conseguiu esquivar
 
                     personagem.vida_atual -= dano
 
-            elif acao_contra_ataca:
-                if contra_atacou:
+            elif resultado['acao'] == self.acao_jogador['contra_atacar']:
+                if resultado['sucesso']:
                     print()#Mensagem dizendo que o inimigo atacou mas o personagem conseguiu contra atacar
 
                     inimigo.vida_atual -= personagem.ataque + personagem.arma.dano
@@ -214,40 +248,43 @@ class Jogo:
 
 
 
-    def acao_personagem(personagem, inimigo):
-        # Mensagem perguntando qual ação ele quer executar
-        if 'Ataca':
-            dano, critou = personagem.ataca()
+    def acao_personagem(self, acao):
+        resultado = {
+            "acao": acao,
+            "sucesso": False,
+            "critico": False,
+            "dano": 0
+        }
+        while True:
+            if acao == 1:
+                dano, critou = self.personagem.ataca()
 
-            if dano != 0:
-                if critou:
-                    print()#Mensagem falando que o ataque deu certo e que critou
+                if dano > 0:
+                    self.inimigo.vida_atual -= dano
+                    resultado["sucesso"] = True
+                    resultado["dano"] = dano
+                    resultado["critico"] = critou
+                return resultado
 
-                else:
-                    print()#Mensagem falando que o ataque deu certo
+            elif acao == 2 :
+                resultado["sucesso"] = self.personagem.esquivar()
+                return resultado
 
-                inimigo.vida_atual -= dano
+            elif acao == 3:
+                resultado["sucesso"] = self.personagem.contra_atacar()
+                return resultado
 
             else:
-                print()#Mensagem falando que o ataque falhou
+                resultado["sucesso"] = self.personagem.usar_pocao()
+                if not resultado["sucesso"]:
+                    print()#Mensagem avisando que nao possui pocao e que deve realizar outra acao
+                    acao = self.obter_acao_personagem()
+                    resultado["acao"] = acao
 
-            return False, False, False, False
-            #Tudo False, pq ele nao esquivou nem contra atacou
-
-
-        elif 'Esquiva':
-            return True, personagem.esquivar(), False, False
-            # True pq ele esquivou, função q vai retornar se deu certo a esquiva, false pq n contra atacou, false pq n contra atacou
-
-        
-        elif 'Contra Atacar':
-            return False, False, True, personagem.contra_atacar()
-            # False pq ele nao esquivou, False pq ele n esquivou, True pq ele contra atacou, função q vai retornar se deu certo o contra ataque
-
-        #Todos esses return de false e true, servem para personalizar as mensagens que vai ser mandada, pra caso esquivou e falhou, ou esquivou e deu certo etc etc, uma mensagem pra cada situação
-
-        elif 'Tomar poção':
-            personagem.usar_pocao()
+    def obter_acao_personagem():
+        print()#Mensagem perguntando oq ele quer fazer, atacar, esquivar, contra atacar ou tomar poca e depois retorna essa escolha
+        # retornando da seguinte maneira
+        # 1 - se ele quiser atacar / 2 - se ele quiser esquivar / 3 - se ele quiser contra atacar / 4 - tomar pocao
 
 # Testes
 xp = "==========================================60%======----------------------------"
