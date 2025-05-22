@@ -249,16 +249,16 @@ class Jogo:
 
 
     def acao_personagem(self, acao):
-        resultado = {
-            "acao": acao,
-            "sucesso": False,
-            "critico": False,
-            "dano": 0
-        }
         while True:
-            if acao == 1:
-                dano, critou = self.personagem.ataca()
+            resultado = {
+                "acao": acao,
+                "sucesso": False,
+                "critico": False,
+                "dano": 0
+            }
 
+            if acao == 1:  
+                dano, critou = self.personagem.ataca()
                 if dano > 0:
                     self.inimigo.vida_atual -= dano
                     resultado["sucesso"] = True
@@ -266,20 +266,25 @@ class Jogo:
                     resultado["critico"] = critou
                 return resultado
 
-            elif acao == 2 :
+            elif acao == 2:  
                 resultado["sucesso"] = self.personagem.esquivar()
                 return resultado
 
-            elif acao == 3:
+            elif acao == 3:  # 
                 resultado["sucesso"] = self.personagem.contra_atacar()
                 return resultado
 
-            else:
-                resultado["sucesso"] = self.personagem.usar_pocao()
-                if not resultado["sucesso"]:
-                    print()#Mensagem avisando que nao possui pocao e que deve realizar outra acao
+            elif acao == 4:  
+                sucesso = self.personagem.usar_pocao()
+
+                if sucesso:
+                    resultado["sucesso"] = True
+                    return resultado
+                
+                else:
+                    print()#Mensagem dizendo que nao tem pocao
                     acao = self.obter_acao_personagem()
-                    resultado["acao"] = acao
+                    
 
     def obter_acao_personagem():
         print()#Mensagem perguntando oq ele quer fazer, atacar, esquivar, contra atacar ou tomar poca e depois retorna essa escolha
