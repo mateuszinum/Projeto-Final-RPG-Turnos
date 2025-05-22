@@ -189,6 +189,8 @@ class Jogo:
                             self.personagem.upar_personagem()
 
                     break
+                
+        self.personagem.vida_atual = self.personagem.vida_max
 
     def executar_acao_personagem(self):
         acao = self.obter_acao_personagem()
