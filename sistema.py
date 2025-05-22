@@ -23,9 +23,9 @@ class Personagem:
         self.pocoes = qnt_pocoes
     
     def ataca(self):
-        acertou = random.choice([True, False], weights=[90, 10])[0]
+        acertou = random.choices([True, False], weights=[90, 10])[0]
         if acertou:
-            critico = random.choice([True, False], weights=[self.arma.critico, 100 - self.arma.critico])
+            critico = random.choices([True, False], weights=[self.arma.critico, 100 - self.arma.critico])
             if critico:
                 return (self.ataque + self.arma.dano) * 2, critico
                 # Retorna o dano, e o True, pra na msg vc poder falar que critou e mostrar o dano
@@ -38,10 +38,10 @@ class Personagem:
             
     def esquivar(self):
         if self.velocidade * 0.5 <= 25:
-            return random.choice([True, False], weights=[65 + self.velocidade * 0.5, 35 - self.velocidade * 0.5])[0]
+            return random.choices([True, False], weights=[65 + self.velocidade * 0.5, 35 - self.velocidade * 0.5])[0]
             
         else:
-            return random.choice([True, False], weights=[90, 10])[0]
+            return random.choices([True, False], weights=[90, 10])[0]
 
     def contra_atacar(self):
         if self.velocidade * 0.3 <= 60:
@@ -71,11 +71,11 @@ class Personagem:
         upou = False
         while (xp + self.xp_atual) > self.xp_max:
             xp = xp - (self.xp_max - self.xp_atual)
-            level += 1
+            self.level += 1
             upou = True
             pontos += 5
             self.xp_atual = 0
-            self.xp_max = 100 * (level ** 1.5)
+            self.xp_max = 100 * (self.level ** 1.5)
         
         return upou, pontos
     
@@ -112,21 +112,25 @@ class Inimigo(Personagem):
 
 class Jogo:
     def __init__(self, personagem, inimigo):
+        self.personagem = personagem
+        self.inimigo = inimigo
+
+    def executar(self):
         while True:
-            if personagem.velocidade > inimigo.velocidade:
-                acao_esquiva, esquivou, acao_contra_ataca, contra_atacou = self.acao_personagem(personagem, inimigo)
-                
-                if inimigo.vida_atual <= 0:
+            if self.personagem.velocidade >= self.inimigo.velocidade:
+                acao_esquiva, esquivou, acao_contra_ataca, contra_atacou = self.acao_personagem(self.personagem, self.inimigo)
+
+                if self.inimigo.vida_atual <= 0:
                     print()#Mensagem falando que o inimigo foi derrotado
 
                     break
 
-                self.acao_inimigo(inimigo, personagem, acao_esquiva, esquivou, acao_contra_ataca, contra_atacou)
+                self.acao_inimigo(self.inimigo, self.personagem, acao_esquiva, esquivou, acao_contra_ataca, contra_atacou)
 
-                if inimigo.vida_atual <= 0:
+                if self.inimigo.vida_atual <= 0:
                     print()#Mensagem falando que o inimigo foi derrotado
 
-                    upou, pontos = personagem.receber_xp((inimigo.level ** 1.3) * 150)
+                    upou, pontos = self.personagem.receber_xp((self.inimigo.level ** 1.3) * 150)
 
                     if upou:
                         #Mensagem falando que o personagem upou
@@ -135,8 +139,44 @@ class Jogo:
                             
                     break
 
-                elif personagem.vida_atual <= 0:
+                elif self.personagem.vida_atual <= 0:
                     print()#Mensagem falando que o personagem foi derrotado
+
+                    break
+
+            else:
+                acao_esquiva = esquivou = acao_contra_ataca = contra_atacou = False
+
+                self.acao_inimigo(self.inimigo, self.personagem, acao_esquiva, esquivou, acao_contra_ataca, contra_atacou)
+
+                if self.inimigo.vida_atual <= 0:
+                    print()#Mensagem falando que o inimigo foi derrotado
+
+                    upou, pontos = self.personagem.receber_xp((self.inimigo.level ** 1.3) * 150)
+
+                    if upou:
+                        #Mensagem falando que o personagem upou
+                        for i in range(0, pontos):
+                            self.personagem.upar_personagem()
+                            
+                    break
+
+                elif self.personagem.vida_atual <= 0:
+                    print()#Mensagem falando que o personagem foi derrotado
+
+                    break
+                
+                acao_esquiva, esquivou, acao_contra_ataca, contra_atacou = self.acao_personagem(self.personagem, self.inimigo)
+
+                if self.inimigo.vida_atual <= 0:
+                    print()#Mensagem falando que o inimigo foi derrotado
+                    
+                    upou, pontos = self.personagem.receber_xp((self.inimigo.level ** 1.3) * 150)
+
+                    if upou:
+                        #Mensagem falando que o personagem upou
+                        for i in range(0, pontos):
+                            self.personagem.upar_personagem()
 
                     break
 
@@ -153,12 +193,13 @@ class Jogo:
                     else:
                         print()#Mensagem dizendo que o inimigo atacou e o personagem nao conseguiu esquivar
 
-                    personagem.vida_atual() -= dano
+                    personagem.vida_atual -= dano
 
             elif acao_contra_ataca:
                 if contra_atacou:
                     print()#Mensagem dizendo que o inimigo atacou mas o personagem conseguiu contra atacar
-                    inimigo.vida_atual() -= personagem.ataque + personagem.arma.dano
+
+                    inimigo.vida_atual -= personagem.ataque + personagem.arma.dano
                 
                 else:
                     print()#Mensagem dizendo que o inimigo atacou e o personagem falhou em contra atacar
@@ -169,7 +210,7 @@ class Jogo:
                 else:
                     print()#Mensagem dizendo que o inimigo atacou
 
-                personagem.vida_atual() -= dano
+                personagem.vida_atual -= dano
 
 
 
@@ -177,6 +218,7 @@ class Jogo:
         # Mensagem perguntando qual ação ele quer executar
         if 'Ataca':
             dano, critou = personagem.ataca()
+
             if dano != 0:
                 if critou:
                     print()#Mensagem falando que o ataque deu certo e que critou
