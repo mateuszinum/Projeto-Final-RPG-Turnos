@@ -25,7 +25,7 @@ class Personagem:
     def ataca(self):
         acertou = random.choices([True, False], weights=[90, 10])[0]
         if acertou:
-            critico = random.choices([True, False], weights=[self.arma.critico, 100 - self.arma.critico])
+            critico = random.choices([True, False], weights=[self.arma.critico, 100 - self.arma.critico])[0]
             if critico:
                 return (self.ataque + self.arma.dano) * 2, critico
                 # Retorna o dano, e o True, pra na msg vc poder falar que critou e mostrar o dano
@@ -246,8 +246,6 @@ class Jogo:
 
                 personagem.vida_atual -= dano
 
-
-
     def acao_personagem(self, acao):
         while True:
             resultado = {
@@ -286,7 +284,7 @@ class Jogo:
                     acao = self.obter_acao_personagem()
                     
 
-    def obter_acao_personagem():
+    def obter_acao_personagem(self):
         print()#Mensagem perguntando oq ele quer fazer, atacar, esquivar, contra atacar ou tomar poca e depois retorna essa escolha
         # retornando da seguinte maneira
         # 1 - se ele quiser atacar / 2 - se ele quiser esquivar / 3 - se ele quiser contra atacar / 4 - tomar pocao
