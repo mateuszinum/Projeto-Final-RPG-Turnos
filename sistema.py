@@ -22,7 +22,7 @@ class Personagem:
         self.arma = arma_inicial
         self.pocoes = qnt_pocoes
     
-    def atacar(self):
+    def ataca(self):
         acertou = random.choice([True, False], weights=[90, 10])[0]
         if acertou:
             critico = random.choice([True, False], weights=[self.arma.critico, 100 - self.arma.critico])
@@ -111,9 +111,101 @@ class Inimigo(Personagem):
         self.raca = raca    
 
 class Jogo:
-    pass
+    def __init__(self, personagem, inimigo):
+        while True:
+            if personagem.velocidade > inimigo.velocidade:
+                acao_esquiva, esquivou, acao_contra_ataca, contra_atacou = self.acao_personagem(personagem, inimigo)
+                
+                if inimigo.vida_atual <= 0:
+                    print()#Mensagem falando que o inimigo foi derrotado
+
+                    break
+
+                self.acao_inimigo(inimigo, personagem, acao_esquiva, esquivou, acao_contra_ataca, contra_atacou)
+
+                if inimigo.vida_atual <= 0:
+                    print()#Mensagem falando que o inimigo foi derrotado
+
+                    upou, pontos = personagem.receber_xp((inimigo.level ** 1.3) * 150)
+
+                    if upou:
+                        #Mensagem falando que o personagem upou
+                        for i in range(0, pontos):
+                            personagem.upar_personagem()
+                            
+                    break
+
+                elif personagem.vida_atual <= 0:
+                    print()#Mensagem falando que o personagem foi derrotado
+
+                    break
+
+    def acao_inimigo(inimigo, personagem, acao_esquiva, esquivou, acao_contra_ataca, contra_atacou):
+        dano, critou = inimigo.ataca()
+        if dano != 0:
+            if acao_esquiva:
+                if esquivou:
+                    print()#Mensagem dizendo que o inimigo atacou mas o personagem conseguiu esquivar
+
+                else:
+                    if critou:
+                        print()#Mensagem dizendo que o inimigo atacou e critou e o personagem nao conseguiu esquivar
+                    else:
+                        print()#Mensagem dizendo que o inimigo atacou e o personagem nao conseguiu esquivar
+
+                    personagem.vida_atual() -= dano
+
+            elif acao_contra_ataca:
+                if contra_atacou:
+                    print()#Mensagem dizendo que o inimigo atacou mas o personagem conseguiu contra atacar
+                    inimigo.vida_atual() -= personagem.ataque + personagem.arma.dano
+                
+                else:
+                    print()#Mensagem dizendo que o inimigo atacou e o personagem falhou em contra atacar
+            else:
+                if critou:
+                    print()#Mensagem dizendo que o inimigo atacou e critou
+
+                else:
+                    print()#Mensagem dizendo que o inimigo atacou
+
+                personagem.vida_atual() -= dano
 
 
+
+    def acao_personagem(personagem, inimigo):
+        # Mensagem perguntando qual ação ele quer executar
+        if 'Ataca':
+            dano, critou = personagem.ataca()
+            if dano != 0:
+                if critou:
+                    print()#Mensagem falando que o ataque deu certo e que critou
+
+                else:
+                    print()#Mensagem falando que o ataque deu certo
+
+                inimigo.vida_atual -= dano
+
+            else:
+                print()#Mensagem falando que o ataque falhou
+
+            return False, False, False, False
+            #Tudo False, pq ele nao esquivou nem contra atacou
+
+
+        elif 'Esquiva':
+            return True, personagem.esquivar(), False, False
+            # True pq ele esquivou, função q vai retornar se deu certo a esquiva, false pq n contra atacou, false pq n contra atacou
+
+        
+        elif 'Contra Atacar':
+            return False, False, True, personagem.contra_atacar()
+            # False pq ele nao esquivou, False pq ele n esquivou, True pq ele contra atacou, função q vai retornar se deu certo o contra ataque
+
+        #Todos esses return de false e true, servem para personalizar as mensagens que vai ser mandada, pra caso esquivou e falhou, ou esquivou e deu certo etc etc, uma mensagem pra cada situação
+
+        elif 'Tomar poção':
+            personagem.usar_pocao()
 
 # Testes
 xp = "==========================================60%======----------------------------"
