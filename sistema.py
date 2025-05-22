@@ -97,7 +97,8 @@ class Personagem:
 
     def verificar_personagem(self):
         # Printar cada atributo do personagem bunitin
-        
+        pass
+    
 class Arma: 
     def __init__(self, dano, critico):
         self.dano = dano
