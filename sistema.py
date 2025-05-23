@@ -13,8 +13,8 @@ class Personagem:
         self.vida_max = vida
         self.vida_atual = vida
         self.ataque = ataque
-        self.defesa = defesa
-        self.defesa_base = defesa
+        self.defesa_inicial = defesa
+        self.defesa_atual = defesa
         self.velocidade = velocidade
         self.xp_atual = 0
         self.xp_max = 100 * (level ** 1.5)
@@ -50,10 +50,10 @@ class Personagem:
 
     def contra_atacar(self):
         if self.velocidade * 0.3 <= 60:
-            return random.choice([True, False], weights=[30 + self.velocidade * 0.3, 70 - self.velocidade * 0.3])
+            return random.choices([True, False], weights=[30 + self.velocidade * 0.3, 70 - self.velocidade * 0.3])
 
         else:
-            return random.choice([True, False], weights=[90, 10])[0]
+            return random.choices([True, False], weights=[90, 10])[0]
     
     def usar_pocao(self):
         if self.pocoes > 0:
@@ -69,12 +69,12 @@ class Personagem:
             return False
 
     def defender_se(self):
-        self.defesa += self.defesa * 0.5
+        self.defesa_atual += self.defesa_atual * 0.5
         return True
 
 
     def receber_dano(self, dano):
-        redução = self.defesa * 0.5
+        redução = self.defesa_atual * 0.5
         dano_final = max(0, dano * (1 - redução/100))
         self.vida_atual -= dano_final
 
@@ -134,81 +134,68 @@ class Jogo:
             'defender': 5
         }
     def executar(self):
+        primeira_acao = True
         while True:
             if self.personagem.velocidade >= self.inimigo.velocidade:
                 resultado = self.executar_acao_personagem()
 
-                if self.inimigo.vida_atual <= 0:
-                    print()#Mensagem falando que o inimigo foi derrotado
-
+                if self.verificar_fim():
                     break
                 
-
                 self.acao_inimigo(self.inimigo, self.personagem, resultado)
 
-                if self.inimigo.vida_atual <= 0:
-                    print()#Mensagem falando que o inimigo foi derrotado
-
-                    upou, pontos = self.personagem.receber_xp((self.inimigo.level ** 1.3) * 150)
-
-                    if upou:
-                        #Mensagem falando que o personagem upou
-                        for i in range(0, pontos):
-                            self.personagem.upar_personagem()
-                            
+                if self.verificar_fim():         
                     break
-
-                elif self.personagem.vida_atual <= 0:
-                    print()#Mensagem falando que o personagem foi derrotado
-
-                    break
-
+                
+                if resultado['acao'] == 5:
+                    self.personagem.defesa_atual = self.personagem.defesa_inicial
+                
             else:
-                resultado = {
-                    "acao": 1,
-                    "sucesso": False,
-                    "critico": False,
-                    "dano": 0   
-                }
+                if primeira_acao:
+                    resultado = {
+                        "acao": 1,
+                        "sucesso": False,
+                        "critico": False,
+                        "dano": 0   
+                    }
 
                 self.acao_inimigo(self.inimigo, self.personagem, resultado)
 
-                if self.inimigo.vida_atual <= 0:
-                    print()#Mensagem falando que o inimigo foi derrotado
-
-                    upou, pontos = self.personagem.receber_xp((self.inimigo.level ** 1.3) * 150)
-
-                    if upou:
-                        #Mensagem falando que o personagem upou
-                        for i in range(0, pontos):
-                            self.personagem.upar_personagem()
-                            
+                if self.verificar_fim():
                     break
-
-                elif self.personagem.vida_atual <= 0:
-                    print()#Mensagem falando que o personagem foi derrotado
-
-                    break
+                
+                if resultado['acao'] == 5:
+                    self.personagem.defesa_atual = self.personagem.defesa_inicial
                 
                 resultado = self.executar_acao_personagem()
 
-                if self.inimigo.vida_atual <= 0:
-                    print()#Mensagem falando que o inimigo foi derrotado
-                    
-                    upou, pontos = self.personagem.receber_xp((self.inimigo.level ** 1.3) * 150)
+                primeira_acao = False
 
-                    if upou:
-                        #Mensagem falando que o personagem upou
-                        for i in range(0, pontos):
-                            self.personagem.upar_personagem()
-
+                if self.verificar_fim():
                     break
 
-            if resultado['acao'] == 5:
-                self.personagem.defesa = self.personagem.defesa_base
-                
         self.personagem.vida_atual = self.personagem.vida_max
 
+    def verificar_fim(self):
+        if self.inimigo.vida_atual <= 0:
+            print()#Mensagem falando que o inimigo foi derrotado
+            
+            upou, pontos = self.personagem.receber_xp((self.inimigo.level ** 1.3) * 150)
+
+            if upou:
+                #Mensagem falando que o personagem upou
+                for i in range(0, pontos):
+                    self.personagem.upar_personagem()
+
+            return True
+        
+        elif self.personagem.vida_atual <= 0:
+            print()#Mensagem falando que o personagem foi derrotado
+
+            return True
+        
+        return False
+    
     def executar_acao_personagem(self):
         acao = self.obter_acao_personagem()
         resultado = self.acao_personagem(acao)
@@ -257,7 +244,7 @@ class Jogo:
                 else:
                     print()#Mensagem dizendo que o inimigo atacou e o personagem falhou em contra atacar
             else:
-                chance_bloqueio = min(40, personagem.defesa * 0.2)
+                chance_bloqueio = min(40, personagem.defesa_atual * 0.2)
 
                 bloqueou = random.choices([True, False], weights=[chance_bloqueio, 100 - chance_bloqueio])[0]
 
