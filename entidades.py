@@ -1,10 +1,15 @@
-import animacoes
-from rich.panel import Panel
-from rich.console import Console
-from rich.columns import Columns
 import random
+from rich.theme import Theme
+from rich.console import Console
 
-console = Console()
+custom_theme = Theme({
+    "default": "bold grey100"
+})
+
+console = Console(theme=custom_theme)
+
+
+# Ações das Entidades
 
 
 class Personagem:
@@ -306,8 +311,42 @@ class Jogo:
         # retornando da seguinte maneira
         # 1 - se ele quiser atacar / 2 - se ele quiser esquivar / 3 - se ele quiser contra atacar / 4 - tomar pocao
 
-# Testes
-xp = "==========================================60%======----------------------------"
-texto_vazio = "\n\n\n\n\n\n\n\n\n"
-colunas = Columns([animacoes.ogro, texto_vazio + animacoes.esqueleto], padding=(0, 30))
-console.print(Panel(colunas, title=f"[bold green] {xp}", border_style="purple"))
+
+# CLASSES
+
+
+# Função: Absorve dano, ideal para segurar o inimigo por muito tempo.
+tanque = Personagem(
+    nome="Tanque",
+    vida=350,
+    ataque=20,
+    defesa=50,
+    velocidade=10,
+    level=1,
+    arma_inicial=Arma(dano=10, critico=5),
+    qnt_pocoes=3
+)
+
+# Função: Equilíbrio entre ataque e defesa.
+cavaleiro = Personagem(
+    nome="Cavaleiro",
+    vida=250,
+    ataque=30,
+    defesa=30,
+    velocidade=20,
+    level=1,
+    arma_inicial=Arma(dano=15, critico=10),
+    qnt_pocoes=3
+)
+
+# Função: Alta chance de crítico, esquiva e contra-ataque.   ######## Assassino não tá mt broken com essa arma aí? por mim diminui o dano da arma e a velocidade em 10
+assassino = Personagem(
+    nome="Assassino",
+    vida=150,
+    ataque=40,
+    defesa=10,
+    velocidade=40,
+    level=1,
+    arma_inicial=Arma(dano=25, critico=25),
+    qnt_pocoes=2
+)

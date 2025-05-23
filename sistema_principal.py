@@ -1,0 +1,55 @@
+from entidades import *
+from rich.panel import Panel
+
+tema = Theme({
+    "default": "bold grey82"
+})
+
+console = Console(theme=tema)
+
+
+# Selecionar a classe do personagem
+def selecionar_classe():
+    console.clear()
+    
+    personagens = [
+        tanque,
+        cavaleiro,
+        assassino
+    ]
+    
+    mensagem = ""
+
+    for i, personagem in enumerate(personagens, 1):
+        mensagem += f"\n[bold magenta]{i}[/] - {personagem.nome}\n"
+        mensagem += f"{" " * 4}[bold bright_green]Vida: {personagem.vida_max}[/] | [bold red1]Ataque: {personagem.ataque}[/] | [bold bright_yellow]Defesa: {personagem.defesa_inicial}[/] | [bold dodger_blue2]Velocidade: {personagem.velocidade}[/]\n"
+        mensagem += f"{" " * 4}[bold ]Arma: [bold red1]Dano {personagem.arma.dano}[/] ([bold orange1]Crítico: {personagem.arma.critico}%[/])\n"
+    
+    console.print(Panel.fit(mensagem, title="[bold royal_blue1]Escolha sua Classe", border_style="bold slate_blue3", style="default"))
+
+    while True:
+        escolha = console.input(f"\n[bold grey82]Escolha sua classe (1-{len(personagens)}): ")
+        
+        if escolha in ["1", "2", "3", "4"]:
+            personagem_escolhido = personagens[int(escolha)-1]
+            console.print(f"\nVocê escolheu o [bold orange1]{personagem_escolhido.nome}[/]!", style="default")
+            return personagem_escolhido
+        else:
+            console.print("[bold red1]Opção inválida! Escolha de 1 a 4", style="default")
+
+personagem = selecionar_classe()
+
+while True:
+    console.print("\nO que você deseja fazer?", style="default")
+    console.print("[bold magenta]1[/] - Seguir em frente\n[bold magenta]2[/] - Ver status\n[bold magenta]3[/] - Sair do jogo", style="default")
+    
+    escolha = console.input("[bold grey82]Escolha uma opção: ")
+    
+    if escolha == "1":
+        pass
+    elif escolha == "2":
+        pass
+    elif escolha == "3":
+        exit()
+    else:
+        console.print("[bold red1]Opção inválida![/]", style="default")
