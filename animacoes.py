@@ -6,109 +6,226 @@ from rich.console import Console
 console = Console()     
 
 CORES = {
-    "monstro": "dark_red",
+    "monstro": "",
     "personagem": "aquamarine1",
-    "projétil": "orange1",
-    "dano": "bold red"
+    "projetil": ""
+    # "dano": "bold red"
 }
 
-def criar_monstro():
+def criar_mago():
     return Text.from_markup(
 rf"""[bold {CORES["monstro"]}]
-    O
-   /|\
-   / \
+         ,    _
+        /|   | |
+      _/_\_  >_<
+     .-\-/.   |
+    /  | | \_ |
+    \ \| |\__(/
+    /(`---')  |
+   / /     \  |
+_.'  \-'-'  / |
+`----'`=-='   '
 [/]""")
 
 def criar_personagem():
     return Text.from_markup(
 rf"""[bold {CORES["personagem"]}]
-   \O/
-    |
-   / \
+
+  /\      .-.
+  ||    __|=|__
+   ||   (_/`-`\_)
+  _||_  //\___/\\
+   \/<__> /   \<>
+          |_._|/
+          <_I_>
+           |||
+          /_|_\
 [/]""")
 
-def criar_personagem_atingido():
-    return Text.from_markup(
-rf"""[bold {CORES["dano"]}]
-   \O/
-    |
-   / \
+
+# Outros sprites do mago, não achei nenhum outro guerreiro legalzinho
+
+
+(rf"""[bold {CORES["monstro"]}]
+       ,/   *
+    _,'/_   |
+    `(")' ,'/
+ _ _,-H-./ /
+ \_\_\.   /
+  /" / \  \_
+_/  /   \  \_
+\_.'( ) (`._/
 [/]""")
+
+
+(rf"""[bold {CORES["monstro"]}]
+         /^\
+    /\   "V"
+   /__\   I
+  //..\\  I
+  \].`[/  I
+  /l\/j\  (]
+ /. ~~ ,\/I
+ \_L__j^\/I
+  \/--v\  I
+  |    |  I
+  |    |  I
+  |    l  I
+_/j  L l\_!
+[/]""")
+
+
+(rf"""[bold {CORES["personagem"]}]
+
+   /\      .-.
+   ||    __|=|__
+   ||   (_/`-`\_)
+  _||_  //\___/\\
+   \/<__> /   \<>
+          |_._|/
+          <_I_>
+           |||
+          /_|_\
+[/]""")
+
 
 xp_temp = "==========================================60%======----------------------------"
 
-def ataque_persoanagem(): # botar pra receber o personagem e o inimigo
-  # Ataque do Personagem
-  for padding in [120, 90, 50, 20, 50, 90, 120]:
-      monstro = criar_monstro()
-      personagem = criar_personagem()
+
+def cria_monstro(inimigo, tipo):
+    if tipo == "Fogo":
+        CORES["monstro"] = "dark_red"
+        CORES["projetil"] = "orange_red1"
+    elif tipo == "Gelo":
+        CORES["monstro"] = "blue"
+        CORES["projetil"] = "bright_cyan"
+        
+    if inimigo == "Mago":
+        monstro = criar_mago()
+
+    return monstro
+
+def ataque_personagem(inimigo, tipo):
+    # Ataque do Personagem
+    console.clear()
+
+    for pos in [100, 80, 60, 40, 60, 80, 100]:
+        monstro = cria_monstro(inimigo, tipo)
+        
+        personagem = criar_personagem()
+        
+        cena = Text()
+        for linha_m, linha_p in zip(monstro.split(), personagem.split()):
+            cena.append(linha_m)
+            cena.append(' ' * pos)
+            cena.append(linha_p)
+            cena.append('\n')
+        
+        console.print(Panel(cena, title=f"[bold green]{xp_temp}", border_style="purple", width=140))
+        time.sleep(0.6)
+        console.clear()
+
+def ataque_monstro(inimigo, tipo):
+    # Ataque do Monstro
+    console.clear()
+
+    for pos in [20, 40, 60, 80]:
+        
+        monstro = cria_monstro(inimigo, tipo)
+
+        personagem = criar_personagem()
+        
+        cena = Text()
+        for i, (linha_m, linha_p) in enumerate(zip(monstro.split(), personagem.split())):
+            if i == 5:
+                cena.append(linha_m)
+                cena.append(' ' * pos)
+                cena.append(Text("▶", style=CORES["projetil"]))
+                cena.append(Text("▶", style=CORES["projetil"]))
+                cena.append(' ' * (100 - pos))
+                cena.append(linha_p)
+                cena.append('\n')
+            else:
+                cena.append(linha_m)
+                cena.append(' ' * (pos + 1))
+                cena.append(' ' * (100 - pos))
+                cena.append(linha_p)
+                cena.append('\n')
       
-      cena = Text()
-      for linha_m, linha_p in zip(monstro.split(), personagem.split()):
-          cena.append(linha_m)
-          cena.append(' ' * padding)
-          cena.append(linha_p)
-          cena.append('\n')
-      
-      console.print(Panel(cena, title=f"[bold green]{xp_temp}", border_style="purple", width=140))
-      time.sleep(0.6)
-      console.clear()
-
-def ataque_monstro(): # botar pra receber o personagem e o inimigo
-  # Ataque do Monstro
-  for pos in [20, 50, 90, 120]:
-      monstro = criar_monstro()
-      personagem = criar_personagem()
-      
-      cena = Text()
-      for i, (linha_m, linha_p) in enumerate(zip(monstro.split(), personagem.split())):
-          if i == 2:
-              cena.append(linha_m)
-              cena.append(' ' * pos)
-              cena.append(Text("▶", style=CORES["projétil"]))
-              cena.append(' ' * (120 - pos))
-              cena.append(linha_p)
-              cena.append('\n')
-          else:
-              cena.append(linha_m)
-              cena.append(' ' * (pos + 1))
-              cena.append(' ' * (120 - pos))
-              cena.append(linha_p)
-              cena.append('\n')
-      
-      console.print(Panel(cena, title=f"[bold green]{xp_temp}", border_style="purple", width=140))
-      time.sleep(0.6)
-      console.clear()
+        console.print(Panel(cena, title=f"[bold green]{xp_temp}", border_style="purple", width=140))
+        time.sleep(0.7)
+        console.clear()
 
 
-def personagem_atingido(): # botar pra receber o personagem e o inimigo
-  # Personagem toma dano
-  monstro = criar_monstro()
-  personagem = criar_personagem_atingido()
+def personagem_atingido(inimigo, tipo):
+    # Personagem toma dano
+    console.clear()
 
-  cena_dano = Text()
-  for linha_m, linha_p in zip(monstro.split(), personagem.split()):
-      cena_dano.append(linha_m)
-      cena_dano.append(' ' * 123)
-      cena_dano.append(linha_p)
-      cena_dano.append('\n')
+    monstro = cria_monstro(inimigo, tipo)
 
-  console.print(Panel(cena_dano, title=f"[bold green]{xp_temp}", border_style="red", width=140))
-  time.sleep(0.6)
+    aux = CORES["personagem"]
+    CORES["personagem"] = "red1"
+
+    personagem = criar_personagem()
+
+    cena_dano = Text()
+    for linha_m, linha_p in zip(monstro.split(), personagem.split()):
+        cena_dano.append(linha_m)
+        cena_dano.append(' ' * 100)
+        cena_dano.append(linha_p)
+        cena_dano.append('\n')
+
+    console.print(Panel(cena_dano, title=f"[bold green]{xp_temp}", subtitle="[bold red]PERSONAGEM ATINGIDO", border_style="red", width=140))
+    time.sleep(0.6)
+    CORES["personagem"] = aux
+
+    voltar_normal(inimigo, tipo)
 
 
-def volta_ao_normal(): # botar pra receber o personagem e o inimigo
-  # Volta ao normal
-  console.clear()
-  monstro = criar_monstro()
-  personagem = criar_personagem()
+def monstro_atingido(inimigo, tipo):
+    # Monstro toma dano
+    console.clear()
+    
+    monstro = cria_monstro(inimigo, tipo)
 
-  cena_normal = Text()
-  for linha_m, linha_p in zip(monstro.split(), personagem.split()):
-      cena_normal.append(linha_m)
-      cena_normal.append(' ' * 123)
-      cena_normal.append(linha_p)
-      cena_normal.append('\n')
+    aux = CORES["monstro"]
+    CORES["monstro"] = "red1"
 
-  console.print(Panel(cena_normal, title=f"[bold green]{xp_temp}", border_style="purple", width=140))
+    if inimigo == "Mago":
+        monstro = criar_mago()
+
+    personagem = criar_personagem()
+
+    cena_dano = Text()
+    for linha_m, linha_p in zip(monstro.split(), personagem.split()):
+        cena_dano.append(linha_m)
+        cena_dano.append(' ' * 100)
+        cena_dano.append(linha_p)
+        cena_dano.append('\n')
+
+    console.print(Panel(cena_dano, title=f"[bold green]{xp_temp}", subtitle="[bold red]MONSTRO ATINGIDO", border_style="red", width=140))
+    time.sleep(0.6)
+
+    CORES["monstro"] = aux
+    voltar_normal(inimigo, tipo)
+
+
+def voltar_normal(inimigo, tipo):
+    # Volta ao normal
+    console.clear()
+
+    monstro = cria_monstro(inimigo, tipo)
+
+        
+    personagem = criar_personagem()
+
+    cena_normal = Text()
+    for linha_m, linha_p in zip(monstro.split(), personagem.split()):
+        cena_normal.append(linha_m)
+        cena_normal.append(' ' * 100)
+        cena_normal.append(linha_p)
+        cena_normal.append('\n')
+
+    console.print(Panel(cena_normal, title=f"[bold green]{xp_temp}", border_style="purple", width=140))
+    time.sleep(0.6)
+    console.clear()

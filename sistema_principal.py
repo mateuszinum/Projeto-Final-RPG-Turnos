@@ -1,9 +1,11 @@
 from entidades import *
+import animacoes as cena
 from rich.panel import Panel
 
 tema = Theme({
     "default": "bold grey82"
 })
+
 
 console = Console(theme=tema)
 
@@ -41,15 +43,68 @@ personagem = selecionar_classe()
 
 while True:
     console.print("\nO que você deseja fazer?", style="default")
-    console.print("[bold magenta]1[/] - Seguir em frente\n[bold magenta]2[/] - Ver status\n[bold magenta]3[/] - Sair do jogo", style="default")
+    console.print("[bold magenta]1[/] - Seguir em frente\n[bold magenta]2[/] - Ver status\n[bold magenta]3[/] - Testes\n[bold magenta]4[/] - Sair do jogo", style="default")
     
     escolha = console.input("[bold grey82]Escolha uma opção: ")
     
     if escolha == "1":
+        # não sei como vai ser o sistema pra achar inimigo, daí só coloquei aleatório
+        # e outra, sobre desviar e contra atacar, não sei se vou conseguir fazer uma animação bonitinha
+        # daí acho que só vou trocar a cor da tela, que nem faço quando o bicho é atingido
+        inimigo = random.choices(["Mago"], weights=[100])[0]
+        tipo = random.choices(["Fogo", "Gelo"], weights=[50, 50])[0]
+        
+        # não tá funcionando, precisei parar
+        if inimigo == "Mago":
+            luta_atual = Jogo(personagem, mago)
+
+        Jogo.obter_acao_personagem()
+        cena.ataque_personagem(inimigo, tipo)
+        cena.ataque_monstro(inimigo, tipo)
+
         pass
+
     elif escolha == "2":
         pass
-    elif escolha == "3":
+
+    elif escolha == "3": # Teste de todas as animações
+        menu_teste = (
+            "\n(1) - Animação ataque personagem"
+            "\n(2) - Animação ataque inimigo"
+            "\n(3) - Animação personagem atingido"
+            "\n(4) - Animação monstro atingido"
+        )
+        console.print(Panel.fit(menu_teste))
+        escolha = console.input("[bold grey82]Qual cena rodar? ")
+        if escolha == "1":
+            inimigo = "Mago"
+            tipo = "Fogo"
+            cena.ataque_personagem(inimigo, tipo)
+            tipo = "Gelo"
+            cena.ataque_personagem(inimigo, tipo)
+
+        elif escolha == "2":
+            inimigo = "Mago"
+            tipo = "Fogo"
+            cena.ataque_monstro(inimigo, tipo)
+            tipo = "Gelo"
+            cena.ataque_monstro(inimigo, tipo)
+
+        elif escolha == "3":
+            inimigo = "Mago"
+            tipo = "Fogo"
+            cena.personagem_atingido(inimigo, tipo)
+            tipo = "Gelo"
+            cena.personagem_atingido(inimigo, tipo)
+
+        elif escolha == "4":
+            inimigo = "Mago"
+            tipo = "Fogo"
+            cena.monstro_atingido(inimigo, tipo)
+            tipo = "Gelo"
+            cena.monstro_atingido(inimigo, tipo)
+
+    elif escolha == "4":
         exit()
     else:
         console.print("[bold red1]Opção inválida![/]", style="default")

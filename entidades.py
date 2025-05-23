@@ -3,7 +3,7 @@ from rich.theme import Theme
 from rich.console import Console
 
 custom_theme = Theme({
-    "default": "bold grey100"
+    "default": "bold grey82"
 })
 
 console = Console(theme=custom_theme)
@@ -13,7 +13,7 @@ console = Console(theme=custom_theme)
 
 
 class Personagem:
-    def __init__(self, nome, vida, ataque, defesa, velocidade ,level, arma_inicial, qnt_pocoes):
+    def __init__(self, nome, vida, ataque, defesa, velocidade, level, arma_inicial, qnt_pocoes):
         self.nome = nome
         self.vida_max = vida
         self.vida_atual = vida
@@ -101,16 +101,20 @@ class Personagem:
         # Pedir pra o usuario escolher um desses atributos para upar
         if 'Vida':
             self.vida_max += 50
-            # Mensagem falando que ele upou a vida e mostrar o novo valor de vida_max
+            console.print("Você upou Vida!")
+            console.print("Vida antiga >> Vida nova")
         elif 'Ataque':
             self.ataque += 10
-            # Mensagem falando que ele upou o ataque e mostrar o novo valor de ataque
+            console.print("Você upou Ataque!")
+            console.print("Ataque antigo >> Ataque novo")
         elif 'Defesa':
             self.defesa += 5
-            # Mensagem falando que ele upou a defesa e mostrar o novo valor de defesa
+            console.print("Você upou Defesa!")
+            console.print("Defesa antiga >> Defesa nova")
         elif 'Velocidade':
             self.velocidade += 10
-            # Mensagem falando que ele upou a velocidade e mostrar o novo valor de velocidade
+            console.print("Você upou Velocidade!")
+            console.print("Velocidade antiga >> Velocidade nova")
 
     def verificar_personagem(self):
         # Printar cada atributo do personagem bunitin
@@ -123,9 +127,18 @@ class Arma:
 
 
 
-class Inimigo(Personagem):
-    def __init__(self, raca):
-        self.raca = raca    
+class Inimigo:
+    def __init__(self, nome, raca, vida, ataque, defesa, velocidade, arma_inicial):
+        self.nome = nome
+        self.raca = raca
+        self.vida_max = vida
+        self.vida_atual = vida
+        self.ataque = ataque
+        self.defesa = defesa
+        self.velocidade = velocidade
+        self.xp_atual = 0
+        self.inventario = [arma_inicial]
+        self.arma = arma_inicial
 
 class Jogo:
     def __init__(self, personagem, inimigo):
@@ -183,7 +196,7 @@ class Jogo:
 
     def verificar_fim(self):
         if self.inimigo.vida_atual <= 0:
-            print()#Mensagem falando que o inimigo foi derrotado
+            console.print("inimigo derrotado")
             
             upou, pontos = self.personagem.receber_xp((self.inimigo.level ** 1.3) * 150)
 
@@ -195,7 +208,7 @@ class Jogo:
             return True
         
         elif self.personagem.vida_atual <= 0:
-            print()#Mensagem falando que o personagem foi derrotado
+            console.print("você morreu")
 
             return True
         
@@ -217,10 +230,10 @@ class Jogo:
             else:
                 msg = "Você errou o ataque."
 
-            print()#Printar a msg bunitin, se vc quiser pode mudar o texto do jeito que quiser, mas tenta usar essa logica q eu usei ai
+            console.print(msg)
         
         elif resultado['acao'] == self.acao_jogador['tomar_pocao']:
-            print()#Mensagem dizendo que tomou a pocao com sucesso
+            console.print("você tomou a poção com sucesso")
 
         return resultado
             
@@ -229,25 +242,25 @@ class Jogo:
         if dano != 0:
             if resultado['acao'] == self.acao_jogador['esquivar']:
                 if resultado['sucesso']:
-                    print()#Mensagem dizendo que o inimigo atacou mas o personagem conseguiu esquivar
+                    console.print("inimigo atacou, sucesso na esquiva")
 
                 else:
                     if critou:
-                        print()#Mensagem dizendo que o inimigo atacou e critou e o personagem nao conseguiu esquivar
+                        console.print("inimigo atacou com crítico, falha na esquiva")
                     
                     else:
-                        print()#Mensagem dizendo que o inimigo atacou e o personagem nao conseguiu esquivar
+                        console.print("inimigo atacou, falha na esquiva")
 
                     personagem.vida_atual -= dano
 
             elif resultado['acao'] == self.acao_jogador['contra_atacar']:
                 if resultado['sucesso']:
-                    print()#Mensagem dizendo que o inimigo atacou mas o personagem conseguiu contra atacar
+                    console.print("inimigo atacou, sucesso no contra ataque")
 
                     inimigo.vida_atual -= personagem.ataque + personagem.arma.dano
                 
                 else:
-                    print()#Mensagem dizendo que o inimigo atacou e o personagem falhou em contra atacar
+                    console.print("inimigo atacou, falha no contra ataque")
             else:
                 chance_bloqueio = min(40, personagem.defesa_atual * 0.2)
 
@@ -255,14 +268,14 @@ class Jogo:
 
                 if not bloqueou:
                     if critou:
-                        print()#Mensagem dizendo que o inimigo atacou e critou
+                        console.print("inimigo atacou com crítico")
 
                     else:
-                        print()#Mensagem dizendo que o inimigo atacou
+                        console.print("inimigo atacou")
 
                     personagem.vida_atual -= dano
                 else:
-                    print()#Mensagem dizendo que o personagem bloqueou o ataque com sua defesa
+                    console.print("o ataque do inimigo foi bloqueado")
 
     def acao_personagem(self, acao):
         while True:
@@ -298,7 +311,7 @@ class Jogo:
                     return resultado
                 
                 else:
-                    print()#Mensagem dizendo que nao tem pocao
+                    console.print("você não possui nenhuma poção")
                     acao = self.obter_acao_personagem()
                     continue
             
@@ -307,9 +320,21 @@ class Jogo:
                 return resultado
 
     def obter_acao_personagem(self):
-        print()#Mensagem perguntando oq ele quer fazer, atacar, esquivar, contra atacar ou tomar poca e depois retorna essa escolha
-        # retornando da seguinte maneira
-        # 1 - se ele quiser atacar / 2 - se ele quiser esquivar / 3 - se ele quiser contra atacar / 4 - tomar pocao
+        acoes = (
+            "\n(1) - Atacar"
+            "(2) - Esquivar"
+            "(3) - Contra Atacar"
+            "(4) - Tomar poção\n"
+        )
+        try:
+            while True:
+                console.print(acoes)
+                escolha = int(console.input("[bold grey82]Escolha a ação: "))
+                if escolha < 1 and escolha > 4:
+                    raise ValueError
+                return escolha
+        except ValueError:
+            console.print("[bold red]Escolha uma ação válida!")
 
 
 # CLASSES
@@ -349,4 +374,14 @@ assassino = Personagem(
     level=1,
     arma_inicial=Arma(dano=25, critico=25),
     qnt_pocoes=2
+)
+
+mago = Inimigo(
+    nome="Mago",
+    raca="Mago",
+    vida=100,
+    ataque=15,
+    defesa=10,
+    velocidade=25,
+    arma_inicial=Arma(dano=15, critico=15)
 )
