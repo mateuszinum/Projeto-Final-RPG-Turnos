@@ -45,7 +45,7 @@ class Personagem:
                 return self.ataque + self.arma.dano, critico
                 # Retorna o dano, e o False, pra vc n precisar falar que critou e apenas mostrar o dano
         else:
-            return 0
+            return 0, False
             # Caso o ataque de 0 de dano, vc coloca uma mensagem dizendo que o ataque falhou
             
     def esquivar(self):
