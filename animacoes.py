@@ -58,10 +58,30 @@ _/  /   \  \_
 
 
 def vida_heroi(heroi):
-    return f"{heroi.vida_atual}"
+    mensagem = "┃" * int(heroi.vida_atual / heroi.vida_max * 50)
+    mensagem += "‒" * (50 - len(mensagem))
+    
+    texto_vida = f" {heroi.vida_atual}/{heroi.vida_max} "
+    meio = len(mensagem) // 2
+    inicio = meio - len(texto_vida) // 2
+    fim = inicio + len(texto_vida)
+    
+    barra_com_texto = (mensagem[:inicio] + texto_vida + mensagem[fim:])
+    
+    return barra_com_texto
 
 def vida_monstro(inimigo):
-    return f"{inimigo.vida_atual}"
+    mensagem = "┃" * int(inimigo.vida_atual / inimigo.vida_max * 50)
+    mensagem += "‒" * (50 - len(mensagem))
+    
+    texto_vida = f" {inimigo.vida_atual}/{inimigo.vida_max} "
+    meio = len(mensagem) // 2
+    inicio = meio - len(texto_vida) // 2
+    fim = inicio + len(texto_vida)
+    
+    barra_com_texto = (mensagem[:inicio] + texto_vida + mensagem[fim:])
+    
+    return barra_com_texto
 
 
 def cria_monstro(inimigo):
@@ -77,6 +97,24 @@ def cria_monstro(inimigo):
         monstro = criar_mago()
 
     return monstro
+
+
+# Cena estática
+def criar_cena(heroi, inimigo):
+    console.clear()
+
+    monstro = cria_monstro(inimigo)
+    personagem = criar_personagem()
+
+    cena = Text()
+    for linha_m, linha_p in zip(monstro.split(), personagem.split()):
+        cena.append(linha_m)
+        cena.append(' ' * 100)
+        cena.append(linha_p)
+        cena.append('\n')
+
+    console.print(Panel(cena, title=f"[{CORES['personagem']}]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style="purple", width=140))
+
 
 def avanco_personagem(heroi, inimigo):
     # Ataque do Personagem
@@ -169,7 +207,7 @@ def ataque_monstro(heroi, inimigo):
                 cena.append(' ' * pos)
                 cena.append(Text("▶", style=CORES["projetil"]))
                 cena.append(Text("▶", style=CORES["projetil"]))
-                cena.append(' ' * (100 - pos))
+                cena.append(' ' * (99 - pos))
                 cena.append(linha_p)
                 cena.append('\n')
             else:
