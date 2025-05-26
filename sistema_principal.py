@@ -53,6 +53,7 @@ while True:
         # daí acho que só vou trocar a cor da tela, que nem faço quando o bicho é atingido
         inimigo = random.choices(["Mago"], weights=[100])[0]
         tipo = random.choices(["Fogo", "Gelo"], weights=[50, 50])[0]
+
         
         # não tá funcionando, precisei parar
         if inimigo == "Mago":

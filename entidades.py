@@ -1,6 +1,7 @@
 import random
 from rich.theme import Theme
 from rich.console import Console
+from animacoes import *
 
 custom_theme = Theme({
     "default": "bold grey82"
@@ -160,7 +161,7 @@ class Jogo:
                 if self.verificar_fim():
                     break
                 
-                self.acao_inimigo(self.inimigo, self.personagem, resultado)
+                self.acao_inimigo(resultado)
 
                 if self.verificar_fim():         
                     break
@@ -177,7 +178,7 @@ class Jogo:
                         "dano": 0   
                     }
 
-                self.acao_inimigo(self.inimigo, self.personagem, resultado)
+                self.acao_inimigo(resultado)
 
                 if self.verificar_fim():
                     break
@@ -219,6 +220,7 @@ class Jogo:
         resultado = self.acao_personagem(acao)
 
         if resultado['acao'] == self.acao_jogador['atacar']:
+            ataque_personagem(self.inimigo)
             if resultado["sucesso"]:
                 msg = "Você acertou o ataque"
 
@@ -226,10 +228,11 @@ class Jogo:
                     msg += " CRÍTICO"
 
                 msg += f", causando {resultado['dano']} de dano."
-
+                monstro_atingido(self.inimigo)
             else:
                 msg = "Você errou o ataque."
 
+            
             console.print(msg)
         
         elif resultado['acao'] == self.acao_jogador['tomar_pocao']:
@@ -237,9 +240,10 @@ class Jogo:
 
         return resultado
             
-    def acao_inimigo(self, inimigo, personagem, resultado):
-        dano, critou = inimigo.ataca()
+    def acao_inimigo(self, resultado):
+        dano, critou = self.inimigo.ataca()
         if dano != 0:
+            ataque_monstro(self.inimigo)
             if resultado['acao'] == self.acao_jogador['esquivar']:
                 if resultado['sucesso']:
                     console.print("inimigo atacou, sucesso na esquiva")
@@ -250,19 +254,20 @@ class Jogo:
                     
                     else:
                         console.print("inimigo atacou, falha na esquiva")
-
-                    personagem.vida_atual -= dano
+                    personagem_atingido(self.inimigo)
+                    self.personagem.vida_atual -= dano
 
             elif resultado['acao'] == self.acao_jogador['contra_atacar']:
                 if resultado['sucesso']:
                     console.print("inimigo atacou, sucesso no contra ataque")
-
-                    inimigo.vida_atual -= personagem.ataque + personagem.arma.dano
+                    monstro_atingido(self.inimigo)
+                    self.inimigo.vida_atual -= self.personagem.ataque + self.personagem.arma.dano
                 
                 else:
                     console.print("inimigo atacou, falha no contra ataque")
+                    personagem_atingido(self.inimigo)
             else:
-                chance_bloqueio = min(40, personagem.defesa_atual * 0.2)
+                chance_bloqueio = min(40, self.personagem.defesa_atual * 0.2)
 
                 bloqueou = random.choices([True, False], weights=[chance_bloqueio, 100 - chance_bloqueio])[0]
 
@@ -272,8 +277,8 @@ class Jogo:
 
                     else:
                         console.print("inimigo atacou")
-
-                    personagem.vida_atual -= dano
+                    personagem_atingido(self.inimigo)
+                    self.personagem.vida_atual -= dano
                 else:
                     console.print("o ataque do inimigo foi bloqueado")
 
