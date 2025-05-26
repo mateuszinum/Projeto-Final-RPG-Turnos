@@ -51,10 +51,10 @@ while True:
         # não sei como vai ser o sistema pra achar inimigo, daí só coloquei aleatório
         # e outra, sobre desviar e contra atacar, não sei se vou conseguir fazer uma animação bonitinha
         # daí acho que só vou trocar a cor da tela, que nem faço quando o bicho é atingido
-        inimigo = random.choices(["Mago"], weights=[100])[0]
+        inimigo = mago
         
         # não tá funcionando, precisei parar
-        if inimigo == "Mago":
+        if inimigo.nome == "Mago":
             luta_atual = Jogo(personagem, mago)
 
         luta_atual.executar()
@@ -73,40 +73,23 @@ while True:
             "\n(4) - Animação monstro atingido"
         )
         console.print(Panel.fit(menu_teste))
+        inimigo = mago
         escolha = console.input("[bold grey82]Qual cena rodar? ")
         if escolha == "1":
-            inimigo = "Mago"
-            tipo = "Fogo"
-            cena.ataque_personagem(inimigo, tipo)
-            tipo = "Gelo"
-            cena.ataque_personagem(inimigo, tipo)
+            cena.avanco_personagem(inimigo)
 
         elif escolha == "2":
-            inimigo = "Mago"
-            tipo = "Fogo"
-            cena.ataque_monstro(inimigo, tipo)
-            tipo = "Gelo"
-            cena.ataque_monstro(inimigo, tipo)
+            cena.ataque_monstro(inimigo)
+
 
         elif escolha == "3":
-            inimigo = "Mago"
-            tipo = "Fogo"
-            cena.personagem_atingido(inimigo, tipo)
-            tipo = "Gelo"
-            cena.personagem_atingido(inimigo, tipo)
+            cena.personagem_atingido(inimigo)
 
         elif escolha == "4":
-            inimigo = "Mago"
-            tipo = "Fogo"
-            cena.monstro_atingido(inimigo, tipo)
-            tipo = "Gelo"
-            cena.monstro_atingido(inimigo, tipo)
+            cena.monstro_atingido(inimigo)
         
         elif escolha == "5":
-            inimigo = "Mago"
-            tipo = "Fogo"
-            resultado = True
-            cena.esquiva_personagem(inimigo, tipo, resultado)
+            cena.esquiva_personagem(inimigo)
 
     elif escolha == "4":
         exit()

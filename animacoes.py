@@ -74,20 +74,6 @@ _/j  L l\_!
 [/]""")
 
 
-(rf"""[bold {CORES["personagem"]}]
-
-   /\      .-.
-   ||    __|=|__
-   ||   (_/`-`\_)
-  _||_  //\___/\\
-   \/<__> /   \<>
-          |_._|/
-          <_I_>
-           |||
-          /_|_\
-[/]""")
-
-
 xp_temp = "==========================================60%======----------------------------"
 
 
@@ -105,7 +91,7 @@ def cria_monstro(inimigo):
 
     return monstro
 
-def ataque_personagem(inimigo):
+def avanco_personagem(inimigo):
     # Ataque do Personagem
     console.clear()
 
@@ -126,29 +112,39 @@ def ataque_personagem(inimigo):
         console.clear()
 
 
-def esquiva_personagem(inimigo, resultado):
-    # Personagem avança
-    ataque_personagem(inimigo)
-
-    if resultado:
-        mensagem = "[bold blue]PERSONAGEM ESQUIVOU"
-        borda = "blue"
-        CORES["personagem"] = "bold blue"
+def personagem_atingido(inimigo):
     
-    else:
-        mensagem = "[bold red]FALHA NA ESQUIVA"
-        borda = "purple"
+    borda = "red"
+    CORES["personagem"] = "bold red"
 
-    muda_personagem_estado(inimigo, mensagem, borda)
-
+    muda_personagem_estado(inimigo, borda)
 
 
-def muda_personagem_estado(inimigo, mensagem, borda):
+def esquiva_personagem(inimigo):
+
+    borda = "blue"
+    CORES["personagem"] = "bold blue"
+
+    muda_personagem_estado(inimigo, borda)
+
+
+def contaAtaque_personagem(inimigo):
+
+    borda = "yellow"
+    CORES["personagem"] = "bold yellow"
+
+
+def tomarPocao_personagem(inimigo):
+
+    borda = "green"
+    CORES["personagem"] = "bold green"
+
+
+def muda_personagem_estado(inimigo, borda):
     # Personagem toma dano
     console.clear()
 
     monstro = cria_monstro(inimigo)
-
     personagem = criar_personagem()
 
     cena_dano = Text()
@@ -158,20 +154,20 @@ def muda_personagem_estado(inimigo, mensagem, borda):
         cena_dano.append(linha_p)
         cena_dano.append('\n')
 
-    console.print(Panel(cena_dano, title=f"[bold green]{xp_temp}", subtitle=mensagem, border_style=borda, width=140))
+    console.print(Panel(cena_dano, title=f"[bold green]{xp_temp}", border_style=borda, width=140))
     time.sleep(1)
     CORES["personagem"] = "aquamarine1"
 
     voltar_normal(inimigo)
 
 
-def ataque_monstro(inimigo, tipo):
+def ataque_monstro(inimigo):
     # Ataque do Monstro
     console.clear()
 
     for pos in [20, 40, 60, 80]:
         
-        monstro = cria_monstro(inimigo, tipo)
+        monstro = cria_monstro(inimigo)
 
         personagem = criar_personagem()
         
@@ -197,18 +193,16 @@ def ataque_monstro(inimigo, tipo):
         console.clear()
 
 
-
-
-def monstro_atingido(inimigo, tipo):
+def monstro_atingido(inimigo):
     # Monstro toma dano
     console.clear()
     
-    monstro = cria_monstro(inimigo, tipo)
+    monstro = cria_monstro(inimigo)
 
     aux = CORES["monstro"]
     CORES["monstro"] = "red1"
 
-    if inimigo == "Mago":
+    if inimigo.nome == "Mago":
         monstro = criar_mago()
 
     personagem = criar_personagem()
@@ -221,17 +215,17 @@ def monstro_atingido(inimigo, tipo):
         cena_dano.append('\n')
 
     console.print(Panel(cena_dano, title=f"[bold green]{xp_temp}", subtitle="[bold red]MONSTRO ATINGIDO", border_style="red", width=140))
-    time.sleep(0.6)
+    time.sleep(1)
 
     CORES["monstro"] = aux
-    voltar_normal(inimigo, tipo)
+    voltar_normal(inimigo)
 
 
-def voltar_normal(inimigo, tipo):
+def voltar_normal(inimigo):
     # Volta ao normal
     console.clear()
 
-    monstro = cria_monstro(inimigo, tipo)
+    monstro = cria_monstro(inimigo)
 
     personagem = criar_personagem()
 

@@ -1,5 +1,4 @@
 import random
-import animacoes as cena
 from rich.theme import Theme
 from rich.console import Console
 from animacoes import *
@@ -79,6 +78,7 @@ class Personagem:
         self.defesa_atual += self.defesa_atual * 0.5
         return True
 
+
     def receber_dano(self, dano):
         redução = self.defesa_atual * 0.5
         dano_final = max(0, dano * (1 - redução/100))
@@ -120,22 +120,18 @@ class Personagem:
     def verificar_personagem(self):
         # Printar cada atributo do personagem bunitin
         pass
-
-
-
-
+    
 class Arma: 
     def __init__(self, dano, critico):
         self.dano = dano
         self.critico = critico
 
 
-
 class Inimigo(Personagem):
-    def __init__(self, raca, tipo):
+    def __init__(self, nome, vida, ataque, defesa, velocidade, level, arma_inicial, qnt_pocoes, raca, tipo):
+        super().__init__(nome, vida, ataque, defesa, velocidade, level, arma_inicial, qnt_pocoes)
         self.raca = raca
         self.tipo = random.choices(tipo, weights=[50, 50])[0]
-
 
 
 class Jogo:
@@ -149,7 +145,6 @@ class Jogo:
             'tomar_pocao': 4,
             'defender': 5
         }
-
     def executar(self):
         primeira_acao = True
         while True:
@@ -161,7 +156,7 @@ class Jogo:
                 
                 self.acao_inimigo(resultado)
 
-                if self.verificar_fim():
+                if self.verificar_fim():         
                     break
                 
                 if resultado['acao'] == 5:
@@ -180,7 +175,7 @@ class Jogo:
 
                 if self.verificar_fim():
                     break
-                
+
                 if resultado['acao'] == 5:
                     self.personagem.defesa_atual = self.personagem.defesa_inicial
                 
@@ -218,7 +213,7 @@ class Jogo:
         resultado = self.acao_personagem(acao)
 
         if resultado['acao'] == self.acao_jogador['atacar']:
-            ataque_personagem(self.inimigo)
+            avanco_personagem(self.inimigo)
             if resultado["sucesso"]:
                 msg = "Você acertou o ataque"
 
