@@ -249,7 +249,7 @@ def monstro_atingido(heroi, inimigo):
         cena.append(linha_p)
         cena.append('\n')
 
-    console.print(Panel(cena, title=f"[{CORES['personagem']}]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style="purple", width=140))
+    console.print(Panel(cena, title=f"[{CORES['personagem']}]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style=f"{CORES['monstro']}", width=140))
     time.sleep(1)
 
     CORES["monstro"] = aux

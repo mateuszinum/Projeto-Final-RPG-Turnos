@@ -24,31 +24,31 @@ def selecionar_classe():
     mensagem = ""
 
     for i, personagem in enumerate(personagens, 1):
-        mensagem += f"\n[bold magenta]{i}[/] - {personagem.nome}\n"
+        mensagem += f"\n[bold plum1]{i}[/] - {personagem.nome}\n"
         mensagem += f"{" " * 4}[bold bright_green]Vida: {personagem.vida_max}[/] | [bold red1]Ataque: {personagem.ataque}[/] | [bold bright_yellow]Defesa: {personagem.defesa_inicial}[/] | [bold dodger_blue2]Velocidade: {personagem.velocidade}[/]\n"
-        mensagem += f"{" " * 4}[bold ]Arma: [bold red1]Dano {personagem.arma.dano}[/] ([bold orange1]Crítico: {personagem.arma.critico}%[/])\n"
+        mensagem += f"{" " * 4}[bold]Arma: [bold red1]Dano {personagem.arma.dano}[/] ([bold orange1]Crítico: {personagem.arma.critico}%[/])\n"
     
     console.print(Panel.fit(mensagem, title="[bold royal_blue1]Escolha sua Classe", border_style="bold slate_blue3", style="default"))
 
     while True:
-        escolha = console.input(f"\n[bold grey82]Escolha sua classe (1-{len(personagens)}): ")
+        escolha = console.input(f"\n\n\n{' ' * 20}[bold grey82]Escolha sua classe (1-{len(personagens)}): ")
         
         if escolha in ["1", "2", "3", "4"]:
             personagem_escolhido = personagens[int(escolha)-1]
-            console.print(f"\nVocê escolheu o [bold orange1]{personagem_escolhido.nome}[/]!", style="default")
+            console.print(f"\n\n\n{' ' * 20}Você escolheu o [bold orange1]{personagem_escolhido.nome}[/]!", style="default")
             return personagem_escolhido
         else:
-            console.print("[bold red1]Opção inválida! Escolha de 1 a 4", style="default")
+            console.print(f"\n\n\n{' ' * 20}[bold red1]Opção inválida! Escolha de 1 a 4", style="default")
 
 
 personagem = selecionar_classe()
 
 
 while True:
-    console.print("\nO que você deseja fazer?", style="default")
-    console.print("[bold magenta]1[/] - Seguir em frente\n[bold magenta]2[/] - Ver status\n[bold magenta]3[/] - Testes\n[bold magenta]4[/] - Sair do jogo", style="default")
+    console.print(f"\n\n\n{' ' * 20}O que você deseja fazer?", style="default")
+    console.print(f"\n{' ' * 20}([bold plum1]1[/]) - Seguir em frente\n{' ' * 20}([bold plum1]2[/]) - Ver status\n{' ' * 20}([bold plum1]3[/]) - Testes\n{' ' * 20}([bold plum1]4[/]) - Sair do jogo", style="default")
     
-    escolha = console.input("[bold grey82]Escolha uma opção: ")
+    escolha = console.input(f"\n{' ' * 20}[bold grey82]Escolha uma opção: ")
     
     if escolha == "1":
 
@@ -66,14 +66,14 @@ while True:
 
     elif escolha == "3": # Teste de todas as animações
         menu_teste = (
-            "\n(1) - Animação ataque personagem"
-            "\n(2) - Animação ataque inimigo"
-            "\n(3) - Animação personagem atingido"
-            "\n(4) - Animação monstro atingido"
+            f"\n\n\n{' ' * 20}(1) - Animação ataque personagem"
+            f"\n{' ' * 20}(2) - Animação ataque inimigo"
+            f"\n{' ' * 20}(3) - Animação personagem atingido"
+            f"\n{' ' * 20}(4) - Animação monstro atingido"
         )
         console.print(Panel.fit(menu_teste))
         inimigo = mago
-        escolha = console.input("[bold grey82]Qual cena rodar? ")
+        escolha = console.input(f"\n{' ' * 20}[bold grey82]Qual cena rodar? ")
         if escolha == "1":
             cena.avanco_personagem(personagem, inimigo)
 
@@ -92,15 +92,15 @@ while True:
     elif escolha == "4":
         exit()
     else:
-        console.print("[bold red1]Opção inválida![/]", style="default")
+        console.print(f"\n{' ' * 20}[bold red1]Opção inválida![/]", style="default")
 
 
 # FAZER
-# arrumar vida que diminui antes do personagem atacar
-# arrumar a cor e o formato dos textos que falam de alguma habilidade
+
+
 # mudar as cores do personage, borda, etc pra ficar bonito
-# botar quanto dano o personagem recebe do inimigo
+# por algum motivo algumas opções demoram para responder
 # esquiva não funciona as vezes
-# botar textos de resposta mais pro meio da tela e pular uma linha
+# quando vai pro próximo inimigo, ele tá com a vida do antigo
 # fazer a vida do inimigo não descer de 0
 # botar menos pontos pra upar e diminuir quanto cada atributo recebe, mt forte
