@@ -123,7 +123,8 @@ class Personagem:
         pass
     
 class Arma: 
-    def __init__(self, dano, critico):
+    def __init__(self, nome, dano, critico):
+        self.nome = nome
         self.dano = dano
         self.critico = critico
 
@@ -137,8 +138,8 @@ class Inimigo(Personagem):
 
 
 class Jogo:
-    def __init__(self, personagem, inimigo):
-        self.personagem = personagem
+    def __init__(self, heroi, inimigo):
+        self.heroi = heroi
         self.inimigo = inimigo
         self.acao_jogador = {
             'atacar': 1,
@@ -147,13 +148,13 @@ class Jogo:
             'tomar_pocao': 4,
             'defender': 5
         }
-        self.id = insert_jogo_e_retorna_id(self)
+        self.id = insert_jogo_e_retorna_id(heroi.id, inimigo.id)
         
         
     def executar(self):
         primeira_acao = True
         while True:
-            if self.personagem.velocidade >= self.inimigo.velocidade:
+            if self.heroi.velocidade >= self.inimigo.velocidade:
                 resultado = self.executar_acao_personagem()
 
                 
@@ -166,7 +167,7 @@ class Jogo:
                     break
                 
                 if resultado['acao'] == 5:
-                    self.personagem.defesa_atual = self.personagem.defesa_inicial
+                    self.heroi.defesa_atual = self.heroi.defesa_inicial
                 
             else:
                 if primeira_acao:
@@ -183,7 +184,7 @@ class Jogo:
                     break
 
                 if resultado['acao'] == 5:
-                    self.personagem.defesa_atual = self.personagem.defesa_inicial
+                    self.heroi.defesa_atual = self.heroi.defesa_inicial
                 
                 resultado = self.executar_acao_personagem()
 
@@ -192,22 +193,22 @@ class Jogo:
                 if self.verificar_fim():
                     break
 
-        self.personagem.vida_atual = self.personagem.vida_max
+        self.heroi.vida_atual = self.heroi.vida_max
 
     def verificar_fim(self):
         if self.inimigo.vida_atual <= 0:
             console.print("inimigo derrotado")
             
-            upou, pontos = self.personagem.receber_xp((self.inimigo.level ** 1.3) * 150)
+            upou, pontos = self.heroi.receber_xp((self.inimigo.level ** 1.3) * 150)
 
             if upou:
                 #Mensagem falando que o personagem upou
                 for i in range(0, pontos):
-                    self.personagem.upar_personagem()
+                    self.heroi.upar_personagem()
 
             return True
         
-        elif self.personagem.vida_atual <= 0:
+        elif self.heroi.vida_atual <= 0:
             console.print("você morreu")
 
             return True
@@ -219,7 +220,7 @@ class Jogo:
         resultado = self.acao_personagem(acao)
 
         if resultado['acao'] == self.acao_jogador['atacar']:
-            avanco_personagem(self.inimigo)
+            avanco_personagem(self.heroi, self.inimigo)
             if resultado["sucesso"]:
                 msg = "Você acertou o ataque"
 
@@ -227,7 +228,7 @@ class Jogo:
                     msg += " CRÍTICO"
 
                 msg += f", causando {resultado['dano']} de dano."
-                monstro_atingido(self.inimigo)
+                monstro_atingido(self.heroi, self.inimigo)
             else:
                 msg = "Você errou o ataque."
 
@@ -242,7 +243,7 @@ class Jogo:
     def acao_inimigo(self, resultado):
         dano, critou = self.inimigo.ataca()
         if dano != 0:
-            ataque_monstro(self.inimigo)
+            ataque_monstro(self.heroi, self.inimigo)
             if resultado['acao'] == self.acao_jogador['esquivar']:
                 if resultado['sucesso']:
                     console.print("inimigo atacou, sucesso na esquiva")
@@ -253,20 +254,20 @@ class Jogo:
                     
                     else:
                         console.print("inimigo atacou, falha na esquiva")
-                    personagem_atingido(self.inimigo)
-                    self.personagem.vida_atual -= dano
+                    personagem_atingido(self.heroi, self.inimigo)
+                    self.heroi.vida_atual -= dano
 
             elif resultado['acao'] == self.acao_jogador['contra_atacar']:
                 if resultado['sucesso']:
                     console.print("inimigo atacou, sucesso no contra ataque")
-                    monstro_atingido(self.inimigo)
-                    self.inimigo.vida_atual -= self.personagem.ataque + self.personagem.arma.dano
+                    monstro_atingido(self.heroi, self.inimigo)
+                    self.inimigo.vida_atual -= self.heroi.ataque + self.heroi.arma.dano
                 
                 else:
                     console.print("inimigo atacou, falha no contra ataque")
-                    personagem_atingido(self.inimigo)
+                    personagem_atingido(self.heroi, self.inimigo)
             else:
-                chance_bloqueio = min(90, self.personagem.defesa_atual * 0.2)
+                chance_bloqueio = min(90, self.heroi.defesa_atual * 0.2)
 
                 bloqueou = random.choices([True, False], weights=[chance_bloqueio, 100 - chance_bloqueio])[0]
 
@@ -276,8 +277,8 @@ class Jogo:
 
                     else:
                         console.print("inimigo atacou")
-                    personagem_atingido(self.inimigo)
-                    self.personagem.vida_atual -= dano
+                    personagem_atingido(self.heroi, self.inimigo)
+                    self.heroi.vida_atual -= dano
                 else:
                     console.print("o ataque do inimigo foi bloqueado")
 
@@ -291,7 +292,7 @@ class Jogo:
             }
 
             if acao == 1:  
-                dano, critou = self.personagem.ataca()
+                dano, critou = self.heroi.ataca()
                 if dano > 0:
                     self.inimigo.vida_atual -= dano
                     resultado["sucesso"] = True
@@ -300,15 +301,15 @@ class Jogo:
                 return resultado
 
             elif acao == 2:  
-                resultado["sucesso"] = self.personagem.esquivar()
+                resultado["sucesso"] = self.heroi.esquivar()
                 return resultado
 
             elif acao == 3:  # 
-                resultado["sucesso"] = self.personagem.contra_atacar()
+                resultado["sucesso"] = self.heroi.contra_atacar()
                 return resultado
 
             elif acao == 4:  
-                sucesso = self.personagem.usar_pocao()
+                sucesso = self.heroi.usar_pocao()
 
                 if sucesso:
                     resultado["sucesso"] = True
@@ -320,7 +321,7 @@ class Jogo:
                     continue
             
             elif acao == 5:
-                resultado['sucesso'] = self.personagem.defender_se()
+                resultado['sucesso'] = self.heroi.defender_se()
                 return resultado
 
     def obter_acao_personagem(self):
@@ -352,7 +353,7 @@ tanque = Personagem(
     defesa=50,
     velocidade=10,
     level=1,
-    arma_inicial=Arma(dano=10, critico=5),
+    arma_inicial=Arma(nome='Clava', dano=10, critico=5),
     qnt_pocoes=3
 )
 
@@ -364,7 +365,7 @@ cavaleiro = Personagem(
     defesa=30,
     velocidade=20,
     level=1,
-    arma_inicial=Arma(dano=15, critico=10),
+    arma_inicial=Arma(nome='Espada', dano=15, critico=10),
     qnt_pocoes=3
 )
 
@@ -376,10 +377,11 @@ assassino = Personagem(
     defesa=10,
     velocidade=40,
     level=1,
-    arma_inicial=Arma(dano=25, critico=25),
+    arma_inicial=Arma(nome='Adaga', dano=25, critico=25),
     qnt_pocoes=2
 )
 
+duende = Inimigo(nome="Duende", raca="Duende", tipo=["Fogo", "Gelo"], vida=100, ataque=14, defesa=12, velocidade=13,level=1, arma_inicial=Arma("Bastão", 10, 12), qnt_pocoes=0)
 mago = Inimigo(
     nome="Mago",
     raca="Mago",
@@ -389,6 +391,6 @@ mago = Inimigo(
     defesa=10,
     velocidade=25,
     level=1,
-    arma_inicial=Arma(dano=15, critico=15),
+    arma_inicial=Arma(nome='Cajado', dano=15, critico=15),
     qnt_pocoes=0
 )

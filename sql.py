@@ -21,7 +21,7 @@ cursor.execute('''
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
         Personagem_ID INTEGER,
         Raca TEXT NOT NULL,
-        Tipo TEXT NOT NULL
+        Tipo TEXT NOT NULL,
         FOREIGN KEY (Personagem_ID) REFERENCES Personagens(ID)
     )                            
 ''')
@@ -65,16 +65,15 @@ cursor.execute('''
 conexao.commit()
 
 def insert_personagem_e_retorna_id(personagem):
-    cursor.execute("INSERT INTO Personagens (Nome, Vida, Ataque, Defesa, Velocidade, Arma, Pocoes) VALUES (?, ?, ?, ?, ?, ?, ?)", (personagem.nome, personagem.vida_max, personagem.ataque, personagem.defesa_inicial, personagem.velocidade, personagem.arma, personagem.pocoes))
+    cursor.execute("INSERT INTO Personagens (Nome, Vida, Ataque, Defesa, Velocidade, Arma, Pocoes) VALUES (?, ?, ?, ?, ?, ?, ?)", (personagem.nome, personagem.vida_max, personagem.ataque, personagem.defesa_inicial, personagem.velocidade, personagem.arma.nome, personagem.pocoes))
     
     conexao.commit()
     
     return cursor.lastrowid
 
 def insert_inimigo_e_retorna_id(inimigo):
-    inimigo_id = insert_personagem_e_retorna_id(inimigo)
     
-    cursor.execute("INSERT INTO Inimigos (Personagem_ID, Raca, Tipo) VALUES (?, ?, ?)", (inimigo_id, inimigo.raca, inimigo.tipo))
+    cursor.execute("INSERT INTO Inimigos (Personagem_ID, Raca, Tipo) VALUES (?, ?, ?)", (inimigo.id, inimigo.raca, inimigo.tipo))
     
     conexao.commit()    
     

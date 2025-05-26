@@ -51,10 +51,10 @@ while True:
         # não sei como vai ser o sistema pra achar inimigo, daí só coloquei aleatório
         # e outra, sobre desviar e contra atacar, não sei se vou conseguir fazer uma animação bonitinha
         # daí acho que só vou trocar a cor da tela, que nem faço quando o bicho é atingido
-        inimigo = mago
+        # inimigo = mago
         
         # não tá funcionando, precisei parar
-        if inimigo.nome == "Mago":
+        if mago.nome == "Mago":
             luta_atual = Jogo(personagem, mago)
 
         luta_atual.executar()
