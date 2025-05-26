@@ -2,7 +2,7 @@ import random
 from rich.theme import Theme
 from rich.console import Console
 from animacoes import *
-
+from sql import *
 custom_theme = Theme({
     "default": "bold grey82"
 })
@@ -28,7 +28,8 @@ class Personagem:
         self.inventario = [arma_inicial]
         self.arma = arma_inicial
         self.pocoes = qnt_pocoes
-    
+        self.id = insert_personagem_e_retorna_id(self)
+            
     def ataca(self):
         acertou = random.choices([True, False], weights=[90, 10])[0]
         if acertou:
@@ -132,6 +133,7 @@ class Inimigo(Personagem):
         super().__init__(nome, vida, ataque, defesa, velocidade, level, arma_inicial, qnt_pocoes)
         self.raca = raca
         self.tipo = random.choices(tipo, weights=[50, 50])[0]
+        self.id = insert_inimigo_e_retorna_id(self)
 
 
 class Jogo:
@@ -145,12 +147,16 @@ class Jogo:
             'tomar_pocao': 4,
             'defender': 5
         }
+        self.id = insert_jogo_e_retorna_id(self)
+        
+        
     def executar(self):
         primeira_acao = True
         while True:
             if self.personagem.velocidade >= self.inimigo.velocidade:
                 resultado = self.executar_acao_personagem()
 
+                
                 if self.verificar_fim():
                     break
                 
