@@ -260,7 +260,7 @@ class Jogo:
                     console.print("inimigo atacou, falha no contra ataque")
                     personagem_atingido(self.inimigo)
             else:
-                chance_bloqueio = min(40, self.personagem.defesa_atual * 0.2)
+                chance_bloqueio = min(90, self.personagem.defesa_atual * 0.2)
 
                 bloqueou = random.choices([True, False], weights=[chance_bloqueio, 100 - chance_bloqueio])[0]
 

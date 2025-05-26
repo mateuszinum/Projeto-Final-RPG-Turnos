@@ -76,20 +76,20 @@ while True:
         inimigo = mago
         escolha = console.input("[bold grey82]Qual cena rodar? ")
         if escolha == "1":
-            cena.avanco_personagem(inimigo)
+            cena.avanco_personagem(personagem, inimigo)
 
         elif escolha == "2":
-            cena.ataque_monstro(inimigo)
+            cena.ataque_monstro(personagem, inimigo)
 
 
         elif escolha == "3":
-            cena.personagem_atingido(inimigo)
+            cena.personagem_atingido(personagem, inimigo)
 
         elif escolha == "4":
-            cena.monstro_atingido(inimigo)
+            cena.monstro_atingido(personagem, inimigo)
         
         elif escolha == "5":
-            cena.esquiva_personagem(inimigo)
+            cena.esquiva_personagem(personagem, inimigo)
 
     elif escolha == "4":
         exit()
