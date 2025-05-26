@@ -52,16 +52,13 @@ while True:
         # e outra, sobre desviar e contra atacar, não sei se vou conseguir fazer uma animação bonitinha
         # daí acho que só vou trocar a cor da tela, que nem faço quando o bicho é atingido
         inimigo = random.choices(["Mago"], weights=[100])[0]
-        tipo = random.choices(["Fogo", "Gelo"], weights=[50, 50])[0]
-
         
         # não tá funcionando, precisei parar
         if inimigo == "Mago":
             luta_atual = Jogo(personagem, mago)
 
-        Jogo.obter_acao_personagem()
-        cena.ataque_personagem(inimigo, tipo)
-        cena.ataque_monstro(inimigo, tipo)
+        luta_atual.executar()
+
 
         pass
 

@@ -128,18 +128,10 @@ class Arma:
 
 
 
-class Inimigo:
-    def __init__(self, nome, raca, vida, ataque, defesa, velocidade, arma_inicial):
-        self.nome = nome
+class Inimigo(Personagem):
+    def __init__(self, raca, tipo):
         self.raca = raca
-        self.vida_max = vida
-        self.vida_atual = vida
-        self.ataque = ataque
-        self.defesa = defesa
-        self.velocidade = velocidade
-        self.xp_atual = 0
-        self.inventario = [arma_inicial]
-        self.arma = arma_inicial
+        self.tipo = random.choices(tipo, weights=[50, 50])[0]
 
 class Jogo:
     def __init__(self, personagem, inimigo):
@@ -384,9 +376,12 @@ assassino = Personagem(
 mago = Inimigo(
     nome="Mago",
     raca="Mago",
+    tipo = ["Fogo", "Gelo"],
     vida=100,
     ataque=15,
     defesa=10,
     velocidade=25,
-    arma_inicial=Arma(dano=15, critico=15)
+    level=1,
+    arma_inicial=Arma(dano=15, critico=15),
+    qnt_pocoes=0
 )
