@@ -9,7 +9,6 @@ CORES = {
     "monstro": "",
     "personagem": "aquamarine1",
     "projetil": ""
-    # "dano": "bold red"
 }
 
 def criar_mago():
@@ -92,27 +91,28 @@ _/j  L l\_!
 xp_temp = "==========================================60%======----------------------------"
 
 
-def cria_monstro(inimigo, tipo):
-    if tipo == "Fogo":
+def cria_monstro(inimigo):
+    if inimigo.tipo == "Fogo":
         CORES["monstro"] = "dark_red"
         CORES["projetil"] = "orange_red1"
-    elif tipo == "Gelo":
+
+    elif inimigo.tipo == "Gelo":
         CORES["monstro"] = "blue"
         CORES["projetil"] = "bright_cyan"
-        
-    if inimigo == "Mago":
+
+    if inimigo.nome == "Mago":
         monstro = criar_mago()
 
     return monstro
 
-def ataque_personagem(inimigo, tipo):
+def ataque_personagem(inimigo):
     # Ataque do Personagem
     console.clear()
 
+    monstro = cria_monstro(inimigo)
+    personagem = criar_personagem()
+
     for pos in [100, 80, 60, 40, 60, 80, 100]:
-        monstro = cria_monstro(inimigo, tipo)
-        
-        personagem = criar_personagem()
         
         cena = Text()
         for linha_m, linha_p in zip(monstro.split(), personagem.split()):
@@ -124,6 +124,46 @@ def ataque_personagem(inimigo, tipo):
         console.print(Panel(cena, title=f"[bold green]{xp_temp}", border_style="purple", width=140))
         time.sleep(0.6)
         console.clear()
+
+
+def esquiva_personagem(inimigo, resultado):
+    # Personagem avança
+    ataque_personagem(inimigo)
+
+    if resultado:
+        mensagem = "[bold blue]PERSONAGEM ESQUIVOU"
+        borda = "blue"
+        CORES["personagem"] = "bold blue"
+    
+    else:
+        mensagem = "[bold red]FALHA NA ESQUIVA"
+        borda = "purple"
+
+    muda_personagem_estado(inimigo, mensagem, borda)
+
+
+
+def muda_personagem_estado(inimigo, mensagem, borda):
+    # Personagem toma dano
+    console.clear()
+
+    monstro = cria_monstro(inimigo)
+
+    personagem = criar_personagem()
+
+    cena_dano = Text()
+    for linha_m, linha_p in zip(monstro.split(), personagem.split()):
+        cena_dano.append(linha_m)
+        cena_dano.append(' ' * 100)
+        cena_dano.append(linha_p)
+        cena_dano.append('\n')
+
+    console.print(Panel(cena_dano, title=f"[bold green]{xp_temp}", subtitle=mensagem, border_style=borda, width=140))
+    time.sleep(1)
+    CORES["personagem"] = "aquamarine1"
+
+    voltar_normal(inimigo)
+
 
 def ataque_monstro(inimigo, tipo):
     # Ataque do Monstro
@@ -157,29 +197,6 @@ def ataque_monstro(inimigo, tipo):
         console.clear()
 
 
-def personagem_atingido(inimigo, tipo):
-    # Personagem toma dano
-    console.clear()
-
-    monstro = cria_monstro(inimigo, tipo)
-
-    aux = CORES["personagem"]
-    CORES["personagem"] = "red1"
-
-    personagem = criar_personagem()
-
-    cena_dano = Text()
-    for linha_m, linha_p in zip(monstro.split(), personagem.split()):
-        cena_dano.append(linha_m)
-        cena_dano.append(' ' * 100)
-        cena_dano.append(linha_p)
-        cena_dano.append('\n')
-
-    console.print(Panel(cena_dano, title=f"[bold green]{xp_temp}", subtitle="[bold red]PERSONAGEM ATINGIDO", border_style="red", width=140))
-    time.sleep(0.6)
-    CORES["personagem"] = aux
-
-    voltar_normal(inimigo, tipo)
 
 
 def monstro_atingido(inimigo, tipo):
@@ -216,7 +233,6 @@ def voltar_normal(inimigo, tipo):
 
     monstro = cria_monstro(inimigo, tipo)
 
-        
     personagem = criar_personagem()
 
     cena_normal = Text()

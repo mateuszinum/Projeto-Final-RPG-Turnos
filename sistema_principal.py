@@ -101,6 +101,12 @@ while True:
             cena.monstro_atingido(inimigo, tipo)
             tipo = "Gelo"
             cena.monstro_atingido(inimigo, tipo)
+        
+        elif escolha == "5":
+            inimigo = "Mago"
+            tipo = "Fogo"
+            resultado = True
+            cena.esquiva_personagem(inimigo, tipo, resultado)
 
     elif escolha == "4":
         exit()
