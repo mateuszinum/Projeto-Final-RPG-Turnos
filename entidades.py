@@ -1,13 +1,17 @@
+import time
 import random
+from sql import *
+import animacoes as cena
 from rich.theme import Theme
 from rich.console import Console
-from animacoes import *
-from sql import *
-custom_theme = Theme({
+
+
+tema = Theme({
     "default": "bold grey82"
 })
 
-console = Console(theme=custom_theme)
+
+console = Console(theme=tema)
 
 
 # Ações das Entidades
@@ -99,34 +103,49 @@ class Personagem:
         return upou, pontos
     
     def upar_personagem(self):
-        atributos = ['Vida', 'Ataque', 'Defesa', 'Velocidade']
-        # Pedir pra o usuario escolher um desses atributos para upar
-        if 'Vida':
+        atributos = ['[bold bright_green]Vida', '[bold red1]Ataque', '[bold bright_yellow]Defesa', '[bold dodger_blue2]Velocidade']
+        console.print("\nAtributos para upar:\n", style="default")
+        for i, atributo in enumerate(atributos, 1):
+            console.print(f"({i}) - {atributo}")
+        
+        escolha = console.input("\n[bold grey82]Escolha um atributo para upar: ")
+
+        if escolha == '1':
             self.vida_max += 50
-            console.print("Você upou Vida!")
-            console.print("Vida antiga >> Vida nova")
-        elif 'Ataque':
+            console.print(f"\nVocê upou [bold bright_green]Vida[/]!", style="default")
+            console.print(f"[bold bright_green]{self.vida_max - 50} >> [bold bright_green]{self.vida_max}", style="default")
+
+        elif escolha == '2':
             self.ataque += 10
-            console.print("Você upou Ataque!")
-            console.print("Ataque antigo >> Ataque novo")
-        elif 'Defesa':
-            self.defesa += 5
-            console.print("Você upou Defesa!")
-            console.print("Defesa antiga >> Defesa nova")
-        elif 'Velocidade':
+            console.print(f"Você upou [bold red1]Ataque[/]!", style="default")
+            console.print(f"[bold red1]{self.ataque - 10} >> [bold red1]{self.ataque}", style="default")
+
+        elif escolha == '3':
+            self.defesa_atual += 5
+            console.print(f"Você upou [bold bright_yellow]Defesa[/]!", style="default")
+            console.print(f"[bold bright_yellow]{self.defesa_atual - 5} >> [bold bright_yellow]{self.defesa_atual}", style="default")
+        
+        elif escolha == '4':
             self.velocidade += 10
-            console.print("Você upou Velocidade!")
-            console.print("Velocidade antiga >> Velocidade nova")
+            console.print(f"Você upou [bold dodger_blue2]Velocidade[/]!", style="default")
+            console.print(f"[bold dodger_blue2]{self.velocidade - 10} >> [bold dodger_blue2]{self.velocidade}", style="default")
+        
+        else:
+            console.print("[bold red]Escolha inválida! Tente novamente.")
+            self.upar_personagem()
 
     def verificar_personagem(self):
         # Printar cada atributo do personagem bunitin
         pass
     
+
+
 class Arma: 
     def __init__(self, nome, dano, critico):
         self.nome = nome
         self.dano = dano
         self.critico = critico
+
 
 
 class Inimigo(Personagem):
@@ -135,6 +154,7 @@ class Inimigo(Personagem):
         self.raca = raca
         self.tipo = random.choices(tipo, weights=[50, 50])[0]
         self.id = insert_inimigo_e_retorna_id(self)
+
 
 
 class Jogo:
@@ -150,13 +170,11 @@ class Jogo:
         }
         self.id = insert_jogo_e_retorna_id(heroi.id, inimigo.id)
         
-        
     def executar(self):
         primeira_acao = True
         while True:
             if self.heroi.velocidade >= self.inimigo.velocidade:
                 resultado = self.executar_acao_personagem()
-
                 
                 if self.verificar_fim():
                     break
@@ -197,20 +215,24 @@ class Jogo:
 
     def verificar_fim(self):
         if self.inimigo.vida_atual <= 0:
-            console.print("inimigo derrotado")
-            
+            cena.criar_cena(self.heroi, self.inimigo)
+            console.print("\n[bold light_goldenrod1]Inimigo derrotado!", style="default")
+            time.sleep(3)
+
             upou, pontos = self.heroi.receber_xp((self.inimigo.level ** 1.3) * 150)
 
             if upou:
-                #Mensagem falando que o personagem upou
+                console.print(f"\n[bold green_yellow]Você subiu de nível![/] Você atingiu o nível [bold green_yellow]{self.heroi.level}[/]!", style="default")
                 for i in range(0, pontos):
                     self.heroi.upar_personagem()
+            time.sleep(3)
 
             return True
         
         elif self.heroi.vida_atual <= 0:
-            console.print("você morreu")
-
+            cena.criar_cena(self.heroi, self.inimigo)
+            console.print(f"\n[bold red3]Você foi derrotado!")
+            time.sleep(3)
             return True
         
         return False
@@ -220,67 +242,92 @@ class Jogo:
         resultado = self.acao_personagem(acao)
 
         if resultado['acao'] == self.acao_jogador['atacar']:
-            avanco_personagem(self.heroi, self.inimigo)
+            
+            cena.avanco_personagem(self.heroi, self.inimigo)
             if resultado["sucesso"]:
                 msg = "Você acertou o ataque"
 
                 if resultado["critico"]:
-                    msg += " CRÍTICO"
+                    msg += "[bold orange_red1] CRÍTICO[/]"
 
-                msg += f", causando {resultado['dano']} de dano."
-                monstro_atingido(self.heroi, self.inimigo)
+                msg += f", causando [bold red3]{resultado['dano']}[/] de dano."
+                
+                cena.monstro_atingido(self.heroi, self.inimigo)
             else:
                 msg = "Você errou o ataque."
 
-            
-            console.print(msg)
+            cena.criar_cena(self.heroi, self.inimigo)
+            console.print(f"{msg}", style="default")
         
         elif resultado['acao'] == self.acao_jogador['tomar_pocao']:
-            console.print("você tomou a poção com sucesso")
-
+            cena.tomarPocao_personagem(self.heroi, self.inimigo)
+            cena.criar_cena(self.heroi, self.inimigo)
+            console.print(f"[bold green_yellow]Você tomou uma poção! + {self.heroi.vida_max * 0.3} HP")
+            
+        time.sleep(3)
         return resultado
             
     def acao_inimigo(self, resultado):
         dano, critou = self.inimigo.ataca()
         if dano != 0:
-            ataque_monstro(self.heroi, self.inimigo)
+            cena.ataque_monstro(self.heroi, self.inimigo)
             if resultado['acao'] == self.acao_jogador['esquivar']:
                 if resultado['sucesso']:
-                    console.print("inimigo atacou, sucesso na esquiva")
+                    cena.criar_cena(self.heroi, self.inimigo)
+                    console.print(f"Inimigo atacou, sucesso na [bold blue]esquiva[/]", style="default")
+                    time.sleep(3)
 
                 else:
+                    cena.personagem_atingido(self.heroi, self.inimigo)
+                    self.heroi.vida_atual -= dano
+                    cena.criar_cena(self.heroi, self.inimigo)
+
                     if critou:
-                        console.print("inimigo atacou com crítico, falha na esquiva")
+                        console.print(f"Inimigo atacou com [bold orange_red1]crítico[/], falha na [bold blue]esquiva[/]", style="default")
                     
                     else:
-                        console.print("inimigo atacou, falha na esquiva")
-                    personagem_atingido(self.heroi, self.inimigo)
-                    self.heroi.vida_atual -= dano
+                        console.print(f"Inimigo atacou, falha na [bold blue]esquiva", style="default")
+
+                    console.print(f"[bold red3]   -{dano} HP")
+                    time.sleep(3)
 
             elif resultado['acao'] == self.acao_jogador['contra_atacar']:
                 if resultado['sucesso']:
-                    console.print("inimigo atacou, sucesso no contra ataque")
-                    monstro_atingido(self.heroi, self.inimigo)
+                    cena.monstro_atingido(self.heroi, self.inimigo)
                     self.inimigo.vida_atual -= self.heroi.ataque + self.heroi.arma.dano
+                    cena.criar_cena(self.heroi, self.inimigo)
+                    console.print(f"Inimigo atacou, sucesso no [bold light_goldenrod1]contra ataque", style="default")
                 
-                else:
-                    console.print("inimigo atacou, falha no contra ataque")
-                    personagem_atingido(self.heroi, self.inimigo)
+                else: ########################## herói não perde vida??????????????????????????????????????????
+                    
+                    cena.personagem_atingido(self.heroi, self.inimigo)
+                    cena.criar_cena(self.heroi, self.inimigo)
+                    console.print(f"Inimigo atacou, falha no [bold light_goldenrod1]contra ataque", style="default")
+                
+                time.sleep(3)
+
             else:
                 chance_bloqueio = min(90, self.heroi.defesa_atual * 0.2)
-
                 bloqueou = random.choices([True, False], weights=[chance_bloqueio, 100 - chance_bloqueio])[0]
 
                 if not bloqueou:
+                    
+                    cena.personagem_atingido(self.heroi, self.inimigo)
+                    self.heroi.vida_atual -= dano
+                    cena.criar_cena(self.heroi, self.inimigo)
                     if critou:
-                        console.print("inimigo atacou com crítico")
+                        console.print(f"Inimigo atacou com [bold orange_red1]crítico", style="default")
 
                     else:
-                        console.print("inimigo atacou")
-                    personagem_atingido(self.heroi, self.inimigo)
-                    self.heroi.vida_atual -= dano
+                        console.print(f"Inimigo atacou", style="default")
+
                 else:
-                    console.print("o ataque do inimigo foi bloqueado")
+                    ######################### animação de bloqueio
+                    cena.criar_cena(self.heroi, self.inimigo)
+                    console.print(f"O ataque do inimigo foi bloqueado com [bold chartreuse2]sucesso[/]!", style="default")
+                
+                time.sleep(3)
+            
 
     def acao_personagem(self, acao):
         while True:
@@ -316,7 +363,7 @@ class Jogo:
                     return resultado
                 
                 else:
-                    console.print("você não possui nenhuma poção")
+                    console.print(f"[bold red]Você não possui nenhuma poção")
                     acao = self.obter_acao_personagem()
                     continue
             
@@ -326,14 +373,14 @@ class Jogo:
 
     def obter_acao_personagem(self):
         acoes = (
-            "\n(1) - Atacar"
-            "(2) - Esquivar"
-            "(3) - Contra Atacar"
-            "(4) - Tomar poção\n"
+            "\n([bold magenta]1[/]) - Atacar"
+            "\n([bold magenta]2[/]) - Esquivar"
+            "\n([bold magenta]3[/]) - Contra Atacar"
+            "\n([bold magenta]4[/]) - Tomar poção\n"
         )
         try:
             while True:
-                console.print(acoes)
+                console.print(f"{acoes}", style="default")
                 escolha = int(console.input("[bold grey82]Escolha a ação: "))
                 if escolha < 1 and escolha > 4:
                     raise ValueError
@@ -345,7 +392,6 @@ class Jogo:
 # CLASSES
 
 
-# Função: Absorve dano, ideal para segurar o inimigo por muito tempo.
 tanque = Personagem(
     nome="Tanque",
     vida=350,
@@ -357,7 +403,6 @@ tanque = Personagem(
     qnt_pocoes=3
 )
 
-# Função: Equilíbrio entre ataque e defesa.
 cavaleiro = Personagem(
     nome="Cavaleiro",
     vida=250,
@@ -369,7 +414,6 @@ cavaleiro = Personagem(
     qnt_pocoes=3
 )
 
-# Função: Alta chance de crítico, esquiva e contra-ataque.   ######## Assassino não tá mt broken com essa arma aí? por mim diminui o dano da arma e a velocidade em 10
 assassino = Personagem(
     nome="Assassino",
     vida=150,

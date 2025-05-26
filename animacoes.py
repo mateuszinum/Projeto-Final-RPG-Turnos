@@ -3,13 +3,16 @@ from rich.text import Text
 from rich.panel import Panel
 from rich.console import Console
 
+
 console = Console()     
+
 
 CORES = {
     "monstro": "",
     "personagem": "aquamarine1",
     "projetil": ""
 }
+
 
 def criar_mago():
     return Text.from_markup(
@@ -25,6 +28,8 @@ rf"""[bold {CORES["monstro"]}]
 _.'  \-'-'  / |
 `----'`=-='   '
 [/]""")
+
+
 
 def criar_personagem():
     return Text.from_markup(
@@ -69,6 +74,7 @@ def vida_heroi(heroi):
     barra_com_texto = (mensagem[:inicio] + texto_vida + mensagem[fim:])
     
     return barra_com_texto
+
 
 def vida_monstro(inimigo):
     mensagem = "┃" * int(inimigo.vida_atual / inimigo.vida_max * 50)

@@ -2,6 +2,7 @@ from entidades import *
 import animacoes as cena
 from rich.panel import Panel
 
+
 tema = Theme({
     "default": "bold grey82"
 })
@@ -39,7 +40,9 @@ def selecionar_classe():
         else:
             console.print("[bold red1]Opção inválida! Escolha de 1 a 4", style="default")
 
+
 personagem = selecionar_classe()
+
 
 while True:
     console.print("\nO que você deseja fazer?", style="default")
@@ -48,14 +51,10 @@ while True:
     escolha = console.input("[bold grey82]Escolha uma opção: ")
     
     if escolha == "1":
-        # não sei como vai ser o sistema pra achar inimigo, daí só coloquei aleatório
-        # e outra, sobre desviar e contra atacar, não sei se vou conseguir fazer uma animação bonitinha
-        # daí acho que só vou trocar a cor da tela, que nem faço quando o bicho é atingido
-        # inimigo = mago
-        
-        # não tá funcionando, precisei parar
-        if mago.nome == "Mago":
-            luta_atual = Jogo(personagem, mago)
+
+        inimigo = mago
+
+        luta_atual = Jogo(personagem, inimigo)
 
         luta_atual.executar()
 
@@ -81,7 +80,6 @@ while True:
         elif escolha == "2":
             cena.ataque_monstro(personagem, inimigo)
 
-
         elif escolha == "3":
             cena.personagem_atingido(personagem, inimigo)
 
@@ -95,3 +93,14 @@ while True:
         exit()
     else:
         console.print("[bold red1]Opção inválida![/]", style="default")
+
+
+# FAZER
+# arrumar vida que diminui antes do personagem atacar
+# arrumar a cor e o formato dos textos que falam de alguma habilidade
+# mudar as cores do personage, borda, etc pra ficar bonito
+# botar quanto dano o personagem recebe do inimigo
+# esquiva não funciona as vezes
+# botar textos de resposta mais pro meio da tela e pular uma linha
+# fazer a vida do inimigo não descer de 0
+# botar menos pontos pra upar e diminuir quanto cada atributo recebe, mt forte
