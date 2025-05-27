@@ -9,7 +9,7 @@ console = Console()
 
 CORES = {
     "monstro": "",
-    "personagem": "aquamarine1",
+    "personagem": "grey46",
     "projetil": ""
 }
 
@@ -50,6 +50,7 @@ rf"""[bold {CORES["personagem"]}]
 # Outros sprites do mago, não achei nenhum outro guerreiro legalzinho
 
 
+# se pá dá pra arrumar esse modelo e usar como fada ou elfo mágico, sla
 (rf"""[bold {CORES["monstro"]}]
        ,/   *
     _,'/_   |
@@ -62,10 +63,27 @@ _/  /   \  \_
 [/]""")
 
 
+# talvez o boss?
+(rf"""[bold {CORES["monstro"]}]
+				 _____
+	 _____	    /__ /(
+	/  _  \	    `.	\ \
+   |  [ () |	  \	 \ \
+ .---.	  ¯|-..    \  \ \
+//` \ \¯¯¯¯¯\  \  _//  \ |
+\` ,' /	     ) / (,`|`--'
+ `---´	 `	/-´`.// /
+  |	 \	'|'( \  // /	 
+  \  | _  _|  `// /
+[/]""")
+
 def vida_heroi(heroi):
     mensagem = "┃" * int(heroi.vida_atual / heroi.vida_max * 50)
     mensagem += "‒" * (50 - len(mensagem))
     
+    if heroi.vida_atual <= 0:
+        heroi.vida_atual = 0
+
     texto_vida = f" {heroi.vida_atual}/{heroi.vida_max} "
     meio = len(mensagem) // 2
     inicio = meio - len(texto_vida) // 2
@@ -80,6 +98,9 @@ def vida_monstro(inimigo):
     mensagem = "┃" * int(inimigo.vida_atual / inimigo.vida_max * 50)
     mensagem += "‒" * (50 - len(mensagem))
     
+    if inimigo.vida_atual <= 0:
+        inimigo.vida_atual = 0
+
     texto_vida = f" {inimigo.vida_atual}/{inimigo.vida_max} "
     meio = len(mensagem) // 2
     inicio = meio - len(texto_vida) // 2
@@ -92,12 +113,12 @@ def vida_monstro(inimigo):
 
 def cria_monstro(inimigo):
     if inimigo.tipo == "Fogo":
-        CORES["monstro"] = "dark_red"
+        CORES["monstro"] = "hot_pink3"
         CORES["projetil"] = "orange_red1"
 
     elif inimigo.tipo == "Gelo":
-        CORES["monstro"] = "blue"
-        CORES["projetil"] = "bright_cyan"
+        CORES["monstro"] = "cornflower_blue"
+        CORES["projetil"] = "deep_sky_blue1"
 
     if inimigo.nome == "Mago":
         monstro = criar_mago()
@@ -119,7 +140,7 @@ def criar_cena(heroi, inimigo):
         cena.append(linha_p)
         cena.append('\n')
 
-    console.print(Panel(cena, title=f"[{CORES['personagem']}]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style="purple", width=140))
+    console.print(Panel(cena, title=f"[bright_green]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style="medium_orchid", width=140))
 
 
 def avanco_personagem(heroi, inimigo):
@@ -138,39 +159,39 @@ def avanco_personagem(heroi, inimigo):
             cena.append(linha_p)
             cena.append('\n')
         
-        console.print(Panel(cena, title=f"[{CORES['personagem']}]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style="purple", width=140))
+        console.print(Panel(cena, title=f"[bright_green]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style="medium_orchid", width=140))
         time.sleep(0.6)
         console.clear()
 
 
 def personagem_atingido(heroi, inimigo):
     
-    borda = "red"
-    CORES["personagem"] = "bold red"
+    borda = "red1"
+    CORES["personagem"] = "red1"
 
     muda_personagem_estado(heroi, inimigo, borda)
 
 
 def esquiva_personagem(heroi, inimigo):
 
-    borda = "blue"
-    CORES["personagem"] = "bold blue"
+    borda = "dodger_blue2"
+    CORES["personagem"] = "dodger_blue2"
 
     muda_personagem_estado(heroi, inimigo, borda)
 
 
 def contaAtaque_personagem(heroi, inimigo):
 
-    borda = "yellow"
-    CORES["personagem"] = "bold yellow"
+    borda = "bright_yellow"
+    CORES["personagem"] = "bright_yellow"
 
     muda_personagem_estado(heroi, inimigo, borda)
 
 
 def tomarPocao_personagem(heroi, inimigo):
 
-    borda = "green"
-    CORES["personagem"] = "bold green"
+    borda = "bright_green"
+    CORES["personagem"] = "bright_green"
 
     muda_personagem_estado(heroi, inimigo, borda)
 
@@ -189,9 +210,9 @@ def muda_personagem_estado(heroi, inimigo, borda):
         cena.append(linha_p)
         cena.append('\n')
 
-    console.print(Panel(cena, title=f"[{CORES['personagem']}]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style=borda, width=140))
+    console.print(Panel(cena, title=f"[bright_green]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style=borda, width=140))
     time.sleep(1)
-    CORES["personagem"] = "aquamarine1"
+    CORES["personagem"] = "grey46"
 
     voltar_normal(heroi, inimigo)
 
@@ -223,7 +244,7 @@ def ataque_monstro(heroi, inimigo):
                 cena.append(linha_p)
                 cena.append('\n')
       
-        console.print(Panel(cena, title=f"[{CORES['personagem']}]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style="purple", width=140))
+        console.print(Panel(cena, title=f"[bright_green]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style="medium_orchid", width=140))
         time.sleep(0.7)
         console.clear()
 
@@ -249,7 +270,7 @@ def monstro_atingido(heroi, inimigo):
         cena.append(linha_p)
         cena.append('\n')
 
-    console.print(Panel(cena, title=f"[{CORES['personagem']}]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style=f"{CORES['monstro']}", width=140))
+    console.print(Panel(cena, title=f"[bright_green]{vida_heroi(heroi)}", subtitle=f"[{aux}]{vida_monstro(inimigo)}", border_style=f"{CORES['monstro']}", width=140))
     time.sleep(1)
 
     CORES["monstro"] = aux
@@ -271,6 +292,6 @@ def voltar_normal(heroi, inimigo):
         cena.append(linha_p)
         cena.append('\n')
 
-    console.print(Panel(cena, title=f"[{CORES['personagem']}]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style="purple", width=140))
+    console.print(Panel(cena, title=f"[bright_green]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style="medium_orchid", width=140))
     time.sleep(0.6)
     console.clear()

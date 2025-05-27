@@ -28,7 +28,7 @@ def selecionar_classe():
         mensagem += f"{" " * 4}[bold bright_green]Vida: {personagem.vida_max}[/] | [bold red1]Ataque: {personagem.ataque}[/] | [bold bright_yellow]Defesa: {personagem.defesa_inicial}[/] | [bold dodger_blue2]Velocidade: {personagem.velocidade}[/]\n"
         mensagem += f"{" " * 4}[bold]Arma: [bold red1]Dano {personagem.arma.dano}[/] ([bold orange1]Crítico: {personagem.arma.critico}%[/])\n"
     
-    console.print(Panel.fit(mensagem, title="[bold royal_blue1]Escolha sua Classe", border_style="bold slate_blue3", style="default"))
+    console.print(Panel.fit(mensagem, title="[bold medium_orchid]Escolha sua Classe", border_style="medium_orchid", style="default"))
 
     while True:
         escolha = console.input(f"\n\n\n{' ' * 20}[bold grey82]Escolha sua classe (1-{len(personagens)}): ")
