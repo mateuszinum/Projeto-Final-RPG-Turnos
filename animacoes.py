@@ -17,16 +17,16 @@ CORES = {
 def criar_mago():
     return Text.from_markup(
 rf"""[bold {CORES["monstro"]}]
-         ,    _
+         ,    _ 
         /|   | |
       _/_\_  >_<
-     .-\-/.   |
-    /  | | \_ |
-    \ \| |\__(/
-    /(`---')  |
-   / /     \  |
-_.'  \-'-'  / |
-`----'`=-='   '
+     .-\-/.   | 
+    /  | | \_ | 
+    \ \| |\__(/ 
+    /(`---')  | 
+   / /     \  | 
+_.'  \-'-'  / | 
+`----'`=-='   ' 
 [/]""")
 
 
@@ -35,30 +35,30 @@ def criar_fenix():
 rf"""[bold {CORES["monstro"]}]
  .\\            //.
 . \ \          / /.
-.\  ,\     /` /,.-
- -.   \  /'/ /  .
- ` -   `-'  \  -
-   '.       /.\`
-      -    .-
-      :`//.'
-      .`.'
-      .'
+.\  ,\     /` /,.- 
+ -.   \  /'/ /  .  
+ ` -   `-'  \  -   
+   '.       /.\`   
+      -    .-      
+      :`//.'       
+      .`.'         
+      .'           
 [/]""")
 
 
 def criar_guardiao():
     return Text.from_markup(
 rf"""[bold {CORES["monstro"]}]
-				 _____
-	 _____	    /__ /(
-	/  _  \	    `.	\ \
-   |  [ () |	  \	 \ \
- .---.	  ¯|-..    \  \ \
+		_____    
+     _____	    /__ /(    
+    /  _  \	    `.	\ \   
+   |  [ () |	  \	 \ \  
+ .---.	  ¯|-..    \  \ \ 
 //` \ \¯¯¯¯¯\  \  _//  \ |
-\` ,' /	     ) / (,`|`--'
- `---´	 `	/-´`.// /
-  |	 \	'|'( \  // /	 
-  \  | _  _|  `// /
+\` ,' /	     ) / (,`|`--' 
+ `---´	 `	/-´`.// /     
+|	 \	'|'( \  // /      
+  \  | _  _|  `// /       
 [/]""")
 
 
@@ -66,15 +66,15 @@ def criar_personagem():
     return Text.from_markup(
 rf"""[bold {CORES["personagem"]}]
 
-  /\      .-.
-  ||    __|=|__
-   ||   (_/`-`\_)
-  _||_  //\___/\\
-   \/<__> /   \<>
-          |_._|/
-          <_I_>
-           |||
-          /_|_\
+ /\      .-.   
+ ||    __|=|__ 
+ ||   (_/`-`\_)
+_||_  //\___/\\
+ \/<__> /   \<>
+        |_._|/ 
+        <_I_>  
+         |||   
+        /_|_\  
 [/]""")
 
 
@@ -151,10 +151,17 @@ def criar_cena(heroi, inimigo):
     monstro = cria_monstro(inimigo)
     personagem = criar_personagem()
 
+    if inimigo.nome == "Mago":
+        pos = 100
+    elif inimigo.nome == "Fênix":
+        pos = 95
+    elif inimigo.nome == "Guardião Elemental":
+        pos = 85
+
     cena = Text()
     for linha_m, linha_p in zip(monstro.split(), personagem.split()):
         cena.append(linha_m)
-        cena.append(' ' * 100) # acho que tem que mudar isso dependendo do monstro
+        cena.append(' ' * pos)
         cena.append(linha_p)
         cena.append('\n')
 
@@ -171,9 +178,9 @@ def avanco_personagem(heroi, inimigo):
     if inimigo.nome == "Mago":
         posicoes = [100, 80, 60, 40, 20, 40, 60, 80, 100]
     elif inimigo.nome == "Fênix":
-        pass
+        posicoes = [95, 80, 60, 40, 20, 40, 60, 80, 95]
     elif inimigo.nome == "Guardião Elemental":
-        pass
+        posicoes = [80, 60, 40, 20, 10, 20, 40, 60, 80]
 
     for pos in posicoes:
         
@@ -228,10 +235,17 @@ def muda_personagem_estado(heroi, inimigo, borda):
     monstro = cria_monstro(inimigo)
     personagem = criar_personagem()
 
+    if inimigo.nome == "Mago":
+        pos = 100
+    elif inimigo.nome == "Fênix":
+        pos = 95
+    elif inimigo.nome == "Guardião Elemental":
+        pos = 90
+
     cena = Text()
     for linha_m, linha_p in zip(monstro.split(), personagem.split()):
         cena.append(linha_m)
-        cena.append(' ' * 100) # acho que tem que mudar isso dependendo do monstro
+        cena.append(' ' * pos)
         cena.append(linha_p)
         cena.append('\n')
 
@@ -248,10 +262,13 @@ def ataque_monstro(heroi, inimigo):
 
     if inimigo.nome == "Mago":
         posicoes = [20, 40, 60, 80]
+        num = 100
     elif inimigo.nome == "Fênix":
-        pass
+        posicoes = [10, 30, 50, 70]
+        num = 95
     elif inimigo.nome == "Guardião Elemental":
-        pass
+        posicoes = [5, 25, 45, 65]
+        num = 90
 
     for pos in posicoes:
         
@@ -266,13 +283,13 @@ def ataque_monstro(heroi, inimigo):
                 cena.append(' ' * pos)
                 cena.append(Text("▶", style=CORES["projetil"]))
                 cena.append(Text("▶", style=CORES["projetil"]))
-                cena.append(' ' * (99 - pos)) # acho que tem que mudar isso dependendo do monstro
+                cena.append(' ' * ((num - 1) - pos))
                 cena.append(linha_p)
                 cena.append('\n')
             else:
                 cena.append(linha_m)
-                cena.append(' ' * (pos + 1)) # acho que tem que mudar isso dependendo do monstro
-                cena.append(' ' * (100 - pos)) # acho que tem que mudar isso dependendo do monstro
+                cena.append(' ' * (pos + 1))
+                cena.append(' ' * (num - pos))
                 cena.append(linha_p)
                 cena.append('\n')
       
@@ -285,16 +302,27 @@ def monstro_atingido(heroi, inimigo):
     # Monstro toma dano
     console.clear()
     
+    monstro = cria_monstro(inimigo)
+
     aux = CORES["monstro"]
     CORES["monstro"] = "red1"
 
-    monstro = cria_monstro(inimigo)
+    if inimigo.nome == "Mago":
+        monstro = criar_mago()
+
     personagem = criar_personagem()
+
+    if inimigo.nome == "Mago":
+        pos = 100
+    elif inimigo.nome == "Fênix":
+        pos = 95
+    elif inimigo.nome == "Guardião Elemental":
+        pos = 90
 
     cena = Text()
     for linha_m, linha_p in zip(monstro.split(), personagem.split()):
         cena.append(linha_m)
-        cena.append(' ' * 100) # acho que tem que mudar isso dependendo do monstro
+        cena.append(' ' * pos)
         cena.append(linha_p)
         cena.append('\n')
 
@@ -312,10 +340,17 @@ def voltar_normal(heroi, inimigo):
     monstro = cria_monstro(inimigo)
     personagem = criar_personagem()
 
+    if inimigo.nome == "Mago":
+        pos = 100
+    elif inimigo.nome == "Fênix":
+        pos = 95
+    elif inimigo.nome == "Guardião Elemental":
+        pos = 90
+
     cena = Text()
     for linha_m, linha_p in zip(monstro.split(), personagem.split()):
         cena.append(linha_m)
-        cena.append(' ' * 100) # acho que tem que mudar isso dependendo do monstro
+        cena.append(' ' * pos)
         cena.append(linha_p)
         cena.append('\n')
 

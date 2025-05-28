@@ -53,7 +53,7 @@ while True:
     if escolha == "1":
 
         # inimigo = random.choices([mago, fenix], weights=[50, 50])[0] ainda não tá funcionando porque não coloquei a posição certinha da fenix
-        inimigo = random.choices([mago], weights=[50, 50])[0]
+        inimigo = random.choices([mago], weights=[100])[0]
 
         luta_atual = Jogo(personagem, inimigo)
 
@@ -99,9 +99,7 @@ while True:
 # FAZER
 
 
-# mudar as cores do personage, borda, etc pra ficar bonito
 # por algum motivo algumas opções demoram para responder
 # esquiva não funciona as vezes
 # quando vai pro próximo inimigo, ele tá com a vida do antigo
-# fazer a vida do inimigo não descer de 0
 # botar menos pontos pra upar e diminuir quanto cada atributo recebe, mt forte

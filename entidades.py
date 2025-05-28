@@ -465,3 +465,16 @@ fenix = Inimigo(
     arma_inicial=Arma(nome='Bico', dano=25, critico=5),
     qnt_pocoes=0
 )
+
+guardiao = Inimigo(
+    nome="Guardião Elemental",
+    raca="Guardião Elemental",
+    tipo = ["Fogo", "Gelo"],
+    vida=200,
+    ataque=30,
+    defesa=20,
+    velocidade=30,
+    level=1,
+    arma_inicial=Arma(nome='Martelo Mágico', dano=25, critico=5),
+    qnt_pocoes=0
+)
