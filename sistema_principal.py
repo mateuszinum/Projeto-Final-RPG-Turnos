@@ -46,7 +46,7 @@ personagem = selecionar_classe()
 
 while True:
     console.print(f"\n\n\n{' ' * 20}O que você deseja fazer?", style="default")
-    console.print(f"\n{' ' * 20}([bold plum1]1[/]) - Seguir em frente\n{' ' * 20}([bold plum1]2[/]) - Ver status\n{' ' * 20}([bold plum1]3[/]) - Testes\n{' ' * 20}([bold plum1]4[/]) - Sair do jogo", style="default")
+    console.print(f"\n{' ' * 20}([bold plum1]1[/]) - Seguir em frente\n{' ' * 20}([bold plum1]2[/]) - Ver status\n{' ' * 20}([bold plum1]3[/]) - Sair do jogo", style="default")
     
     escolha = console.input(f"\n{' ' * 20}[bold grey82]Escolha uma opção: ")
     
@@ -64,33 +64,9 @@ while True:
     elif escolha == "2":
         pass
 
-    elif escolha == "3": # Teste de todas as animações
-        menu_teste = (
-            f"\n\n\n{' ' * 20}(1) - Animação ataque personagem"
-            f"\n{' ' * 20}(2) - Animação ataque inimigo"
-            f"\n{' ' * 20}(3) - Animação personagem atingido"
-            f"\n{' ' * 20}(4) - Animação monstro atingido"
-        )
-        console.print(Panel.fit(menu_teste))
-        inimigo = mago
-        escolha = console.input(f"\n{' ' * 20}[bold grey82]Qual cena rodar? ")
-        if escolha == "1":
-            cena.avanco_personagem(personagem, inimigo)
-
-        elif escolha == "2":
-            cena.ataque_monstro(personagem, inimigo)
-
-        elif escolha == "3":
-            cena.personagem_atingido(personagem, inimigo)
-
-        elif escolha == "4":
-            cena.monstro_atingido(personagem, inimigo)
-        
-        elif escolha == "5":
-            cena.esquiva_personagem(personagem, inimigo)
-
-    elif escolha == "4":
+    elif escolha == "3":
         exit()
+
     else:
         console.print(f"\n{' ' * 20}[bold red1]Opção inválida![/]", style="default")
 
@@ -99,6 +75,5 @@ while True:
 
 
 # por algum motivo algumas opções demoram para responder
-# esquiva não funciona as vezes
-# quando vai pro próximo inimigo, ele tá com a vida do antigo
 # botar menos pontos pra upar e diminuir quanto cada atributo recebe, mt forte
+# balancear inimigos, sistema de xp, (personagens?)

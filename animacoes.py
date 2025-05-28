@@ -202,11 +202,18 @@ def esquiva_personagem(heroi, inimigo):
 
 def contraAtaque_personagem(heroi, inimigo):
 
+    borda = "dark_orange3"
+    CORES["personagem"] = "dark_orange3"
+
+    muda_personagem_estado(heroi, inimigo, borda)
+
+
+def bloqueio_personagem(heroi, inimigo):
+
     borda = "bright_yellow"
     CORES["personagem"] = "bright_yellow"
 
     muda_personagem_estado(heroi, inimigo, borda)
-
 
 def tomarPocao_personagem(heroi, inimigo):
 

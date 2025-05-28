@@ -298,7 +298,7 @@ class Jogo:
                         console.print(f"\n\n\n{' ' * 20}Inimigo atacou com [bold orange1]crítico[/], causando [bold red1]{dano}[/] de dano, [bold red1]falha[/] na [bold dodger_blue2]esquiva[/]", style="default")
                     
                     else:
-                        console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano} de dano, [bold red1]falha[/] na [bold dodger_blue2]esquiva", style="default")
+                        console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano}[/] de dano, [bold red1]falha[/] na [bold dodger_blue2]esquiva", style="default")
 
                     time.sleep(3)
 
@@ -334,7 +334,7 @@ class Jogo:
                         console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano}[/] de dano", style="default")
 
                 else:
-                    ######################### animação de bloqueio
+                    cena.bloqueio_personagem(self.heroi, self.inimigo)
                     cena.criar_cena(self.heroi, self.inimigo)
                     console.print(f"\n\n\n{' ' * 20}O ataque do inimigo foi bloqueado com [bold bright_green]sucesso[/]!", style="default")
                 
