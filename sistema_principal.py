@@ -52,7 +52,8 @@ while True:
     
     if escolha == "1":
 
-        inimigo = mago
+        # inimigo = random.choices([mago, fenix], weights=[50, 50])[0] ainda não tá funcionando porque não coloquei a posição certinha da fenix
+        inimigo = random.choices([mago], weights=[50, 50])[0]
 
         luta_atual = Jogo(personagem, inimigo)
 

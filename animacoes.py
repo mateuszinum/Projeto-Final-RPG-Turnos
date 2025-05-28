@@ -30,6 +30,37 @@ _.'  \-'-'  / |
 [/]""")
 
 
+def criar_fenix():
+    return Text.from_markup(
+rf"""[bold {CORES["monstro"]}]
+ .\\            //.
+. \ \          / /.
+.\  ,\     /` /,.-
+ -.   \  /'/ /  .
+ ` -   `-'  \  -
+   '.       /.\`
+      -    .-
+      :`//.'
+      .`.'
+      .'
+[/]""")
+
+
+def criar_guardiao():
+    return Text.from_markup(
+rf"""[bold {CORES["monstro"]}]
+				 _____
+	 _____	    /__ /(
+	/  _  \	    `.	\ \
+   |  [ () |	  \	 \ \
+ .---.	  ¯|-..    \  \ \
+//` \ \¯¯¯¯¯\  \  _//  \ |
+\` ,' /	     ) / (,`|`--'
+ `---´	 `	/-´`.// /
+  |	 \	'|'( \  // /	 
+  \  | _  _|  `// /
+[/]""")
+
 
 def criar_personagem():
     return Text.from_markup(
@@ -47,9 +78,6 @@ rf"""[bold {CORES["personagem"]}]
 [/]""")
 
 
-# Outros sprites do mago, não achei nenhum outro guerreiro legalzinho
-
-
 # se pá dá pra arrumar esse modelo e usar como fada ou elfo mágico, sla
 (rf"""[bold {CORES["monstro"]}]
        ,/   *
@@ -62,20 +90,6 @@ _/  /   \  \_
 \_.'( ) (`._/
 [/]""")
 
-
-# talvez o boss?
-(rf"""[bold {CORES["monstro"]}]
-				 _____
-	 _____	    /__ /(
-	/  _  \	    `.	\ \
-   |  [ () |	  \	 \ \
- .---.	  ¯|-..    \  \ \
-//` \ \¯¯¯¯¯\  \  _//  \ |
-\` ,' /	     ) / (,`|`--'
- `---´	 `	/-´`.// /
-  |	 \	'|'( \  // /	 
-  \  | _  _|  `// /
-[/]""")
 
 def vida_heroi(heroi):
     mensagem = "┃" * int(heroi.vida_atual / heroi.vida_max * 50)
@@ -122,6 +136,10 @@ def cria_monstro(inimigo):
 
     if inimigo.nome == "Mago":
         monstro = criar_mago()
+    elif inimigo.nome == "Fênix":
+        monstro = criar_fenix()
+    elif inimigo.nome == "Guardião Elemental":
+        monstro = criar_guardiao()
 
     return monstro
 
@@ -136,7 +154,7 @@ def criar_cena(heroi, inimigo):
     cena = Text()
     for linha_m, linha_p in zip(monstro.split(), personagem.split()):
         cena.append(linha_m)
-        cena.append(' ' * 100)
+        cena.append(' ' * 100) # acho que tem que mudar isso dependendo do monstro
         cena.append(linha_p)
         cena.append('\n')
 
@@ -150,7 +168,14 @@ def avanco_personagem(heroi, inimigo):
     monstro = cria_monstro(inimigo)
     personagem = criar_personagem()
 
-    for pos in [100, 80, 60, 40, 60, 80, 100]:
+    if inimigo.nome == "Mago":
+        posicoes = [100, 80, 60, 40, 20, 40, 60, 80, 100]
+    elif inimigo.nome == "Fênix":
+        pass
+    elif inimigo.nome == "Guardião Elemental":
+        pass
+
+    for pos in posicoes:
         
         cena = Text()
         for linha_m, linha_p in zip(monstro.split(), personagem.split()):
@@ -206,7 +231,7 @@ def muda_personagem_estado(heroi, inimigo, borda):
     cena = Text()
     for linha_m, linha_p in zip(monstro.split(), personagem.split()):
         cena.append(linha_m)
-        cena.append(' ' * 100)
+        cena.append(' ' * 100) # acho que tem que mudar isso dependendo do monstro
         cena.append(linha_p)
         cena.append('\n')
 
@@ -221,7 +246,14 @@ def ataque_monstro(heroi, inimigo):
     # Ataque do Monstro
     console.clear()
 
-    for pos in [20, 40, 60, 80]:
+    if inimigo.nome == "Mago":
+        posicoes = [20, 40, 60, 80]
+    elif inimigo.nome == "Fênix":
+        pass
+    elif inimigo.nome == "Guardião Elemental":
+        pass
+
+    for pos in posicoes:
         
         monstro = cria_monstro(inimigo)
 
@@ -234,13 +266,13 @@ def ataque_monstro(heroi, inimigo):
                 cena.append(' ' * pos)
                 cena.append(Text("▶", style=CORES["projetil"]))
                 cena.append(Text("▶", style=CORES["projetil"]))
-                cena.append(' ' * (99 - pos))
+                cena.append(' ' * (99 - pos)) # acho que tem que mudar isso dependendo do monstro
                 cena.append(linha_p)
                 cena.append('\n')
             else:
                 cena.append(linha_m)
-                cena.append(' ' * (pos + 1))
-                cena.append(' ' * (100 - pos))
+                cena.append(' ' * (pos + 1)) # acho que tem que mudar isso dependendo do monstro
+                cena.append(' ' * (100 - pos)) # acho que tem que mudar isso dependendo do monstro
                 cena.append(linha_p)
                 cena.append('\n')
       
@@ -253,20 +285,16 @@ def monstro_atingido(heroi, inimigo):
     # Monstro toma dano
     console.clear()
     
-    monstro = cria_monstro(inimigo)
-
     aux = CORES["monstro"]
     CORES["monstro"] = "red1"
 
-    if inimigo.nome == "Mago":
-        monstro = criar_mago()
-
+    monstro = cria_monstro(inimigo)
     personagem = criar_personagem()
 
     cena = Text()
     for linha_m, linha_p in zip(monstro.split(), personagem.split()):
         cena.append(linha_m)
-        cena.append(' ' * 100)
+        cena.append(' ' * 100) # acho que tem que mudar isso dependendo do monstro
         cena.append(linha_p)
         cena.append('\n')
 
@@ -282,13 +310,12 @@ def voltar_normal(heroi, inimigo):
     console.clear()
 
     monstro = cria_monstro(inimigo)
-
     personagem = criar_personagem()
 
     cena = Text()
     for linha_m, linha_p in zip(monstro.split(), personagem.split()):
         cena.append(linha_m)
-        cena.append(' ' * 100)
+        cena.append(' ' * 100) # acho que tem que mudar isso dependendo do monstro
         cena.append(linha_p)
         cena.append('\n')
 

@@ -440,7 +440,6 @@ assassino = Personagem(
     qnt_pocoes=2
 )
 
-duende = Inimigo(nome="Duende", raca="Duende", tipo=["Fogo", "Gelo"], vida=100, ataque=14, defesa=12, velocidade=13,level=1, arma_inicial=Arma("Bastão", 10, 12), qnt_pocoes=0)
 mago = Inimigo(
     nome="Mago",
     raca="Mago",
@@ -451,5 +450,18 @@ mago = Inimigo(
     velocidade=25,
     level=1,
     arma_inicial=Arma(nome='Cajado', dano=15, critico=15),
+    qnt_pocoes=0
+)
+
+fenix = Inimigo(
+    nome="Fênix",
+    raca="Fênix",
+    tipo = ["Fogo", "Gelo"],
+    vida=200,
+    ataque=30,
+    defesa=20,
+    velocidade=30,
+    level=1,
+    arma_inicial=Arma(nome='Bico', dano=25, critico=5),
     qnt_pocoes=0
 )
