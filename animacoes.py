@@ -49,17 +49,18 @@ rf"""[bold {CORES["monstro"]}]
 def criar_guardiao():
     return Text.from_markup(
 rf"""[bold {CORES["monstro"]}]
-		_____    
-     _____	    /__ /(    
-    /  _  \	    `.	\ \   
-   |  [ () |	  \	 \ \  
- .---.	  ¯|-..    \  \ \ 
-//` \ \¯¯¯¯¯\  \  _//  \ |
-\` ,' /	     ) / (,`|`--' 
- `---´	 `	/-´`.// /     
-|	 \	'|'( \  // /      
+               _____     
+     _____    /__ /(      
+    /  _  \    `. \ \     
+   |  [ () |     \ \ \    
+ .---.    ¯|-..   \ \  \  
+//` \ \¯¯¯¯¯\  \  _// \ | 
+\` ,' /     )  / (,`|`--' 
+ `---´     `/-´`.// /     
+  |  \  '|'( \  // /      
   \  | _  _|  `// /       
-[/]""")
+[/]"""
+    )
 
 
 def criar_personagem():
@@ -75,19 +76,6 @@ _||_  //\___/\\
         <_I_>  
          |||   
         /_|_\  
-[/]""")
-
-
-# se pá dá pra arrumar esse modelo e usar como fada ou elfo mágico, sla
-(rf"""[bold {CORES["monstro"]}]
-       ,/   *
-    _,'/_   |
-    `(")' ,'/
- _ _,-H-./ /
- \_\_\.   /
-  /" / \  \_
-_/  /   \  \_
-\_.'( ) (`._/
 [/]""")
 
 
@@ -127,8 +115,8 @@ def vida_monstro(inimigo):
 
 def cria_monstro(inimigo):
     if inimigo.tipo == "Fogo":
-        CORES["monstro"] = "hot_pink3"
-        CORES["projetil"] = "orange_red1"
+        CORES["monstro"] = "indian_red"
+        CORES["projetil"] = "dark_orange"
 
     elif inimigo.tipo == "Gelo":
         CORES["monstro"] = "cornflower_blue"
@@ -156,7 +144,7 @@ def criar_cena(heroi, inimigo):
     elif inimigo.nome == "Fênix":
         pos = 95
     elif inimigo.nome == "Guardião Elemental":
-        pos = 85
+        pos = 90
 
     cena = Text()
     for linha_m, linha_p in zip(monstro.split(), personagem.split()):
@@ -180,7 +168,7 @@ def avanco_personagem(heroi, inimigo):
     elif inimigo.nome == "Fênix":
         posicoes = [95, 80, 60, 40, 20, 40, 60, 80, 95]
     elif inimigo.nome == "Guardião Elemental":
-        posicoes = [80, 60, 40, 20, 10, 20, 40, 60, 80]
+        posicoes = [90, 70, 50, 30, 10, 30, 50, 70, 90]
 
     for pos in posicoes:
         
@@ -212,7 +200,7 @@ def esquiva_personagem(heroi, inimigo):
     muda_personagem_estado(heroi, inimigo, borda)
 
 
-def contaAtaque_personagem(heroi, inimigo):
+def contraAtaque_personagem(heroi, inimigo):
 
     borda = "bright_yellow"
     CORES["personagem"] = "bright_yellow"
@@ -267,7 +255,7 @@ def ataque_monstro(heroi, inimigo):
         posicoes = [10, 30, 50, 70]
         num = 95
     elif inimigo.nome == "Guardião Elemental":
-        posicoes = [5, 25, 45, 65]
+        posicoes = [20, 40, 60, 80]
         num = 90
 
     for pos in posicoes:
@@ -302,13 +290,17 @@ def monstro_atingido(heroi, inimigo):
     # Monstro toma dano
     console.clear()
     
-    monstro = cria_monstro(inimigo)
+    # monstro = cria_monstro(inimigo)
 
     aux = CORES["monstro"]
     CORES["monstro"] = "red1"
 
     if inimigo.nome == "Mago":
         monstro = criar_mago()
+    elif inimigo.nome == "Fênix":
+        monstro = criar_fenix()
+    elif inimigo.nome == "Guardião Elemental":
+        monstro = criar_guardiao()
 
     personagem = criar_personagem()
 
