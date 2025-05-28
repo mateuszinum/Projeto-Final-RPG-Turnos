@@ -60,9 +60,11 @@ class Personagem:
             return random.choices([True, False], weights=[90, 10])[0]
 
     def contra_atacar(self):
-        if self.velocidade * 0.3 <= 60:
-            return random.choices([True, False], weights=[30 + self.velocidade * 0.3, 70 - self.velocidade * 0.3])
-
+        if self.velocidade * 0.2 <= 70:
+            chance_acerto = 20 + self.velocidade * 0.2
+            chance_erro = 80 - self.velocidade * 0.2
+            return random.choices([True, False], weights=[chance_acerto, chance_erro])
+        
         else:
             return random.choices([True, False], weights=[90, 10])[0]
     
@@ -140,7 +142,7 @@ class Personagem:
             console.print(f"\n{' ' * 20}[bold red1]Escolha inválida! Tente novamente.")
             self.upar_personagem()
         
-        time.sleep(2)
+        time.sleep(1)
 
     def verificar_personagem(self):
         # Printar cada atributo do personagem bunitin
@@ -308,11 +310,12 @@ class Jogo:
                     cena.monstro_atingido(self.heroi, self.inimigo)
                     self.inimigo.vida_atual -= self.heroi.ataque + self.heroi.arma.dano
                     cena.criar_cena(self.heroi, self.inimigo)
-                    console.print(f"\n\n\n{' ' * 20}Inimigo atacou, [bold bright_green]sucesso[/] no [bold bright_yellow]contra ataque", style="default")
+                    console.print(f"\n\n\n{' ' * 20}Inimigo atacou, [bold bright_green]sucesso[/] no [bold bright_yellow]contra ataque[/], causou [bold red1]{self.heroi.ataque + self.heroi.arma.dano}[/]", style="default")
                 
-                else: ########################## herói não perde vida??????????????????????????????????????????
+                else:
                     
                     cena.personagem_atingido(self.heroi, self.inimigo)
+                    self.heroi.vida_atual -= dano ##### arrumar
                     cena.criar_cena(self.heroi, self.inimigo)
                     console.print(f"\n\n\n{' ' * 20}Inimigo atacou, [bold red1]falha[/] no [bold bright_yellow]contra ataque", style="default")
                 
@@ -353,7 +356,6 @@ class Jogo:
             if acao == 1:  
                 dano, critou = self.heroi.ataca()
                 if dano > 0:
-                    # self.inimigo.vida_atual -= dano
                     resultado["sucesso"] = True
                     resultado["dano"] = dano
                     resultado["critico"] = critou

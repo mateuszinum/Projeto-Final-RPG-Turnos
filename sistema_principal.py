@@ -1,5 +1,4 @@
 from entidades import *
-import animacoes as cena
 from rich.panel import Panel
 
 
