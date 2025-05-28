@@ -225,7 +225,7 @@ class Jogo:
         if self.inimigo.vida_atual <= 0:
             cena.criar_cena(self.heroi, self.inimigo)
             console.print(f"\n\n\n{' ' * 20}[bold light_goldenrod1]Inimigo derrotado!", style="default")
-            console.print(f"{' ' * 20}[bold plum1]+{(self.inimigo.level ** 1.3) * 150} XP", style="default")
+            console.print(f"{' ' * 20}[bold plum1]+{int((self.inimigo.level ** 1.3) * 150)} XP", style="default")
             time.sleep(3)
 
             upou, pontos = self.heroi.receber_xp((self.inimigo.level ** 1.3) * 150)
@@ -284,6 +284,7 @@ class Jogo:
             cena.ataque_monstro(self.heroi, self.inimigo)
             if resultado['acao'] == self.acao_jogador['esquivar']:
                 if resultado['sucesso']:
+                    cena.esquiva_personagem(self.heroi, self.inimigo)
                     cena.criar_cena(self.heroi, self.inimigo)
                     console.print(f"\n\n\n{' ' * 20}Inimigo atacou, [bold bright_green]sucesso[/] na [bold dodger_blue2]esquiva[/]", style="default")
                     time.sleep(3)
@@ -303,6 +304,7 @@ class Jogo:
 
             elif resultado['acao'] == self.acao_jogador['contra_atacar']:
                 if resultado['sucesso']:
+                    cena.contraAtaque_personagem(self.heroi, self.inimigo)
                     cena.monstro_atingido(self.heroi, self.inimigo)
                     self.inimigo.vida_atual -= self.heroi.ataque + self.heroi.arma.dano
                     cena.criar_cena(self.heroi, self.inimigo)

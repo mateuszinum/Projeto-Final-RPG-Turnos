@@ -25,8 +25,8 @@ def selecionar_classe():
 
     for i, personagem in enumerate(personagens, 1):
         mensagem += f"\n[bold plum1]{i}[/] - {personagem.nome}\n"
-        mensagem += f"{" " * 4}[bold bright_green]Vida: {personagem.vida_max}[/] | [bold red1]Ataque: {personagem.ataque}[/] | [bold bright_yellow]Defesa: {personagem.defesa_inicial}[/] | [bold dodger_blue2]Velocidade: {personagem.velocidade}[/]\n"
-        mensagem += f"{" " * 4}[bold]Arma: [bold red1]Dano {personagem.arma.dano}[/] ([bold orange1]Crítico: {personagem.arma.critico}%[/])\n"
+        mensagem += f"{' ' * 4}[bold bright_green]Vida: {personagem.vida_max}[/] | [bold red1]Ataque: {personagem.ataque}[/] | [bold bright_yellow]Defesa: {personagem.defesa_inicial}[/] | [bold dodger_blue2]Velocidade: {personagem.velocidade}[/]\n"
+        mensagem += f"{' ' * 4}[bold]Arma: [bold red1]Dano {personagem.arma.dano}[/] ([bold orange1]Crítico: {personagem.arma.critico}%[/])\n"
     
     console.print(Panel.fit(mensagem, title="[bold medium_orchid]Escolha sua Classe", border_style="medium_orchid", style="default"))
 
@@ -52,8 +52,7 @@ while True:
     
     if escolha == "1":
 
-        # inimigo = random.choices([mago, fenix], weights=[50, 50])[0] ainda não tá funcionando porque não coloquei a posição certinha da fenix
-        inimigo = random.choices([mago], weights=[100])[0]
+        inimigo = random.choices([mago, fenix, guardiao], weights=[33, 33, 33])[0]
 
         luta_atual = Jogo(personagem, inimigo)
 
