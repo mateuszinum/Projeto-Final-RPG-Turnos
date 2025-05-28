@@ -32,7 +32,7 @@ def selecionar_classe():
     while True:
         escolha = console.input(f"\n\n\n{' ' * 20}[bold grey82]Escolha sua classe (1-{len(personagens)}): ")
         
-        if escolha in ["1", "2", "3", "4"]:
+        if escolha in ["1", "2", "3"]:
             personagem_escolhido = personagens[int(escolha)-1]
             console.print(f"\n\n\n{' ' * 20}Você escolheu o [bold orange1]{personagem_escolhido.nome}[/]!", style="default")
             return personagem_escolhido
@@ -67,12 +67,15 @@ while True:
         exit()
 
     else:
-        console.print(f"\n{' ' * 20}[bold red1]Opção inválida![/]", style="default")
+        console.print(f"\n\n\n{' ' * 20}[bold red1]Opção inválida![/]", style="default")
 
 
 # FAZER
 
 
-# por algum motivo algumas opções demoram para responder
+# fazer o negócio pra ver status do personagem
+# botar pra dropar chave pro boss
+# botar mais um inimigo
+# fazer gerar certinho novos inimigos
 # botar menos pontos pra upar e diminuir quanto cada atributo recebe, mt forte
 # balancear inimigos, sistema de xp, (personagens?)

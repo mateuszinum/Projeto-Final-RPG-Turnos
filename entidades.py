@@ -44,13 +44,13 @@ class Personagem:
             critico = random.choices([True, False], weights=[chance_critico_total, 100 - chance_critico_total])[0]
             if critico:
                 return (self.ataque + self.arma.dano) * 2, critico
-                # Retorna o dano, e o True, pra na msg vc poder falar que critou e mostrar o dano
+
             else:
                 return self.ataque + self.arma.dano, critico
-                # Retorna o dano, e o False, pra vc n precisar falar que critou e apenas mostrar o dano
+
         else:
             return 0, False
-            # Caso o ataque de 0 de dano, vc coloca uma mensagem dizendo que o ataque falhou
+
             
     def esquivar(self):
         if self.velocidade * 0.5 <= 25:
@@ -61,9 +61,7 @@ class Personagem:
 
     def contra_atacar(self):
         if self.velocidade * 0.2 <= 70:
-            chance_acerto = 20 + self.velocidade * 0.2
-            chance_erro = 80 - self.velocidade * 0.2
-            return random.choices([True, False], weights=[chance_acerto, chance_erro])
+            return random.choices([True, False], weights=[20 + self.velocidade * 0.2, 80 - self.velocidade * 0.2])[0]
         
         else:
             return random.choices([True, False], weights=[90, 10])[0]
@@ -140,7 +138,8 @@ class Personagem:
         
         else:
             console.print(f"\n{' ' * 20}[bold red1]Escolha inválida! Tente novamente.")
-            self.upar_personagem()
+            time.sleep(1)
+            self.upar_personagem(pontos)
         
         time.sleep(1)
 
@@ -261,23 +260,24 @@ class Jogo:
                 if resultado["critico"]:
                     msg += "[bold orange1] crítico[/]"
 
-                msg += f", causando [bold red1]{resultado['dano']}[/] de dano."
+                msg += f", causando [bold red1]{resultado['dano']}[/] de dano"
                 
                 cena.monstro_atingido(self.heroi, self.inimigo)
                 self.inimigo.vida_atual -= resultado["dano"]
 
             else:
-                msg = "Você [bold red1]errou[/] o ataque."
+                msg = "Você [bold red1]errou[/] o ataque"
 
             cena.criar_cena(self.heroi, self.inimigo)
             console.print(f"\n\n\n{' ' * 20}{msg}", style="default")
-        
+            time.sleep(3)
+
         elif resultado['acao'] == self.acao_jogador['tomar_pocao']:
             cena.tomarPocao_personagem(self.heroi, self.inimigo)
             cena.criar_cena(self.heroi, self.inimigo)
             console.print(f"\n\n\n{' ' * 20}[bold green_yellow]Você tomou uma poção! [bold bright_green]+ {self.heroi.vida_max * 0.3} HP[/]")
-
-        time.sleep(3)
+            time.sleep(3)
+        
         return resultado
             
     def acao_inimigo(self, resultado):
@@ -289,7 +289,6 @@ class Jogo:
                     cena.esquiva_personagem(self.heroi, self.inimigo)
                     cena.criar_cena(self.heroi, self.inimigo)
                     console.print(f"\n\n\n{' ' * 20}Inimigo atacou, [bold bright_green]sucesso[/] na [bold dodger_blue2]esquiva[/]", style="default")
-                    time.sleep(3)
 
                 else:
                     cena.personagem_atingido(self.heroi, self.inimigo)
@@ -298,11 +297,10 @@ class Jogo:
 
                     if critou:
                         console.print(f"\n\n\n{' ' * 20}Inimigo atacou com [bold orange1]crítico[/], causando [bold red1]{dano}[/] de dano, [bold red1]falha[/] na [bold dodger_blue2]esquiva[/]", style="default")
-                    
                     else:
                         console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano}[/] de dano, [bold red1]falha[/] na [bold dodger_blue2]esquiva", style="default")
 
-                    time.sleep(3)
+                time.sleep(3)
 
             elif resultado['acao'] == self.acao_jogador['contra_atacar']:
                 if resultado['sucesso']:
@@ -310,7 +308,7 @@ class Jogo:
                     cena.monstro_atingido(self.heroi, self.inimigo)
                     self.inimigo.vida_atual -= self.heroi.ataque + self.heroi.arma.dano
                     cena.criar_cena(self.heroi, self.inimigo)
-                    console.print(f"\n\n\n{' ' * 20}Inimigo atacou, [bold bright_green]sucesso[/] no [bold bright_yellow]contra ataque[/], causou [bold red1]{self.heroi.ataque + self.heroi.arma.dano}[/]", style="default")
+                    console.print(f"\n\n\n{' ' * 20}Inimigo atacou, [bold bright_green]sucesso[/] no [bold bright_yellow]contra ataque[/], causou [bold red1]{self.heroi.ataque + self.heroi.arma.dano}[/] de dano", style="default")
                 
                 else:
                     
@@ -384,6 +382,10 @@ class Jogo:
             elif acao == 5:
                 resultado['sucesso'] = self.heroi.defender_se()
                 return resultado
+            
+            else:
+                console.print(f"\n\n\n{' ' * 20}[bold red1]Ação inválida. Escolha novamente.")
+                acao = self.obter_acao_personagem()
 
     def obter_acao_personagem(self):
 
