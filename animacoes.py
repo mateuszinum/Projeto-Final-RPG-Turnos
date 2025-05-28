@@ -59,8 +59,24 @@ rf"""[bold {CORES["monstro"]}]
  `---´     `/-´`.// /     
   |  \  '|'( \  // /      
   \  | _  _|  `// /       
-[/]"""
-    )
+[/]""")
+
+
+def criar_demonio():
+    return Text.from_markup(
+rf"""[bold {CORES["monstro"]}]
+          v  
+    (__)v | v
+    /\/\\_|_/
+   _\__/  |  
+  /  \/`\<`) 
+  \ (  |\_/  
+  /)))-(  |  
+ / /^ ^ \ |  
+/  )^/\^( |  
+)_//`__>> |  
+  #   #`  |  
+[/]""")
 
 
 def criar_personagem():
@@ -128,6 +144,8 @@ def cria_monstro(inimigo):
         monstro = criar_fenix()
     elif inimigo.nome == "Guardião Elemental":
         monstro = criar_guardiao()
+    elif inimigo.nome == "Demônio":
+        monstro = criar_demonio()
 
     return monstro
 
@@ -145,6 +163,8 @@ def criar_cena(heroi, inimigo):
         pos = 95
     elif inimigo.nome == "Guardião Elemental":
         pos = 90
+    elif inimigo.nome == "Demônio":
+        pos = 105
 
     cena = Text()
     for linha_m, linha_p in zip(monstro.split(), personagem.split()):
@@ -169,6 +189,8 @@ def avanco_personagem(heroi, inimigo):
         posicoes = [95, 80, 60, 40, 20, 40, 60, 80, 95]
     elif inimigo.nome == "Guardião Elemental":
         posicoes = [90, 70, 50, 30, 10, 30, 50, 70, 90]
+    elif inimigo.nome == "Demônio":
+        posicoes = [105, 85, 65, 45, 25, 45, 65, 85, 105]
 
     for pos in posicoes:
         
@@ -236,6 +258,8 @@ def muda_personagem_estado(heroi, inimigo, borda):
         pos = 95
     elif inimigo.nome == "Guardião Elemental":
         pos = 90
+    elif inimigo.nome == "Demônio":
+        pos = 105
 
     cena = Text()
     for linha_m, linha_p in zip(monstro.split(), personagem.split()):
@@ -264,6 +288,9 @@ def ataque_monstro(heroi, inimigo):
     elif inimigo.nome == "Guardião Elemental":
         posicoes = [20, 40, 60, 80]
         num = 90
+    elif inimigo.nome == "Demônio":
+        posicoes = [25, 45, 65, 85]
+        num = 105
 
     for pos in posicoes:
         
@@ -308,6 +335,8 @@ def monstro_atingido(heroi, inimigo):
         monstro = criar_fenix()
     elif inimigo.nome == "Guardião Elemental":
         monstro = criar_guardiao()
+    elif inimigo.nome == "Demônio":
+        monstro = criar_demonio()
 
     personagem = criar_personagem()
 
@@ -317,6 +346,8 @@ def monstro_atingido(heroi, inimigo):
         pos = 95
     elif inimigo.nome == "Guardião Elemental":
         pos = 90
+    elif inimigo.nome == "Demônio":
+        pos = 105
 
     cena = Text()
     for linha_m, linha_p in zip(monstro.split(), personagem.split()):
@@ -345,6 +376,8 @@ def voltar_normal(heroi, inimigo):
         pos = 95
     elif inimigo.nome == "Guardião Elemental":
         pos = 90
+    elif inimigo.nome == "Demônio":
+        pos = 105
 
     cena = Text()
     for linha_m, linha_p in zip(monstro.split(), personagem.split()):

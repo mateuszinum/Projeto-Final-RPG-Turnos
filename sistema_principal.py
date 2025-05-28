@@ -51,7 +51,7 @@ while True:
     
     if escolha == "1":
 
-        inimigo = random.choices([mago, fenix, guardiao], weights=[33, 33, 33])[0]
+        inimigo = random.choices([mago, fenix, guardiao, demonio], weights=[25, 25, 25, 25])[0]
 
         luta_atual = Jogo(personagem, inimigo)
 
@@ -72,10 +72,9 @@ while True:
 
 # FAZER
 
-
+# a vida tá ficando float depois de tomar poção
 # fazer o negócio pra ver status do personagem
 # botar pra dropar chave pro boss
-# botar mais um inimigo
 # fazer gerar certinho novos inimigos
 # botar menos pontos pra upar e diminuir quanto cada atributo recebe, mt forte
 # balancear inimigos, sistema de xp, (personagens?)

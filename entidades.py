@@ -315,7 +315,7 @@ class Jogo:
                     cena.personagem_atingido(self.heroi, self.inimigo)
                     self.heroi.vida_atual -= dano ##### arrumar
                     cena.criar_cena(self.heroi, self.inimigo)
-                    console.print(f"\n\n\n{' ' * 20}Inimigo atacou, [bold red1]falha[/] no [bold bright_yellow]contra ataque", style="default")
+                    console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano}[/] de dano, [bold red1]falha[/] no [bold bright_yellow]contra ataque", style="default")
                 
                 time.sleep(3)
 
@@ -482,5 +482,18 @@ guardiao = Inimigo(
     velocidade=30,
     level=1,
     arma_inicial=Arma(nome='Martelo Mágico', dano=25, critico=5),
+    qnt_pocoes=0
+)
+
+demonio = Inimigo(
+    nome="Demônio",
+    raca="Demônio",
+    tipo = ["Fogo", "Gelo"],
+    vida=200,
+    ataque=30,
+    defesa=20,
+    velocidade=30,
+    level=1,
+    arma_inicial=Arma(nome='Tridente', dano=25, critico=5),
     qnt_pocoes=0
 )
