@@ -73,7 +73,7 @@ conexao.commit()
 
 
 def insert_personagem_e_retorna_id(personagem):
-    cursor.execute("INSERT INTO Personagens (Nome, Vida, Ataque, Defesa, Velocidade, Arma, Pocoes) VALUES (?, ?, ?, ?, ?, ?, ?)", (personagem.nome, personagem.vida_max, personagem.ataque, personagem.defesa_inicial, personagem.velocidade, personagem.arma.nome, personagem.pocoes))
+    cursor.execute("INSERT INTO Personagens (Nome, Vida, Ataque, Defesa, Velocidade, Arma, Pocoes) VALUES (?, ?, ?, ?, ?, ?, ?)", (personagem.nome, personagem.vida_max, personagem.ataque, personagem.defesa_inicial, personagem.velocidade, personagem.arma.nome, personagem.pocoes_max))
     
     conexao.commit()
     

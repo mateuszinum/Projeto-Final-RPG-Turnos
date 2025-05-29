@@ -30,7 +30,8 @@ class Personagem:
         self.xp_max = 100 * (level ** 1.5)
         self.level = level
         self.arma = arma
-        self.pocoes = qnt_pocoes
+        self.pocoes_max = qnt_pocoes
+        self.pocoes_atual = qnt_pocoes
         self.chave = chave
         self.id = insert_personagem_e_retorna_id(self)
             
@@ -67,13 +68,13 @@ class Personagem:
             return random.choices([True, False], weights=[90, 10])[0]
     
     def usar_pocao(self):
-        if self.pocoes > 0:
+        if self.pocoes_atual > 0:
             if (self.vida_atual + self.vida_max * 0.3) > self.vida_max:
                 self.vida_atual = self.vida_max
 
             else:
                 self.vida_atual += int(self.vida_max * 0.3)
-            self.pocoes -= 1
+            self.pocoes_atual -= 1
             return True
         
         else:
@@ -85,9 +86,10 @@ class Personagem:
 
 
     def receber_dano(self, dano):
-        redução = self.defesa_atual * 0.5
-        dano_final = max(0, dano * (1 - redução/100))
-        self.vida_atual -= dano_final
+        redução = min(90, self.defesa_atual * 0.5)
+        dano_final = dano * (1 - redução/100)
+        self.vida_atual -= int(dano_final)
+        return int(dano_final)
 
     def receber_xp(self, xp):
         pontos = 0
@@ -110,7 +112,7 @@ class Personagem:
                     '[bold bright_yellow]Defesa', 
                     '[bold dodger_blue2]Velocidade']
         
-        console.print(f"\n\n\n{' ' * 20}Pontos restantes: [bold plum1]{5 - pontos}\n", style="default")
+        console.print(f"\n\n\n{' ' * 20}Pontos restantes: [bold plum1]{3 - pontos}\n", style="default")
         for i, atributo in enumerate(atributos, 1):
             console.print(f"{' ' * 20}([bold plum1]{i}[/]) - {atributo}", style="default")
         
@@ -158,8 +160,8 @@ class Arma:
 
 
 class Inimigo(Personagem):
-    def __init__(self, nome, vida, ataque, defesa, velocidade, level, arma_inicial, qnt_pocoes, raca, tipo):
-        super().__init__(nome, vida, ataque, defesa, velocidade, level, arma_inicial, qnt_pocoes)
+    def __init__(self, nome, vida, ataque, defesa, velocidade, level, arma, qnt_pocoes, chave, raca, tipo):
+        super().__init__(nome, vida, ataque, defesa, velocidade, level, arma, qnt_pocoes, chave)
         self.raca = raca
         self.tipo = random.choices(tipo, weights=[50, 50])[0]
         self.id = insert_inimigo_e_retorna_id(self)
@@ -181,46 +183,52 @@ class Jogo:
         
     def executar(self):
         primeira_acao = True
-        while True:
-            if self.heroi.velocidade >= self.inimigo.velocidade:
-                resultado = self.executar_acao_personagem()
-                
-                if self.verificar_fim():
-                    break
-                
-                self.acao_inimigo(resultado)
+        acabou = False
+        while True and self.heroi.velocidade >= self.inimigo.velocidade and not acabou:
+            resultado = self.executar_acao_personagem()
+            
+            if self.verificar_fim():
+                acabou = True
+                break
+            
+            self.acao_inimigo(resultado)
 
-                if self.verificar_fim():         
-                    break
-                
-                if resultado['acao'] == 5:
-                    self.heroi.defesa_atual = self.heroi.defesa_inicial
-                
-            else:
-                if primeira_acao:
-                    resultado = {
-                        "acao": 1,
-                        "sucesso": False,
-                        "critico": False,
-                        "dano": 0   
-                    }
+            if self.verificar_fim():  
+                acabou = True       
+                break
+            
+            if resultado['acao'] == 5:
+                self.heroi.defesa_atual = self.heroi.defesa_inicial
+        
+        while True and self.heroi.velocidade < self.inimigo.velocidade and not acabou:
+            if primeira_acao:
+                resultado = {
+                    "acao": 1,
+                    "sucesso": False,
+                    "critico": False,
+                    "dano": 0   
+                }
 
-                self.acao_inimigo(resultado)
+            self.acao_inimigo(resultado)
 
-                if self.verificar_fim():
-                    break
+            if self.verificar_fim():
+                acabou = True
+                break
 
-                if resultado['acao'] == 5:
-                    self.heroi.defesa_atual = self.heroi.defesa_inicial
-                
-                resultado = self.executar_acao_personagem()
+            if resultado['acao'] == 5:
+                self.heroi.defesa_atual = self.heroi.defesa_inicial
+            
+            resultado = self.executar_acao_personagem()
 
-                primeira_acao = False
+            primeira_acao = False
 
-                if self.verificar_fim():
-                    break
+            if self.verificar_fim():
+                acabou = True
+                break
 
         self.heroi.vida_atual = self.heroi.vida_max
+        self.heroi.pocoes_atual = self.heroi.pocoes_max
+
 
     def verificar_fim(self):
         if self.inimigo.vida_atual <= 0:
@@ -297,13 +305,13 @@ class Jogo:
 
                 else:
                     cena.personagem_atingido(self.heroi, self.inimigo)
-                    self.heroi.vida_atual -= dano
+                    dano_final = self.heroi.receber_dano(dano)
                     cena.criar_cena(self.heroi, self.inimigo)
 
                     if critou:
-                        console.print(f"\n\n\n{' ' * 20}Inimigo atacou com [bold orange1]crítico[/], causando [bold red1]{dano}[/] de dano, [bold red1]falha[/] na [bold dodger_blue2]esquiva[/]", style="default")
+                        console.print(f"\n\n\n{' ' * 20}Inimigo atacou com [bold orange1]crítico[/], causando [bold red1]{dano_final}[/] de dano, [bold red1]falha[/] na [bold dodger_blue2]esquiva[/]", style="default")
                     else:
-                        console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano}[/] de dano, [bold red1]falha[/] na [bold dodger_blue2]esquiva", style="default")
+                        console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano_final}[/] de dano, [bold red1]falha[/] na [bold dodger_blue2]esquiva", style="default")
 
                 time.sleep(3)
 
@@ -318,9 +326,9 @@ class Jogo:
                 else:
                     
                     cena.personagem_atingido(self.heroi, self.inimigo)
-                    self.heroi.vida_atual -= dano ##### arrumar
+                    dano_final = self.heroi.receber_dano(dano)
                     cena.criar_cena(self.heroi, self.inimigo)
-                    console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano}[/] de dano, [bold red1]falha[/] no [bold bright_yellow]contra ataque", style="default")
+                    console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano_final}[/] de dano, [bold red1]falha[/] no [bold bright_yellow]contra ataque", style="default")
                 
                 time.sleep(3)
 
@@ -331,13 +339,13 @@ class Jogo:
                 if not bloqueou:
                     
                     cena.personagem_atingido(self.heroi, self.inimigo)
-                    self.heroi.vida_atual -= dano
+                    dano_final = self.heroi.receber_dano(dano)
                     cena.criar_cena(self.heroi, self.inimigo)
                     if critou:
-                        console.print(f"\n\n\n{' ' * 20}Inimigo atacou com [bold orange1]crítico[/], causando [bold red1]{dano}[/] de dano", style="default")
+                        console.print(f"\n\n\n{' ' * 20}Inimigo atacou com [bold orange1]crítico[/], causando [bold red1]{dano_final}[/] de dano", style="default")
 
                     else:
-                        console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano}[/] de dano", style="default")
+                        console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano_final}[/] de dano", style="default")
 
                 else:
                     cena.bloqueio_personagem(self.heroi, self.inimigo)
@@ -403,12 +411,13 @@ class Jogo:
             f"\n{' ' * 20}([bold plum1]2[/]) - Esquivar"
             f"\n{' ' * 20}([bold plum1]3[/]) - Contra Atacar"
             f"\n{' ' * 20}([bold plum1]4[/]) - Tomar poção"
+            f"\n{' ' * 20}([bold plum1]5[/]) - Defender"
         )
         try:
             while True:
                 console.print(f"{acoes}", style="default")
                 escolha = int(console.input(f"\n{' ' * 20}[bold grey82]Escolha a ação: "))
-                if escolha < 1 and escolha > 4:
+                if escolha < 1 and escolha > 5:
                     raise ValueError
                 return escolha
         except ValueError:
@@ -425,8 +434,9 @@ tanque = Personagem(
     defesa=50,
     velocidade=10,
     level=1,
-    arma_inicial=Arma(nome='Clava', dano=10, critico=5),
-    qnt_pocoes=3
+    arma=Arma(nome='Clava', dano=10, critico=5),
+    qnt_pocoes=3,
+    chave=False
 )
 
 cavaleiro = Personagem(
@@ -436,8 +446,9 @@ cavaleiro = Personagem(
     defesa=30,
     velocidade=20,
     level=1,
-    arma_inicial=Arma(nome='Espada', dano=15, critico=10),
-    qnt_pocoes=3
+    arma=Arma(nome='Espada', dano=15, critico=10),
+    qnt_pocoes=3,
+    chave=False
 )
 
 assassino = Personagem(
@@ -447,8 +458,9 @@ assassino = Personagem(
     defesa=10,
     velocidade=40,
     level=1,
-    arma_inicial=Arma(nome='Adaga', dano=25, critico=25),
-    qnt_pocoes=2
+    arma=Arma(nome='Adaga', dano=25, critico=25),
+    qnt_pocoes=2,
+    chave=False
 )
 
 def criar_monstro(inimigo):
@@ -462,9 +474,9 @@ def criar_monstro(inimigo):
             defesa=10,
             velocidade=25,
             level=1,
-            arma_inicial=Arma(nome='Cajado', dano=15, critico=15),
+            arma=Arma(nome='Cajado', dano=15, critico=15),
             qnt_pocoes=0,
-            chave=random.choices([True, False], weights=[10, 90])
+            chave=random.choices([True, False], weights=[10, 90])[0]
         )
 
     elif inimigo == "Fenix":
@@ -472,14 +484,14 @@ def criar_monstro(inimigo):
             nome="Fênix",
             raca="Fênix",
             tipo = ["Fogo", "Gelo"],
-            vida=200,
+            vida=300,
             ataque=30,
             defesa=20,
             velocidade=30,
             level=1,
-            arma_inicial=Arma(nome='Bico', dano=25, critico=5),
+            arma=Arma(nome='Bico', dano=25, critico=5),
             qnt_pocoes=0,
-            chave=random.choices([True, False], weights=[40, 60])
+            chave=random.choices([True, False], weights=[40, 60])[0]
         )
 
     elif inimigo == "Guardiao":
@@ -487,14 +499,14 @@ def criar_monstro(inimigo):
             nome="Guardião Elemental",
             raca="Guardião Elemental",
             tipo = ["Fogo", "Gelo"],
-            vida=200,
+            vida=500,
             ataque=30,
             defesa=20,
             velocidade=30,
             level=1,
-            arma_inicial=Arma(nome='Martelo Mágico', dano=25, critico=5),
+            arma=Arma(nome='Martelo Mágico', dano=25, critico=5),
             qnt_pocoes=0,
-            chave=random.choices([True, False], weights=[80, 20])
+            chave=random.choices([True, False], weights=[80, 20])[0]
         )
 
     elif inimigo == "Demonio":
@@ -502,12 +514,12 @@ def criar_monstro(inimigo):
             nome="Demônio",
             raca="Demônio",
             tipo = ["Fogo", "Gelo"],
-            vida=1000,
+            vida=1500,
             ataque=70,
             defesa=40,
             velocidade=50,
             level=1,
-            arma_inicial=Arma(nome='Tridente', dano=55, critico=25),
+            arma=Arma(nome='Tridente', dano=55, critico=25),
             qnt_pocoes=0,
             chave=False
         )

@@ -95,7 +95,10 @@ while True:
 
 # FAZER
 
-# Colocar as msg da chave e as msg de entrando na sala do boss, e colocar a opcao de ir pra sala do boss
+# Colocar as msg da chave e as msg de entrando na sala do boss 
+# colocar a opcao de ir pra sala do boss
 # A msg se ele ganhou a chave, esta na funcao verificar_fim
 # fazer o negócio pra ver status do personagem
-# balancear inimigos, sistema de xp, (personagens?)
+# balancear inimigos, sistema de xp, (personagens?), eu dei uma balanceada, minha ideia é, mago o mais fraco, fenix um pouco mais forte, guardiao um pouco mais forte q a fenix, o demonio ser bem forte, para ele ser o boss
+# ai eu fiz caso o cara seja lvl 1, ele enfrentar so o mago, lvl2 mago ou fenix, level 3 fenix ou guardiao
+# Trocar o nome da opcao 1, Seguir em frente, coloca algo do tipo, Caçar monstros, ou Explorar Dungueon
