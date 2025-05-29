@@ -18,7 +18,7 @@ console = Console(theme=tema)
 
 
 class Personagem:
-    def __init__(self, nome, vida, ataque, defesa, velocidade, level, arma_inicial, qnt_pocoes):
+    def __init__(self, nome, vida, ataque, defesa, velocidade, level, arma, qnt_pocoes, chave):
         self.nome = nome
         self.vida_max = vida
         self.vida_atual = vida
@@ -29,9 +29,9 @@ class Personagem:
         self.xp_atual = 0
         self.xp_max = 100 * (level ** 1.5)
         self.level = level
-        self.inventario = [arma_inicial]
-        self.arma = arma_inicial
+        self.arma = arma
         self.pocoes = qnt_pocoes
+        self.chave = chave
         self.id = insert_personagem_e_retorna_id(self)
             
     def ataca(self):
@@ -72,7 +72,7 @@ class Personagem:
                 self.vida_atual = self.vida_max
 
             else:
-                self.vida_atual += self.vida_max * 0.3
+                self.vida_atual += int(self.vida_max * 0.3)
             self.pocoes -= 1
             return True
         
@@ -96,7 +96,7 @@ class Personagem:
             xp = xp - (self.xp_max - self.xp_atual)
             self.level += 1
             upou = True
-            pontos += 5
+            pontos += 3
             self.xp_atual = 0
             self.xp_max = 100 * (self.level ** 1.5)
         
@@ -236,6 +236,11 @@ class Jogo:
                 time.sleep(3)
                 for i in range(0, pontos):
                     self.heroi.upar_personagem(i)
+
+            if self.inimigo.chave and not self.heroi.chave:
+                #MSG DIZENDO QUE ELE GANHO A CHAVE PARA A SALA DO BOSS
+                print("Ganho chave") #Depois apaga esse aq, coloquei so pra testar o game
+                self.heroi.chave = True
 
             return True
         
@@ -446,54 +451,63 @@ assassino = Personagem(
     qnt_pocoes=2
 )
 
-mago = Inimigo(
-    nome="Mago",
-    raca="Mago",
-    tipo = ["Fogo", "Gelo"],
-    vida=100,
-    ataque=15,
-    defesa=10,
-    velocidade=25,
-    level=1,
-    arma_inicial=Arma(nome='Cajado', dano=15, critico=15),
-    qnt_pocoes=0
-)
+def criar_monstro(inimigo):
+    if inimigo == "Mago":
+        return Inimigo(
+            nome="Mago",
+            raca="Mago",
+            tipo = ["Fogo", "Gelo"],
+            vida=100,
+            ataque=15,
+            defesa=10,
+            velocidade=25,
+            level=1,
+            arma_inicial=Arma(nome='Cajado', dano=15, critico=15),
+            qnt_pocoes=0,
+            chave=random.choices([True, False], weights=[10, 90])
+        )
 
-fenix = Inimigo(
-    nome="Fênix",
-    raca="Fênix",
-    tipo = ["Fogo", "Gelo"],
-    vida=200,
-    ataque=30,
-    defesa=20,
-    velocidade=30,
-    level=1,
-    arma_inicial=Arma(nome='Bico', dano=25, critico=5),
-    qnt_pocoes=0
-)
+    elif inimigo == "Fenix":
+        return Inimigo(
+            nome="Fênix",
+            raca="Fênix",
+            tipo = ["Fogo", "Gelo"],
+            vida=200,
+            ataque=30,
+            defesa=20,
+            velocidade=30,
+            level=1,
+            arma_inicial=Arma(nome='Bico', dano=25, critico=5),
+            qnt_pocoes=0,
+            chave=random.choices([True, False], weights=[40, 60])
+        )
 
-guardiao = Inimigo(
-    nome="Guardião Elemental",
-    raca="Guardião Elemental",
-    tipo = ["Fogo", "Gelo"],
-    vida=200,
-    ataque=30,
-    defesa=20,
-    velocidade=30,
-    level=1,
-    arma_inicial=Arma(nome='Martelo Mágico', dano=25, critico=5),
-    qnt_pocoes=0
-)
+    elif inimigo == "Guardiao":
+        return Inimigo(
+            nome="Guardião Elemental",
+            raca="Guardião Elemental",
+            tipo = ["Fogo", "Gelo"],
+            vida=200,
+            ataque=30,
+            defesa=20,
+            velocidade=30,
+            level=1,
+            arma_inicial=Arma(nome='Martelo Mágico', dano=25, critico=5),
+            qnt_pocoes=0,
+            chave=random.choices([True, False], weights=[80, 20])
+        )
 
-demonio = Inimigo(
-    nome="Demônio",
-    raca="Demônio",
-    tipo = ["Fogo", "Gelo"],
-    vida=200,
-    ataque=30,
-    defesa=20,
-    velocidade=30,
-    level=1,
-    arma_inicial=Arma(nome='Tridente', dano=25, critico=5),
-    qnt_pocoes=0
-)
+    elif inimigo == "Demonio":
+        return Inimigo(
+            nome="Demônio",
+            raca="Demônio",
+            tipo = ["Fogo", "Gelo"],
+            vida=1000,
+            ataque=70,
+            defesa=40,
+            velocidade=50,
+            level=1,
+            arma_inicial=Arma(nome='Tridente', dano=55, critico=25),
+            qnt_pocoes=0,
+            chave=False
+        )

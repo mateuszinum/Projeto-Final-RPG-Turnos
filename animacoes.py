@@ -14,7 +14,7 @@ CORES = {
 }
 
 
-def criar_mago():
+def criar_mago_ascii():
     return Text.from_markup(
 rf"""[bold {CORES["monstro"]}]
          ,    _ 
@@ -30,7 +30,7 @@ _.'  \-'-'  / |
 [/]""")
 
 
-def criar_fenix():
+def criar_fenix_ascii():
     return Text.from_markup(
 rf"""[bold {CORES["monstro"]}]
  .\\            //.
@@ -46,7 +46,7 @@ rf"""[bold {CORES["monstro"]}]
 [/]""")
 
 
-def criar_guardiao():
+def criar_guardiao_ascii():
     return Text.from_markup(
 rf"""[bold {CORES["monstro"]}]
                _____     
@@ -62,7 +62,7 @@ rf"""[bold {CORES["monstro"]}]
 [/]""")
 
 
-def criar_demonio():
+def criar_demonio_ascii():
     return Text.from_markup(
 rf"""[bold {CORES["monstro"]}]
           v  
@@ -79,7 +79,7 @@ rf"""[bold {CORES["monstro"]}]
 [/]""")
 
 
-def criar_personagem():
+def criar_personagem_ascii():
     return Text.from_markup(
 rf"""[bold {CORES["personagem"]}]
 
@@ -129,7 +129,7 @@ def vida_monstro(inimigo):
     return barra_com_texto
 
 
-def cria_monstro(inimigo):
+def cria_monstro_ascii(inimigo):
     if inimigo.tipo == "Fogo":
         CORES["monstro"] = "indian_red"
         CORES["projetil"] = "dark_orange"
@@ -139,13 +139,13 @@ def cria_monstro(inimigo):
         CORES["projetil"] = "deep_sky_blue1"
 
     if inimigo.nome == "Mago":
-        monstro = criar_mago()
+        monstro = criar_mago_ascii()
     elif inimigo.nome == "Fênix":
-        monstro = criar_fenix()
+        monstro = criar_fenix_ascii()
     elif inimigo.nome == "Guardião Elemental":
-        monstro = criar_guardiao()
+        monstro = criar_guardiao_ascii()
     elif inimigo.nome == "Demônio":
-        monstro = criar_demonio()
+        monstro = criar_demonio_ascii()
 
     return monstro
 
@@ -154,8 +154,8 @@ def cria_monstro(inimigo):
 def criar_cena(heroi, inimigo):
     console.clear()
 
-    monstro = cria_monstro(inimigo)
-    personagem = criar_personagem()
+    monstro = cria_monstro_ascii(inimigo)
+    personagem = criar_personagem_ascii()
 
     if inimigo.nome == "Mago":
         pos = 100
@@ -180,8 +180,8 @@ def avanco_personagem(heroi, inimigo):
     # Ataque do Personagem
     console.clear()
 
-    monstro = cria_monstro(inimigo)
-    personagem = criar_personagem()
+    monstro = cria_monstro_ascii(inimigo)
+    personagem = criar_personagem_ascii()
 
     if inimigo.nome == "Mago":
         posicoes = [100, 80, 60, 40, 20, 40, 60, 80, 100]
@@ -249,8 +249,8 @@ def muda_personagem_estado(heroi, inimigo, borda):
     # Personagem toma dano
     console.clear()
 
-    monstro = cria_monstro(inimigo)
-    personagem = criar_personagem()
+    monstro = cria_monstro_ascii(inimigo)
+    personagem = criar_personagem_ascii()
 
     if inimigo.nome == "Mago":
         pos = 100
@@ -294,9 +294,9 @@ def ataque_monstro(heroi, inimigo):
 
     for pos in posicoes:
         
-        monstro = cria_monstro(inimigo)
+        monstro = cria_monstro_ascii(inimigo)
 
-        personagem = criar_personagem()
+        personagem = criar_personagem_ascii()
         
         cena = Text()
         for i, (linha_m, linha_p) in enumerate(zip(monstro.split(), personagem.split())):
@@ -330,15 +330,15 @@ def monstro_atingido(heroi, inimigo):
     CORES["monstro"] = "red1"
 
     if inimigo.nome == "Mago":
-        monstro = criar_mago()
+        monstro = criar_mago_ascii()
     elif inimigo.nome == "Fênix":
-        monstro = criar_fenix()
+        monstro = criar_fenix_ascii()
     elif inimigo.nome == "Guardião Elemental":
-        monstro = criar_guardiao()
+        monstro = criar_guardiao_ascii()
     elif inimigo.nome == "Demônio":
-        monstro = criar_demonio()
+        monstro = criar_demonio_ascii()
 
-    personagem = criar_personagem()
+    personagem = criar_personagem_ascii()
 
     if inimigo.nome == "Mago":
         pos = 100
@@ -367,8 +367,8 @@ def voltar_normal(heroi, inimigo):
     # Volta ao normal
     console.clear()
 
-    monstro = cria_monstro(inimigo)
-    personagem = criar_personagem()
+    monstro = cria_monstro_ascii(inimigo)
+    personagem = criar_personagem_ascii()
 
     if inimigo.nome == "Mago":
         pos = 100
