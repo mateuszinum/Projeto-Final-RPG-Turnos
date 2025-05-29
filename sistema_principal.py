@@ -1,6 +1,6 @@
-from entidades import *
+from classes import *
 from rich.panel import Panel
-
+from personagens import *
 
 tema = Theme({
     "default": "bold grey82"
@@ -10,7 +10,7 @@ tema = Theme({
 console = Console(theme=tema)
 
 
-# Selecionar a classe do personagem
+
 def selecionar_classe():
     console.clear()
     
@@ -97,8 +97,10 @@ while True:
 
 # Colocar as msg da chave e as msg de entrando na sala do boss 
 # colocar a opcao de ir pra sala do boss
+# Na hora de printar as opcoes de personagens, coloca o level dele do lado do Nome
 # A msg se ele ganhou a chave, esta na funcao verificar_fim
 # fazer o negócio pra ver status do personagem
-# balancear inimigos, sistema de xp, (personagens?), eu dei uma balanceada, minha ideia é, mago o mais fraco, fenix um pouco mais forte, guardiao um pouco mais forte q a fenix, o demonio ser bem forte, para ele ser o boss
+# balancear inimigos, sistema de xp, (personagens?), eu dei uma balanceada, minha ideia é, mago o mais fraco, 
+# fenix um pouco mais forte, guardiao um pouco mais forte q a fenix, o demonio ser bem forte, para ele ser o boss
 # ai eu fiz caso o cara seja lvl 1, ele enfrentar so o mago, lvl2 mago ou fenix, level 3 fenix ou guardiao
 # Trocar o nome da opcao 1, Seguir em frente, coloca algo do tipo, Caçar monstros, ou Explorar Dungueon

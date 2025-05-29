@@ -14,7 +14,10 @@ cursor.execute('''
         Defesa INTEGER,
         Velocidade INTEGER,
         Arma TEXT NOT NULL,
-        Pocoes INTEGER
+        Pocoes INTEGER,
+        Level INTEGER DEFAULT 1,
+        XP_Atual INTEGER DEFAULT 0,
+        Chave INTEGER DEFAULT 0
     )                     
 ''')
 
@@ -35,7 +38,7 @@ cursor.execute('''
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
         Heroi_ID INTEGER,
         Inimigo_ID INTEGER,
-        Vencedor INTEGER,
+        Vencedor_ID INTEGER,
         FOREIGN KEY (Heroi_ID) REFERENCES Personagens(ID),
         FOREIGN KEY (Inimigo_ID) REFERENCES Inimigos(ID)
     )               
@@ -47,11 +50,12 @@ cursor.execute('''
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
         Heroi_ID INTEGER,
         Inimigo_ID INTEGER,
-        Acao TEXT NOT NULL,
+        Acao_ID INTEGER,
         Autor TEXT NOT NULL,
         Sucesso INTEGER,
         FOREIGN KEY (Heroi_ID) REFERENCES Personagens(ID),
-        FOREIGN KEY (Inimigo_ID) REFERENCES Inimigos(ID)
+        FOREIGN KEY (Inimigo_ID) REFERENCES Inimigos(ID),
+        FOREIGN KEY (Acao_ID) REFERENCES Acoes(ID)
     )
 ''')
 
@@ -68,16 +72,59 @@ cursor.execute('''
     )
 ''')
 
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS Acoes (
+        ID INTEGER,
+        Nome TEXT NOT NULL
+    )
+''')
 
-conexao.commit()
+cursor.execute("SELECT 1 FROM Acoes LIMIT 1")
+elemento_1 = cursor.fetchone()
+
+if elemento_1 is None:
+    for i in range(1, 6):
+        acao = {
+            1: "Ataque",
+            2: "Esquiva",
+            3: "Contra Ataque",
+            4: "Pocao",
+            5: "Defesa"
+        }
+        cursor.execute("INSERT INTO Acoes (ID, Nome) VALUES (?, ?)", (i, acao[i]))
+
+        conexao.commit()
+
+
 
 
 def insert_personagem_e_retorna_id(personagem):
-    cursor.execute("INSERT INTO Personagens (Nome, Vida, Ataque, Defesa, Velocidade, Arma, Pocoes) VALUES (?, ?, ?, ?, ?, ?, ?)", (personagem.nome, personagem.vida_max, personagem.ataque, personagem.defesa_inicial, personagem.velocidade, personagem.arma.nome, personagem.pocoes_max))
-    
+    cursor.execute("""
+        INSERT INTO Personagens (Nome, Vida, Ataque, Defesa, Velocidade, Arma, Pocoes, Level, XP_Atual, Chave)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        personagem.nome,
+        personagem.vida_max,
+        personagem.ataque,
+        personagem.defesa_inicial,
+        personagem.velocidade,
+        personagem.arma.nome,
+        personagem.pocoes_max,
+        personagem.level,
+        personagem.xp_atual,
+        int(personagem.chave)
+    ))  
     conexao.commit()
     
     return cursor.lastrowid
+
+def carregar_dados_personagem_completo(nome):
+    cursor.execute("""
+        SELECT Vida, Ataque, Defesa, Velocidade, Pocoes, Level, XP_Atual, Chave
+        FROM Personagens
+        WHERE Nome = ?
+    """, (nome,))
+    return cursor.fetchone()
 
 
 def insert_inimigo_e_retorna_id(inimigo):
@@ -96,14 +143,18 @@ def insert_jogo_e_retorna_id(heroi_id, inimigo_id):
 
     return cursor.lastrowid
 
+def atualiza_vencedor_jogo(jogo_id, vencedor_id):
+    cursor.execute("""
+        UPDATE Jogos
+        SET Vencedor_ID = ?
+        WHERE ID = ?
+""", (vencedor_id, jogo_id))
+    
+    conexao.commit()
 
-def insert_turno_e_retorna_id(heroi_id, inimigo_id, acao, autor, sucesso):
-    if sucesso:
-        cursor.execute("INSERT INTO Turnos (Heroi_ID, Inimigo_ID, Acao, Autor, Sucesso) VALUES (?, ?, ?, ?, ?)", (heroi_id, inimigo_id, acao, autor, 1))
-    
-    else:  
-        cursor.execute("INSERT INTO Turnos (Heroi_ID, Inimigo_ID, Acao, Autor, Sucesso) VALUES (?, ?, ?, ?, ?)", (heroi_id, inimigo_id, acao, autor, 0))
-    
+
+def insert_turno_e_retorna_id(heroi_id, inimigo_id, acao_id, autor, sucesso):
+    cursor.execute("INSERT INTO Turnos (Heroi_ID, Inimigo_ID, Acao_ID, Autor, Sucesso) VALUES (?, ?, ?, ?, ?)", (heroi_id, inimigo_id, acao_id, autor, int(sucesso)))   
     conexao.commit()
     
     return cursor.lastrowid
@@ -112,4 +163,17 @@ def insert_turno_e_retorna_id(heroi_id, inimigo_id, acao, autor, sucesso):
 def insert_historico(jogo_id, turno_id, vida_heroi, vida_inimigo):
     cursor.execute("INSERT INTO Historico (Jogo_ID, Turno_ID, Vida_Heroi, Vida_Inimigo) VALUES (?, ?, ?, ?)", (jogo_id, turno_id, vida_heroi, vida_inimigo))
     
+    conexao.commit()
+
+def personagem_existe(nome):
+    cursor.execute("SELECT ID FROM Personagens WHERE Nome = ?", (nome,))
+    return cursor.fetchone() is not None
+
+def atualiza_heroi(heroi_id, vida, ataque, defesa, velocidade, level, xp_atual, pocoes, chave):
+    cursor.execute("""
+        UPDATE Personagens
+        SET Vida = ?, Ataque = ?, Defesa = ?, Velocidade = ?, Level = ?, XP_Atual = ?, Pocoes = ?, Chave = ?
+        WHERE ID = ?
+    """, (vida, ataque, defesa, velocidade, level, xp_atual, pocoes, int(chave), heroi_id))
+
     conexao.commit()
