@@ -2,7 +2,9 @@ import time
 import random
 from sql import *
 import animacoes as cena
+from rich.panel import Panel
 from rich.theme import Theme
+from rich.columns import Columns
 from rich.console import Console
 
 
@@ -163,7 +165,20 @@ class Personagem:
         time.sleep(1)
 
     def verificar_personagem(self):
-        # Printar cada atributo do personagem bunitin
+        console.clear()
+        heroi = cena.criar_personagem_ascii()
+        mensagem = (
+            f"\n\n\n[bold bright_green]Vida: {self.vida_max}[/]  | [bold red1]Ataque: {self.ataque}[/]\n"
+            f"[bold bright_yellow]Defesa: {self.defesa_inicial}[/] | [bold dodger_blue2]Velocidade: {self.velocidade}[/]\n"
+            f"Inventário:\n"
+            f"\n{' ' * 2}- [bold]Arma: [bold red1]{self.arma.dano} DMG[/] ([bold orange1]Crítico: {self.arma.critico}%[/])\n"
+            f"{' ' * 2}- [bold]Poções: [bold green_yellow]{self.pocoes_atual}[/] / [bold green_yellow]{self.pocoes_max}[/]\n"
+        )
+        if self.chave:
+            mensagem += f"{' ' * 2}- [bold light_goldenrod1]Chave do Boss\n"
+
+        colunas = Columns([heroi, mensagem], equal=True, expand=True) 
+        console.print(Panel.fit(colunas, title=f"[bold grey82]{self.nome} - Nível [bold plum1]{self.level}[/]", border_style="medium_orchid", style="default", width=90))
         pass
     
 
@@ -287,7 +302,10 @@ class Jogo:
         elif self.heroi.vida_atual <= 0:
             cena.criar_cena(self.heroi, self.inimigo)
             console.print(f"\n\n\n{' ' * 20}[bold red3]Você foi derrotado!")
+            time.sleep(1)
+            console.print(f"{' ' * 20}[bold light_goldenrod1]Porém a sua aventura ainda não acabou.")
             time.sleep(3)
+            console.clear()
 
             atualiza_vencedor_jogo(self.id, self.heroi.id)
 
@@ -337,6 +355,7 @@ class Jogo:
                     cena.esquiva_personagem(self.heroi, self.inimigo)
                     cena.criar_cena(self.heroi, self.inimigo)
                     console.print(f"\n\n\n{' ' * 20}Inimigo atacou, [bold bright_green]sucesso[/] na [bold dodger_blue2]esquiva[/]", style="default")
+                    time.sleep(3)
                     return False
                 
                 else:
@@ -349,7 +368,7 @@ class Jogo:
                     
                     else:
                         console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano_final}[/] de dano, [bold red1]falha[/] na [bold dodger_blue2]esquiva", style="default")
-                    
+                    time.sleep(3)
                     return True
 
             elif resultado['acao'] == self.acao_jogador['contra_atacar']:
@@ -359,6 +378,7 @@ class Jogo:
                     self.inimigo.vida_atual -= self.heroi.ataque + self.heroi.arma.dano
                     cena.criar_cena(self.heroi, self.inimigo)
                     console.print(f"\n\n\n{' ' * 20}Inimigo atacou, [bold bright_green]sucesso[/] no [bold bright_yellow]contra ataque[/], causou [bold red1]{self.heroi.ataque + self.heroi.arma.dano}[/] de dano", style="default")
+                    time.sleep(3)
                     return False
 
                 else:
@@ -367,6 +387,7 @@ class Jogo:
                     dano_final = self.heroi.receber_dano(dano)
                     cena.criar_cena(self.heroi, self.inimigo)
                     console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano_final}[/] de dano, [bold red1]falha[/] no [bold bright_yellow]contra ataque", style="default")
+                    time.sleep(3)
                     return True
 
             else:
@@ -384,6 +405,7 @@ class Jogo:
                     else:
                         console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano_final}[/] de dano", style="default")
 
+                    time.sleep(3)
                     return True
 
                 else:
@@ -391,10 +413,13 @@ class Jogo:
                     cena.criar_cena(self.heroi, self.inimigo)
                     console.print(f"\n\n\n{' ' * 20}O ataque do inimigo foi bloqueado com [bold bright_green]sucesso[/]!", style="default")
 
+                    time.sleep(3)
                     return False
 
         else:
+            cena.criar_cena(self.heroi, self.inimigo)
             console.print(f"\n\n\n{' ' * 20}Inimigo [bold red1]errou[/] o ataque", style="default")
+            time.sleep(3)
             return False 
 
     def acao_personagem(self, acao):
@@ -431,6 +456,7 @@ class Jogo:
                 
                 else:
                     console.print(f"\n\n\n{' ' * 20}[bold red1]Você não possui nenhuma poção")
+                    time.sleep(3)
                     acao = self.obter_acao_personagem()
                     continue
             
@@ -440,6 +466,7 @@ class Jogo:
             
             else:
                 console.print(f"\n\n\n{' ' * 20}[bold red1]Ação inválida. Escolha novamente.")
+                time.sleep(3)
                 acao = self.obter_acao_personagem()
 
     def obter_acao_personagem(self):

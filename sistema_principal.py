@@ -70,11 +70,16 @@ while True:
 
     elif escolha == "2" :
         if heroi.chave:
-            console.print(f"\n\n\n{' ' * 20}Você abre a sala trancada e.[/]", style="default")
-            time.sleep(0.5)
-            console.print(f"\n\n\n{' ' * 20}Você abre a sala trancada e..[/]", style="default")
-            time.sleep(0.5)
-            console.print(f"\n\n\n{' ' * 20}Você abre a sala trancada e...[/]", style="default")
+            console.clear()
+            console.print(f"\n\n\n{' ' * 20}Você abre a sala trancada e.", style="default")
+            time.sleep(1)
+            console.clear()
+            console.print(f"\n\n\n{' ' * 20}Você abre a sala trancada e..", style="default")
+            time.sleep(1)
+            console.clear()
+            console.print(f"\n\n\n{' ' * 20}Você abre a sala trancada e...", style="default")
+            time.sleep(1)
+            console.clear()
             inimigo = criar_monstro("Demonio")
 
             luta_atual = Jogo(heroi, inimigo)
@@ -137,10 +142,7 @@ def menu_novo_jogo():
 
 # FAZER
 
-# tá faltando time.sleep em alguns lugares
-# quando é derrotado o jogo não acaba
-# Na hora de printar as opcoes de personagens, coloca o level dele do lado do Nome
-# fazer o negócio pra ver status do personagem
-# balancear inimigos, sistema de xp, (personagens?), eu dei uma balanceada, minha ideia é, mago o mais fraco, 
-# fenix um pouco mais forte, guardiao um pouco mais forte q a fenix, o demonio ser bem forte, para ele ser o boss
-# ai eu fiz caso o cara seja lvl 1, ele enfrentar so o mago, lvl2 mago ou fenix, level 3 fenix ou guardiao
+# botar os menus iniciais
+# ver se não ficou mt tosco o que eu fiz quando o herói entra na sala do boss
+# bufar um pouco a poção de cura ou fazer com que quando tome ela, não conte como uma ação (o inimigo não ataca de volta)
+# nerfar um pouco o boss final, mt vida slk
