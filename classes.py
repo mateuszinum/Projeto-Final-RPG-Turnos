@@ -172,7 +172,7 @@ class Personagem:
             f"[bold bright_yellow]Defesa: {self.defesa_inicial}[/] | [bold dodger_blue2]Velocidade: {self.velocidade}[/]\n"
             f"Inventário:\n"
             f"\n{' ' * 2}- [bold]Arma: [bold red1]{self.arma.dano} DMG[/] ([bold orange1]Crítico: {self.arma.critico}%[/])\n"
-            f"{' ' * 2}- [bold]Poções: [bold green_yellow]{self.pocoes_atual}[/] / [bold green_yellow]{self.pocoes_max}[/]\n"
+            f"{' ' * 2}- [bold]Poções: [bold green_yellow]{self.pocoes_atual}\n"
         )
         if self.chave:
             mensagem += f"{' ' * 2}- [bold light_goldenrod1]Chave do Boss\n"
