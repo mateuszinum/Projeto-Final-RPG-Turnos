@@ -137,7 +137,7 @@ def insert_inimigo_e_retorna_id(inimigo):
 
 
 def insert_jogo_e_retorna_id(heroi_id, inimigo_id):
-    cursor.execute("INSERT INTO Jogos (Heroi_ID, Inimigo_ID, Vencedor) VALUES (?, ?, ?)", (heroi_id, inimigo_id, None))
+    cursor.execute("INSERT INTO Jogos (Heroi_ID, Inimigo_ID, Vencedor_ID) VALUES (?, ?, ?)", (heroi_id, inimigo_id, None))
 
     conexao.commit()
 

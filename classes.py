@@ -275,8 +275,7 @@ class Jogo:
                     self.heroi.upar_personagem(i)
 
             if self.inimigo.chave and not self.heroi.chave:
-                #MSG DIZENDO QUE ELE GANHO A CHAVE PARA A SALA DO BOSS
-                print("Ganho chave") #Depois apaga esse aq, coloquei so pra testar o game
+                console.print(f"\n\n\n{' ' * 20}Você encontrou: [bold green_yellow]Chave do Boss[/]!", style="default")
                 self.heroi.chave = True
 
             atualiza_heroi(self.heroi.id, self.heroi.vida_max, self.heroi.ataque, self.heroi.defesa_inicial, self.heroi.velocidade, self.heroi.level, self.heroi.xp_atual, self.heroi.pocoes_max, self.heroi.chave)           
@@ -353,8 +352,6 @@ class Jogo:
                     
                     return True
 
-
-
             elif resultado['acao'] == self.acao_jogador['contra_atacar']:
                 if resultado['sucesso']:
                     cena.contraAtaque_personagem(self.heroi, self.inimigo)
@@ -371,8 +368,6 @@ class Jogo:
                     cena.criar_cena(self.heroi, self.inimigo)
                     console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano_final}[/] de dano, [bold red1]falha[/] no [bold bright_yellow]contra ataque", style="default")
                     return True
-
-
 
             else:
                 chance_bloqueio = min(90, self.heroi.defesa_atual * 0.2)
@@ -398,10 +393,8 @@ class Jogo:
 
                     return False
 
-
-
         else:
-            #MSG dizendo que o inimigo errou o ataque
+            console.print(f"\n\n\n{' ' * 20}Inimigo [bold red1]errou[/] o ataque", style="default")
             return False 
 
     def acao_personagem(self, acao):
@@ -471,5 +464,3 @@ class Jogo:
                 return escolha
         except ValueError:
             console.print(f"\n{' ' * 20}[bold red1]Escolha uma ação válida!")
-
-

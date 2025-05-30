@@ -323,8 +323,6 @@ def ataque_monstro(heroi, inimigo):
 def monstro_atingido(heroi, inimigo):
     # Monstro toma dano
     console.clear()
-    
-    # monstro = cria_monstro(inimigo)
 
     aux = CORES["monstro"]
     CORES["monstro"] = "red1"
