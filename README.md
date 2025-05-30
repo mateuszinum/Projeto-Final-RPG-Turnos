@@ -77,10 +77,74 @@ A cada turno, o jogador pode escolher entre as seguintes ações:
 
 ---
 
-## 💾 Sistema de Save
+## 🎞️ Sistema de Animação
 
-- Ao iniciar o jogo, o jogador pode:
-  - **Carregar um jogo salvo** (mantendo level e atributos).
-  - **Começar um novo jogo** do zero.
+O sistema de combate é renderizado **frame a frame**, utilizando a biblioteca [`rich`](https://github.com/Textualize/rich), o que proporciona uma experiência visual imersiva mesmo no terminal.
 
+O design do sistema foi feito de forma que seja **fácil adicionar novos inimigos**.  
+Para isso, basta fornecer:
+- O **sprite** (imagem ASCII ou visual) do inimigo
+- O **espaçamento inicial** adequado (baseado no tamanho da arte)
+  
+Isso garante que o inimigo e o herói fiquem corretamente alinhados na tela, independentemente do tamanho dos sprites.
+
+---
+
+## 💾 Sistema de Carregamento e Salvamento
+
+### 📂 **Sistema de Carregar Jogo**
+
+Ao iniciar o jogo, o jogador pode:
+
+- 🔁 **Carregar um jogo salvo**, mantendo todos os atributos, nível, experiência e progresso da campanha.
+- 🆕 **Começar uma nova jornada do zero**, escolhendo um novo herói e iniciando uma nova aventura na Dungeon.
+
+---
+
+### 💾 **Sistema de Save**
+
+O sistema de salvamento é implementado com a biblioteca **`sqlite3`**, garantindo persistência completa de dados durante toda a jogatina.
+
+Durante o jogo, **todas as ações** são salvas automaticamente, incluindo:
+
+- O estado atual do Herói (vida, ataque, defesa, nível, XP, poções, chave)
+- Os inimigos enfrentados
+- Cada turno do combate
+- Todo o histórico da partida
+
+Essa abordagem permite que o jogador **retome exatamente de onde parou**, mesmo após fechar o jogo. Além disso, serve como uma poderosa ferramenta para que o **administrador ou desenvolvedor** monitore detalhadamente o que está acontecendo no jogo, analisando o banco de dados para fins de balanceamento, depuração ou narrativa.
+
+---
+
+## 🧰 Recursos Utilizados
+
+Este projeto utiliza diversas bibliotecas e técnicas para criar uma experiência interativa e modular no terminal. Abaixo estão os principais recursos aplicados:
+
+### 📚 Bibliotecas
+
+- **[rich](https://github.com/Textualize/rich)** – Utilizada para criar uma interface visual elegante e animada no terminal (ex: painéis, cores, animações frame a frame).
+- **sqlite3** – Banco de dados embutido para persistência de dados dos personagens, inimigos, combates, ações e histórico de turnos.
+
+### 🧱 Estrutura do Projeto
+
+- **Programação Orientada a Objetos (POO)** – Heróis, inimigos e lutas são implementados como classes com encapsulamento de lógica e atributos.
+- **Sistema de combate baseado em turnos** – Controlado por lógica condicional baseada na velocidade dos personagens.
+- **Banco de dados relacional** – Com tabelas como `Personagens`, `Inimigos`, `Jogos`, `Turnos`, `Historico`, e `Acoes`, que registram todas as ações do jogador e dos inimigos.
+- **Sistema de XP e Level Up** – Com crescimento dinâmico baseado em fórmulas matemáticas e pontos de atributo distribuíveis.
+- **Sistema de Save e Load** – Permite que o progresso do jogador seja salvo automaticamente e carregado em sessões futuras.
+
+### 🖼️ Animações ASCII (sprites)
+- Renderização por frame no terminal com posicionamento baseado em espaçamento horizontal.
+- Estrutura modular que facilita a adição de novos personagens e inimigos com novos sprites.
+
+### ⚙️ Outros destaques
+- Lógica de chance de sucesso (ataque, crítico, esquiva, etc.) com **pesos probabilísticos** (`random.choices`).
+- Sistema de chave e progressão até o Boss.
+- Separação de responsabilidades por arquivos:
+  - `classes.py` – Lógica de herói, inimigo e combate
+  - `personagens.py` – Instanciamento dos heróis e inimigos
+  - `sql.py` – Interface com banco de dados
+  - `sistema_principal.py` – Menu principal e controle de fluxo do jogo
+
+---
 
