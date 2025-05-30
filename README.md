@@ -1,73 +1,86 @@
-SISTEMA DE RPG DE TURNO
+# 🛡️ SISTEMA DE RPG DE TURNO
 
-Jogador pode escolher qual Herói ele usará para o jogo. Heróis: Tanque, Cavaleiro e Assassino. Em seguida ira se aventurar na Dungueon, onde,
-baseado no level de seu Herói, encontrará inimigos poderosos, como o Mago, a Fenix e outros. Cada inimigo tem a chance de possuir a chave da
-sala do Boss, O Dêmonio, quando o jogador encontrar a chave poderá tentar derrotar o Boss e derrotar toda a Dungueon.
+Neste jogo, o jogador escolhe um Herói entre três classes: **Tanque**, **Cavaleiro** e **Assassino**.  
+Após a escolha, ele se aventura em uma **Dungeon**, onde enfrentará inimigos de acordo com o seu nível, como **Mago**, **Fênix**, **Guardião** e, por fim, o **Boss: Demônio**.
 
-A cada turno no combate o jogador tem a opçao de atacar, esquivar, contra atacar, tomar poção ou defender. O inimigo só tem a opção de atacar.
+Alguns inimigos têm chance de carregar a **Chave do Boss**. Ao obtê-la, o jogador poderá entrar na sala do Demônio e tentar conquistar a Dungeon.
 
-  Atacar:
-  - Vai tentar atacar o inimigo, com chance de falhar, e com chance de fazer um acerto crítico, o que irá dobra o dano total.
-  - O dano do ataque é baseado no atributo Ataque do personagem e no atributo Dano de sua arma.
-  - A chance de acerto crítico é baseado no atributo Ataque do personagem e no atributo Critico de sua arma.
-  
-  Esquivar:
-  - Vai esperar o ataque inimigo, para tentar esquivar do ataque, com chance de falhar.
-  - Caso tenha sucesso, o Heroi não irá receber dano do ataque do inimigo.
-  - A chance de acerto da esquiva é baseada no atributo Velocidade do personagem.
-  
-  Contra Atacar:
-  - Vai esperar o ataque inimigo, para tentar contra atacar, com chance de falhar.
-  - Caso tenha sucesso, irá usar a ação Atacar no inimigo e não irá receber o dano do ataque do inimigo.
-  - A chance de acerto da esquiva é baseada no atributo Velocidade do personagem.
-  
-  Tomar Poção:
-  - Caso tenha poção em seu inventário, ele irá tomar uma poção, e irá recuperar 30% da vida.
-  
-  Defender:
-  - Aumentará em 50% da defesa do personagem por 1 turno.
-  - Sem chance de falha.
+---
 
+## 🎮 Sistema de Combate por Turno
 
-Atributos dos Personagens(Herói ou inimigo):
-  Vida:
-  - Quantidade de dano que o personagem pode suportar.
+A cada turno, o jogador pode escolher entre as seguintes ações:
 
-  Ataque:
-  - Afeta no dano que irá causar no ataque.
-  - Afeta na chance de crítico do ataque.
+### ⚔️ Atacar
+- Tenta acertar o inimigo.
+- Pode **falhar** ou **acertar criticamente** (dobrando o dano).
+- O dano é calculado com base nos atributos **Ataque** e **Dano da Arma**.
+- A chance de crítico é baseada em **Ataque** e no atributo **Crítico da Arma**.
 
-  Defesa:
-  - Afeta no dano que irá receber do ataque do oponente.
+### 🌀 Esquivar
+- Tenta evitar o ataque inimigo.
+- Se for bem-sucedido, **anula o dano recebido**.
+- A chance de esquiva depende da **Velocidade** do Herói.
 
-  Velocidade:
-  - Afeta em qual personagem irá agir primeiro, quem tiver maior velocidade, terá a primeira ação no combate.
-  - Afeta na chance de sucesso da esquiva e do contra ataque.
+### 🔁 Contra-Atacar
+- Espera o ataque do inimigo para tentar revidar.
+- Se tiver sucesso, **ataca o inimigo e não sofre dano**.
+- A chance de sucesso depende da **Velocidade**.
 
+### 🧪 Tomar Poção
+- Recupera **30% da Vida Máxima**.
+- Apenas se houver poções disponíveis no inventário.
 
-Inventário(Herói ou inimigo:
-  Arma:
-  - Dano: Afeta no dano do ataque.
-  - Crítico: Afeta na chance de crítico do ataque.
+### 🛡️ Defender
+- Aumenta a **Defesa em 50%** por 1 turno.
+- Não possui chance de falha.
 
-  Poções:
-  - Somente Heróis podem usar.
-  - Quantidade fixa de poções que o Herói pode usar no combate.
-  - Recupera as poções após o fim do combate.
+> O **inimigo**, por enquanto, só possui a ação de ataque.
 
-  Chave:
-  - Se o Herói derrotar algum inimigo que possua a chave, ele irá pegar para si.
-  - Chave para abrir a chave do Boss.
+---
 
-Sistema de Level Up:
+## 📊 Atributos dos Personagens (Heróis e Inimigos)
 
-A cada combate vencido o Herói irá receber uma quantidade de XP, baseada no level do inimigo. Se ele atingir o XP máximo do level atual, ele irá upar.
-Ao upar o jogador pode colocar pontos de atributos em seus atributos para aumentar seu Poder.
+- **Vida**: Total de dano que o personagem pode suportar.
+- **Ataque**:  
+  - Aumenta o dano causado.  
+  - Aumenta a chance de crítico.
+- **Defesa**: Reduz o dano recebido.
+- **Velocidade**:  
+  - Determina quem ataca primeiro.  
+  - Afeta a chance de esquiva e contra-ataque.
 
+---
 
-Sistema de Save:
+## 🎒 Inventário
 
-Ao abrir o jogo o Jogador tem a opção de carregar um jogo anterior, onde seus personagens irão carregar o seu level e seus atributos.
-Ou começar um jogo novo.
+### 🔫 Arma
+- **Dano**: Contribui no cálculo do ataque.
+- **Crítico**: Aumenta a chance de ataque crítico.
+
+### 💊 Poções
+- Apenas os **Heróis** possuem.
+- São recuperadas ao fim de cada combate.
+- Número de uso é limitado.
+
+### 🔑 Chave
+- Obtida ao derrotar certos inimigos.
+- Necessária para entrar na **Sala do Boss**.
+
+---
+
+## 📈 Sistema de Level Up
+
+- A cada combate vencido, o Herói ganha **XP**, proporcional ao nível do inimigo.
+- Ao alcançar o **XP Máximo**, o Herói sobe de nível.
+- Cada nível oferece **pontos de atributos** para distribuir livremente.
+
+---
+
+## 💾 Sistema de Save
+
+- Ao iniciar o jogo, o jogador pode:
+  - **Carregar um jogo salvo** (mantendo level e atributos).
+  - **Começar um novo jogo** do zero.
 
 
