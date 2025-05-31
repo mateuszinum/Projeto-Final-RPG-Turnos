@@ -493,3 +493,4 @@ class Jogo:
                 return escolha
         except ValueError:
             console.print(f"\n{' ' * 20}[bold red1]Escolha uma ação válida!")
+

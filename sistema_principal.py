@@ -1,6 +1,7 @@
 from classes import *
 from rich.panel import Panel
-from personagens import *
+from menus import *
+
 
 tema = Theme({
     "default": "bold grey82"
@@ -9,39 +10,7 @@ tema = Theme({
 
 console = Console(theme=tema)
 
-
-
-def selecionar_classe():
-    console.clear()
-    
-    herois = [
-        tanque,
-        cavaleiro,
-        assassino
-    ]
-    
-    mensagem = ""
-
-    for i, heroi in enumerate(herois, 1):
-        mensagem += f"\n[bold plum1]{i}[/] - {heroi.nome} [bold plum1](Nível {heroi.level})[/]\n"
-        mensagem += f"{' ' * 4}[bold bright_green]Vida: {heroi.vida_max}[/] | [bold red1]Ataque: {heroi.ataque}[/] | [bold bright_yellow]Defesa: {heroi.defesa_inicial}[/] | [bold dodger_blue2]Velocidade: {heroi.velocidade}[/]\n"
-        mensagem += f"{' ' * 4}[bold]Arma: [bold red1]Dano {heroi.arma.dano}[/] ([bold orange1]Crítico: {heroi.arma.critico}%[/])\n"
-    
-    console.print(Panel.fit(mensagem, title="[bold medium_orchid]Escolha sua Classe", border_style="medium_orchid", style="default"))
-
-    while True:
-        escolha = console.input(f"\n\n\n{' ' * 20}[bold grey82]Escolha sua classe (1-{len(herois)}): ")
-        
-        if escolha in ["1", "2", "3"]:
-            heroi_escolhido = herois[int(escolha)-1]
-            console.print(f"\n\n\n{' ' * 20}Você escolheu o [bold orange1]{heroi_escolhido.nome}[/]!", style="default")
-            return heroi_escolhido
-        else:
-            console.print(f"\n\n\n{' ' * 20}[bold red1]Opção inválida! Escolha de 1 a 4", style="default")
-
-
-heroi = selecionar_classe()
-
+heroi = menu_inicial()
 
 while True:
     console.print(f"\n\n\n{' ' * 20}O que você deseja fazer?", style="default")

@@ -1,6 +1,5 @@
 import sqlite3
 
-
 conexao = sqlite3.connect('dados.db')
 cursor = conexao.cursor()
 
@@ -139,7 +138,7 @@ def insert_inimigo_e_retorna_id(inimigo):
 
 
 def insert_jogo_e_retorna_id(heroi_id, inimigo_id):
-    cursor.execute("INSERT INTO Jogos (Heroi_ID, Inimigo_ID, Vencedor_ID, Vencedor_Tipo) VALUES (?, ?, ?)", (heroi_id, inimigo_id, None, None))
+    cursor.execute("INSERT INTO Jogos (Heroi_ID, Inimigo_ID, Vencedor_ID, Vencedor_Tipo) VALUES (?, ?, ?, ?)", (heroi_id, inimigo_id, None, None))
 
     conexao.commit()
 
@@ -156,7 +155,7 @@ def atualiza_vencedor_jogo(jogo_id, vencedor_id, vencedor_tipo):
 
 
 def insert_turno_e_retorna_id(heroi_id, inimigo_id, acao_id, autor_id, autor_tipo, sucesso):
-    cursor.execute("INSERT INTO Turnos (Heroi_ID, Inimigo_ID, Acao_ID, Autor_ID, Autor_Tipo, Sucesso) VALUES (?, ?, ?, ?, ?, ?, ?)", (heroi_id, inimigo_id, acao_id, autor_id, autor_tipo, int(sucesso)))   
+    cursor.execute("INSERT INTO Turnos (Heroi_ID, Inimigo_ID, Acao_ID, Autor_ID, Autor_Tipo, Sucesso) VALUES (?, ?, ?, ?, ?, ?)", (heroi_id, inimigo_id, acao_id, autor_id, autor_tipo, int(sucesso)))   
     conexao.commit()
     
     return cursor.lastrowid
@@ -179,3 +178,8 @@ def atualiza_heroi(heroi_id, vida, ataque, defesa, velocidade, level, xp_atual, 
     """, (vida, ataque, defesa, velocidade, level, xp_atual, pocoes, int(chave), heroi_id))
 
     conexao.commit()
+
+def ha_jogos_salvos():
+    cursor.execute("SELECT COUNT(*) FROM Jogos")
+    return cursor.fetchone()[0] > 0
+
