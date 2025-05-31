@@ -219,7 +219,7 @@ class Jogo:
         while True and self.heroi.velocidade >= self.inimigo.velocidade and not acabou:
             resultado = self.executar_acao_personagem()
             
-            turno_id = insert_turno_e_retorna_id(self.heroi.id, self.inimigo.id, resultado['acao'], "Heroi", resultado["sucesso"])
+            turno_id = insert_turno_e_retorna_id(self.heroi.id, self.inimigo.id, resultado['acao'], self.heroi.id, "Heroi", resultado["sucesso"])
             insert_historico(self.id, turno_id, self.heroi.vida_atual, self.inimigo.vida_atual)
 
             if self.verificar_fim():
@@ -228,7 +228,7 @@ class Jogo:
             
             sucesso = self.acao_inimigo(resultado)
 
-            turno_id = insert_turno_e_retorna_id(self.heroi.id, self.inimigo.id, 1, "inimigo", sucesso)
+            turno_id = insert_turno_e_retorna_id(self.heroi.id, self.inimigo.id, 1, self.inimigo.id, "Inimigo", sucesso)
             insert_historico(self.id, turno_id, self.heroi.vida_atual, self.inimigo.vida_atual)
 
             if self.verificar_fim():  
@@ -251,7 +251,8 @@ class Jogo:
 
             time.sleep(3)
 
-            turno_id = insert_turno_e_retorna_id(self.heroi.id, self.inimigo.id, 1, "Inimigo", sucesso)
+            turno_id = insert_turno_e_retorna_id(self.heroi.id, self.inimigo.id, 1, self.inimigo.id, "Inimigo", sucesso)
+            insert_historico(self.id, turno_id, self.heroi.vida_atual, self.inimigo.vida_atual)
 
             if self.verificar_fim():
                 acabou = True
@@ -262,7 +263,8 @@ class Jogo:
             
             resultado = self.executar_acao_personagem()
             
-            insert_turno_e_retorna_id(self.heroi.id, self.inimigo.id, resultado["acao"])
+            insert_turno_e_retorna_id(self.heroi.id, self.inimigo.id, resultado["acao"], self.heroi.id, "Heroi", resultado['sucesso'])
+            insert_historico(self.id, turno_id, self.heroi.vida_atual, self.inimigo.vida_atual)
 
             primeira_acao = False
 
@@ -295,7 +297,7 @@ class Jogo:
 
             atualiza_heroi(self.heroi.id, self.heroi.vida_max, self.heroi.ataque, self.heroi.defesa_inicial, self.heroi.velocidade, self.heroi.level, self.heroi.xp_atual, self.heroi.pocoes_max, self.heroi.chave)           
             
-            atualiza_vencedor_jogo(self.id, self.heroi.id)
+            atualiza_vencedor_jogo(self.id, self.heroi.id, "Herói")
 
             return True
         
@@ -307,7 +309,7 @@ class Jogo:
             time.sleep(3)
             console.clear()
 
-            atualiza_vencedor_jogo(self.id, self.heroi.id)
+            atualiza_vencedor_jogo(self.id, self.inimigo.id, "Inimigo")
 
             return True
         

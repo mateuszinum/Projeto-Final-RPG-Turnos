@@ -28,7 +28,7 @@ cursor.execute('''
         Personagem_ID INTEGER,
         Raca TEXT NOT NULL,
         Tipo TEXT NOT NULL,
-        FOREIGN KEY (Personagem_ID) REFERENCES Personagens(ID)
+        FOREIGN KEY (Personagem_ID) REFERENCES Personagens(ID) ON DELETE CASCADE
     )                            
 ''')
 
@@ -39,9 +39,10 @@ cursor.execute('''
         Heroi_ID INTEGER,
         Inimigo_ID INTEGER,
         Vencedor_ID INTEGER,
-        FOREIGN KEY (Heroi_ID) REFERENCES Personagens(ID),
-        FOREIGN KEY (Inimigo_ID) REFERENCES Inimigos(ID)
-    )               
+        Vencedor_Tipo TEXT,
+        FOREIGN KEY (Heroi_ID) REFERENCES Personagens(ID) ON DELETE SET NULL,
+        FOREIGN KEY (Inimigo_ID) REFERENCES Inimigos(ID) ON DELETE SET NULL
+    )                
 ''')
 
 
@@ -51,10 +52,11 @@ cursor.execute('''
         Heroi_ID INTEGER,
         Inimigo_ID INTEGER,
         Acao_ID INTEGER,
-        Autor TEXT NOT NULL,
+        Autor_ID INTEGER,
+        Autor_Tipo TEXT NOT NULL,
         Sucesso INTEGER,
-        FOREIGN KEY (Heroi_ID) REFERENCES Personagens(ID),
-        FOREIGN KEY (Inimigo_ID) REFERENCES Inimigos(ID),
+        FOREIGN KEY (Heroi_ID) REFERENCES Personagens(ID) ON DELETE CASCADE,
+        FOREIGN KEY (Inimigo_ID) REFERENCES Inimigos(ID) ON DELETE CASCADE,
         FOREIGN KEY (Acao_ID) REFERENCES Acoes(ID)
     )
 ''')
@@ -67,8 +69,8 @@ cursor.execute('''
         Turno_ID INTEGER,
         Vida_Heroi INTEGER,
         Vida_Inimigo INTEGER,
-        FOREIGN KEY (Jogo_ID) REFERENCES Jogos(ID),
-        FOREIGN KEY (Turno_ID) REFERENCES Turnos(ID)
+        FOREIGN KEY (Jogo_ID) REFERENCES Jogos(ID) ON DELETE CASCADE,
+        FOREIGN KEY (Turno_ID) REFERENCES Turnos(ID) ON DELETE CASCADE
     )
 ''')
 
@@ -137,24 +139,24 @@ def insert_inimigo_e_retorna_id(inimigo):
 
 
 def insert_jogo_e_retorna_id(heroi_id, inimigo_id):
-    cursor.execute("INSERT INTO Jogos (Heroi_ID, Inimigo_ID, Vencedor_ID) VALUES (?, ?, ?)", (heroi_id, inimigo_id, None))
+    cursor.execute("INSERT INTO Jogos (Heroi_ID, Inimigo_ID, Vencedor_ID, Vencedor_Tipo) VALUES (?, ?, ?)", (heroi_id, inimigo_id, None, None))
 
     conexao.commit()
 
     return cursor.lastrowid
 
-def atualiza_vencedor_jogo(jogo_id, vencedor_id):
+def atualiza_vencedor_jogo(jogo_id, vencedor_id, vencedor_tipo):
     cursor.execute("""
         UPDATE Jogos
-        SET Vencedor_ID = ?
+        SET Vencedor_ID = ?, Vencedor_Tipo = ?
         WHERE ID = ?
-""", (vencedor_id, jogo_id))
+""", (vencedor_id, vencedor_tipo, jogo_id))
     
     conexao.commit()
 
 
-def insert_turno_e_retorna_id(heroi_id, inimigo_id, acao_id, autor, sucesso):
-    cursor.execute("INSERT INTO Turnos (Heroi_ID, Inimigo_ID, Acao_ID, Autor, Sucesso) VALUES (?, ?, ?, ?, ?)", (heroi_id, inimigo_id, acao_id, autor, int(sucesso)))   
+def insert_turno_e_retorna_id(heroi_id, inimigo_id, acao_id, autor_id, autor_tipo, sucesso):
+    cursor.execute("INSERT INTO Turnos (Heroi_ID, Inimigo_ID, Acao_ID, Autor_ID, Autor_Tipo, Sucesso) VALUES (?, ?, ?, ?, ?, ?, ?)", (heroi_id, inimigo_id, acao_id, autor_id, autor_tipo, int(sucesso)))   
     conexao.commit()
     
     return cursor.lastrowid
