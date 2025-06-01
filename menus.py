@@ -14,26 +14,28 @@ def menu_inicial():
 
 def menu_carregar_jogo():
     console.clear()
-    console.print(Panel.fit("Bem-vindo ao NOME!", title="[bold medium_orchid]Menu Principal", border_style="medium_orchid", style="default"))
-    console.print("\n\n\n([bold plum1]1[/]) - Novo Jogo")
-    console.print("([bold plum1]2[/]) - Carregar Jogo")
-    console.print("([bold plum1]0[/])- Sair do Jogo")
+    mensagem = (
+        f"\n([bold plum1]1[/]) - Novo Jogo\n"
+        f"([bold plum1]2[/]) - Carregar Jogo\n"
+        f"([bold plum1]0[/]) - Sair do Jogo\n"
+    )
+    console.print(Panel.fit(mensagem, title="[bold grey82]Menu Principal", border_style="medium_orchid", style="default"))
 
     while True:
         escolha = console.input(f"\n{' ' * 20}[bold grey82]Escolha uma opção: ")
 
         if escolha == "1":
-            console.print(f"\n\n{' ' * 10}[bold red1]Isso irá apagar todo o progresso anterior![/]", style="default")
-            confirmacao = console.input(f"{' ' * 10}[bold grey82]Deseja continuar? ([green]s[/]/[red]n[/]): ").lower()
+            console.print(f"\n\n{' ' * 20}[bold red1]Isso irá apagar todo o progresso anterior![/]", style="default")
+            confirmacao = console.input(f"{' ' * 20}[bold grey82]Deseja continuar? ([green]S[/]/[red]N[/]): ").lower()
 
             if confirmacao == "s":
-                console.print(f"\n\n{' ' * 10}[bold green_yellow]Progresso anterior apagado com sucesso![/]\n", style="default")
+                console.print(f"\n\n{' ' * 20}[bold green_yellow]Progresso anterior apagado com sucesso![/]\n", style="default")
                 tanque, cavaleiro, assassino = criar_personagem_novo()
-                time.sleep(1)
+                time.sleep(2)
                 return menu_selecionar_classe(tanque, cavaleiro, assassino)
             else:
-                console.print(f"\n\n{' ' * 10}[bold yellow]Cancelado. Voltando ao menu...[/]", style="default")
-                time.sleep(1)
+                console.print(f"\n\n{' ' * 20}[bold yellow]Cancelado. Voltando ao menu...[/]", style="default")
+                time.sleep(2)
                 return menu_carregar_jogo()
 
         elif escolha == "2":
@@ -46,9 +48,11 @@ def menu_carregar_jogo():
 
 def menu_novo_jogo():
     console.clear()
-    console.print(Panel.fit("Bem-vindo ao NOME!", title="[bold medium_orchid]Menu Principal", border_style="medium_orchid", style="default"))
-    console.print("\n\n\n([bold plum1]1[/]) - Novo Jogo")
-    console.print("([bold plum1]0[/]) - Sair do Jogo")
+    mensagem = (
+        f"\n\n([bold plum1]1[/]) - Novo Jogo\n"
+        f"([bold plum1]0[/]) - Sair do Jogo\n"
+    )
+    console.print(Panel.fit(mensagem, title="[bold grey82]Menu Principal", border_style="medium_orchid", style="default"))
 
     while True:
         escolha = console.input(f"\n{' ' * 20}[bold grey82]Escolha uma opção: ")
