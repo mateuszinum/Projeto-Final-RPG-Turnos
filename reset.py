@@ -1,28 +1,107 @@
-from sql import cursor, conexao
-from personagens import tanque, cavaleiro, assassino
+import time
+from classes import Personagem, Arma
+from sql import cursor
 
-def resetar_banco_de_dados():
-    tabelas = ["Historico", "Turnos", "Jogos", "Inimigos"]
-    for tabela in tabelas:
-        cursor.execute(f"DELETE FROM {tabela}")
+def obter_herois():
+    nomes = ["Tanque", "Cavaleiro", "Assassino"]
+
+    tanque = None
+    cavaleiro = None
+    assassino = None
+
+    heroi = {"Tanque": tanque, 
+             "Cavaleiro": cavaleiro,
+             "Assassino": assassino}
     
-    herois_padrao = {
-        "Tanque": tanque,
-        "Cavaleiro": cavaleiro,
-        "Assassino": assassino
-    }
+    for nome_base in nomes:
+        cursor.execute(f"""
+            SELECT ID, Nome, Vida, Ataque, Defesa, Velocidade, Arma, Pocoes, Level, XP_Atual, Chave
+            FROM Personagens
+            WHERE Nome LIKE ?
+            ORDER BY ID DESC
+            LIMIT 1
+        """, (f"{nome_base}%",))
 
-    cursor.execute("SELECT Nome FROM Personagens")
-    nomes = cursor.fetchall()
+        resultado = cursor.fetchone()
 
-    for (nome,) in nomes:
-        if nome in herois_padrao:
-            h = herois_padrao[nome]
-            cursor.execute("""
-                UPDATE Personagens
-                SET Vida = ?, Ataque = ?, Defesa = ?, Velocidade = ?, Level = ?, XP_Atual = ?, Pocoes = ?, Chave = ?
-                WHERE Nome = ?
-            """, ( h.vida_max, h.ataque, h.defesa_inicial, h.velocidade, 1, 0, h.pocoes_max, 0, nome)
-            )
+        if resultado:
+            (
+                id_,
+                nome,
+                vida,
+                ataque,
+                defesa,
+                velocidade,
+                arma_nome,
+                pocoes,
+                level,
+                xp_atual,
+                chave
+            ) = resultado
 
-    conexao.commit()
+            arma_padrao = {
+                "Clava": Arma("Clava", 10, 5),
+                "Espada": Arma("Espada", 15, 10),
+                "Adaga": Arma("Adaga", 25, 25)
+            }
+
+            arma = arma_padrao.get(arma_nome, Arma(arma_nome, 10, 5))
+
+            heroi[nome_base] = Personagem(
+                nome=nome,
+                vida=vida,
+                ataque=ataque,
+                defesa=defesa,
+                velocidade=velocidade,
+                xp_atual=xp_atual,
+                level=level,
+                arma=arma,
+                qnt_pocoes=pocoes,
+                chave=bool(chave),
+                )
+
+    return tanque, cavaleiro, assassino
+    
+
+def criar_personagem_novo():
+
+    tanque = Personagem(
+            nome=f"Tanque_{int(time.time())}",
+            vida=350,
+            ataque=20,
+            defesa=50,
+            velocidade=10,
+            xp_atual=0,
+            level=1,
+            arma=Arma("Clava", 10, 5),
+            qnt_pocoes=3,
+            chave=False
+        )
+
+    cavaleiro = Personagem(
+            nome=f"Cavaleiro_{int(time.time())}",
+            vida=250,
+            ataque=30,
+            defesa=30,
+            velocidade=20,
+            xp_atual=0,
+            level=1,
+            arma=Arma("Espada", 15, 10),
+            qnt_pocoes=3,
+            chave=False
+        )
+
+    assassino = Personagem(
+            nome=f"Assassino_{int(time.time())}",
+            vida=150,
+            ataque=40,
+            defesa=10,
+            velocidade=40,
+            xp_atual=0,
+            level=1,
+            arma=Arma("Adaga", 25, 25),
+            qnt_pocoes=2,
+            chave=False
+        )
+    
+    return tanque, cavaleiro, assassino

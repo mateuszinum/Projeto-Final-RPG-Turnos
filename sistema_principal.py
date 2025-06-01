@@ -69,49 +69,10 @@ while True:
     else:
         console.print(f"\n\n\n{' ' * 20}[bold red1]Opção inválida![/]", style="default")
 
-
-
-def menu_carregar_jogo():
-    console.clear()
-    console.print(Panel.fit("Bem-vindo ao NOME!", title="[bold medium_orchid]Menu Principal", border_style="medium_orchid", style="default"))
-    console.print("\n\n\n([bold plum1]1[/]) - Novo Jogo")
-    console.print("([bold plum1]2[/]) - Carregar Jogo")
-    console.print("([bold plum1]0[/])- Sair do Jogo")
-
-    while True:
-        escolha = console.input(f"\n{' ' * 20}[bold grey82]Escolha uma opção: ")
-        
-        if escolha == "1":
-            return selecionar_classe()
-        elif escolha == "2":
-            pass
-            # Carregar jogo
-        elif escolha == "0":
-            exit()
-        else:
-            console.print(f"\n\n\n{' ' * 20}[bold red1]Opção inválida!", style="default")
-
-def menu_novo_jogo():
-    console.clear()
-    console.print(Panel.fit("Bem-vindo ao NOME!", title="[bold medium_orchid]Menu Principal", border_style="medium_orchid", style="default"))
-    console.print("\n\n\n([bold plum1]1[/]) - Novo Jogo")
-    console.print("([bold plum1]0[/]) - Sair do Jogo")
-
-    while True:
-        escolha = console.input(f"\n{' ' * 20}[bold grey82]Escolha uma opção: ")
-        
-        if escolha == "1":
-            return selecionar_classe()
-        elif escolha == "0":
-            exit()
-        else:
-            console.print(f"\n\n\n{' ' * 20}[bold red1]Opção inválida!", style="default")
-
-
-
 # FAZER
 
 # botar os menus iniciais
 # ver se não ficou mt tosco o que eu fiz quando o herói entra na sala do boss
 # bufar um pouco a poção de cura ou fazer com que quando tome ela, não conte como uma ação (o inimigo não ataca de volta)
 # nerfar um pouco o boss final, mt vida slk
+# Dando erro, to tentando arrumar, questao do banco de dados, amanha vvou continuar arrumando

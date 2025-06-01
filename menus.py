@@ -1,7 +1,9 @@
 from classes import *
 from rich.panel import Panel
 from personagens import *
-from reset import resetar_banco_de_dados
+from reset import *
+
+
 
 def menu_inicial():
     if ha_jogos_salvos():
@@ -19,23 +21,24 @@ def menu_carregar_jogo():
 
     while True:
         escolha = console.input(f"\n{' ' * 20}[bold grey82]Escolha uma opção: ")
-        
+
         if escolha == "1":
             console.print(f"\n\n{' ' * 10}[bold red1]Isso irá apagar todo o progresso anterior![/]", style="default")
             confirmacao = console.input(f"{' ' * 10}[bold grey82]Deseja continuar? ([green]s[/]/[red]n[/]): ").lower()
 
             if confirmacao == "s":
-                resetar_banco_de_dados()
                 console.print(f"\n\n{' ' * 10}[bold green_yellow]Progresso anterior apagado com sucesso![/]\n", style="default")
+                tanque, cavaleiro, assassino = criar_personagem_novo()
                 time.sleep(1)
-                return selecionar_classe()
+                return menu_selecionar_classe(tanque, cavaleiro, assassino)
             else:
                 console.print(f"\n\n{' ' * 10}[bold yellow]Cancelado. Voltando ao menu...[/]", style="default")
                 time.sleep(1)
                 return menu_carregar_jogo()
 
         elif escolha == "2":
-            return selecionar_classe()
+            tanque, cavaleiro, assassino = obter_herois()
+            return menu_selecionar_classe(tanque, cavaleiro, assassino)
         elif escolha == "0":
             exit()
         else:
@@ -51,25 +54,26 @@ def menu_novo_jogo():
         escolha = console.input(f"\n{' ' * 20}[bold grey82]Escolha uma opção: ")
         
         if escolha == "1":
-            return selecionar_classe()
+            tanque, cavaleiro, assassino = criar_personagem_novo()
+            return menu_selecionar_classe(tanque, cavaleiro, assassino)
         elif escolha == "0":
             exit()
         else:
             console.print(f"\n\n\n{' ' * 20}[bold red1]Opção inválida!", style="default")
 
-def selecionar_classe():
+def menu_selecionar_classe(tanque, cavaleiro, assassino):
     console.clear()
-    
+
     herois = [
         tanque,
         cavaleiro,
         assassino
     ]
-    
+
     mensagem = ""
 
     for i, heroi in enumerate(herois, 1):
-        mensagem += f"\n[bold plum1]{i}[/] - {heroi.nome} [bold plum1](Nível {heroi.level})[/]\n"
+        mensagem += f"\n[bold plum1]{i}[/] - {heroi.nome[:len(heroi.nome) - 11]} [bold plum1](Nível {heroi.level})[/]\n"
         mensagem += f"{' ' * 4}[bold bright_green]Vida: {heroi.vida_max}[/] | [bold red1]Ataque: {heroi.ataque}[/] | [bold bright_yellow]Defesa: {heroi.defesa_inicial}[/] | [bold dodger_blue2]Velocidade: {heroi.velocidade}[/]\n"
         mensagem += f"{' ' * 4}[bold]Arma: [bold red1]Dano {heroi.arma.dano}[/] ([bold orange1]Crítico: {heroi.arma.critico}%[/])\n"
     
@@ -80,7 +84,7 @@ def selecionar_classe():
         
         if escolha in ["1", "2", "3"]:
             heroi_escolhido = herois[int(escolha)-1]
-            console.print(f"\n\n\n{' ' * 20}Você escolheu o [bold orange1]{heroi_escolhido.nome}[/]!", style="default")
+            console.print(f"\n\n\n{' ' * 20}Você escolheu o [bold orange1]{heroi_escolhido.nome[:len(heroi_escolhido.nome) - 11]}[/]!", style="default")
             return heroi_escolhido
         else:
             console.print(f"\n\n\n{' ' * 20}[bold red1]Opção inválida! Escolha de 1 a 4", style="default")

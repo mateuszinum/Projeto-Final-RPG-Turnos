@@ -1,40 +1,5 @@
 from classes import *
 
-tanque = Personagem(
-    nome="Tanque",
-    vida=350,
-    ataque=20,
-    defesa=50,
-    velocidade=10,
-    level=1,
-    arma=Arma(nome='Clava', dano=10, critico=5),
-    qnt_pocoes=3,
-    chave=False
-)
-
-cavaleiro = Personagem(
-    nome="Cavaleiro",
-    vida=250,
-    ataque=30,
-    defesa=30,
-    velocidade=20,
-    level=1,
-    arma=Arma(nome='Espada', dano=15, critico=10),
-    qnt_pocoes=3,
-    chave=False
-)
-
-assassino = Personagem(
-    nome="Assassino",
-    vida=150,
-    ataque=40,
-    defesa=10,
-    velocidade=40,
-    level=1,
-    arma=Arma(nome='Adaga', dano=25, critico=25),
-    qnt_pocoes=2,
-    chave=False
-)
 
 def criar_monstro(inimigo):
     if inimigo == "Mago":
@@ -46,6 +11,7 @@ def criar_monstro(inimigo):
             ataque=15,
             defesa=10,
             velocidade=25,
+            xp_atual=0,
             level=1,
             arma=Arma(nome='Cajado', dano=15, critico=15),
             qnt_pocoes=0,
@@ -61,6 +27,7 @@ def criar_monstro(inimigo):
             ataque=30,
             defesa=20,
             velocidade=30,
+            xp_atual=0,
             level=2,
             arma=Arma(nome='Bico', dano=25, critico=5),
             qnt_pocoes=0,
@@ -76,6 +43,7 @@ def criar_monstro(inimigo):
             ataque=30,
             defesa=20,
             velocidade=30,
+            xp_atual=0,
             level=3,
             arma=Arma(nome='Martelo Mágico', dano=25, critico=5),
             qnt_pocoes=0,
@@ -91,6 +59,7 @@ def criar_monstro(inimigo):
             ataque=70,
             defesa=40,
             velocidade=50,
+            xp_atual=0,
             level=5,
             arma=Arma(nome='Tridente', dano=55, critico=25),
             qnt_pocoes=0,

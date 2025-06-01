@@ -20,7 +20,7 @@ console = Console(theme=tema)
 
 
 class Personagem:
-    def __init__(self, nome, vida, ataque, defesa, velocidade, level, arma, qnt_pocoes, chave):
+    def __init__(self, nome, vida, ataque, defesa, velocidade, xp_atual, level, arma, qnt_pocoes, chave):
         self.nome = nome
         self.vida_max = vida
         self.vida_atual = vida
@@ -28,7 +28,7 @@ class Personagem:
         self.defesa_inicial = defesa
         self.defesa_atual = defesa
         self.velocidade = velocidade
-        self.xp_atual = 0
+        self.xp_atual = xp_atual
         self.xp_max = 100 * (level ** 1.5)
         self.level = level
         self.arma = arma
@@ -192,8 +192,8 @@ class Arma:
 
 
 class Inimigo(Personagem):
-    def __init__(self, nome, vida, ataque, defesa, velocidade, level, arma, qnt_pocoes, chave, raca, tipo):
-        super().__init__(nome, vida, ataque, defesa, velocidade, level, arma, qnt_pocoes, chave)
+    def __init__(self, nome, vida, ataque, defesa, velocidade, xp_atual,level, arma, qnt_pocoes, chave, raca, tipo):
+        super().__init__(nome, vida, ataque, defesa, velocidade, xp_atual, level, arma, qnt_pocoes, chave)
         self.raca = raca
         self.tipo = random.choices(tipo, weights=[50, 50])[0]
         self.id = insert_inimigo_e_retorna_id(self)
