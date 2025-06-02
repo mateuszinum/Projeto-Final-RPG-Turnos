@@ -53,7 +53,7 @@ def obter_herois():
                 qnt_pocoes=pocoes,
                 chave=bool(chave),
                 )
-
+    print(herois["Tanque"], herois["Cavaleiro"], herois["Assassino"])
     return herois["Tanque"], herois["Cavaleiro"], herois["Assassino"]
 
 obter_herois()
