@@ -36,7 +36,7 @@ class Personagem:
         self.pocoes_atual = qnt_pocoes
         self.chave = chave
 
-        if not personagem_existe(self.nome):
+        if not personagem_existe_ou_inimigo(self.nome):
             self.id = insert_personagem_e_retorna_id(self)
 
         else:

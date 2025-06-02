@@ -157,7 +157,10 @@ def insert_historico(jogo_id, turno_id, vida_heroi, vida_inimigo):
     
     conexao.commit()
 
-def personagem_existe(nome):
+def personagem_existe_ou_inimigo(nome):
+    if nome in ['Mago', 'Fenix', 'Guardiao', 'Demonio']:
+        return False
+    
     cursor.execute("SELECT ID FROM Personagens WHERE Nome = ?", (nome,))
     return cursor.fetchone() is not None
 
