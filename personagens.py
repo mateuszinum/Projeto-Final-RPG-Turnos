@@ -3,6 +3,7 @@ from classes import *
 
 def criar_monstro(inimigo):
     if inimigo == "Mago":
+        sorteio = random.choices([True, False], weights=[10, 90])[0]
         return Inimigo(
             nome="Mago",
             raca="Mago",
@@ -15,10 +16,11 @@ def criar_monstro(inimigo):
             level=1,
             arma=Arma(nome='Cajado', dano=15, critico=15),
             qnt_pocoes=0,
-            chave=random.choices([True, False], weights=[10, 90])[0]
+            chave=sorteio
         )
 
     elif inimigo == "Fenix":
+        sorteio = random.choices([True, False], weights=[40, 60])[0]
         return Inimigo(
             nome="Fênix",
             raca="Fênix",
@@ -28,13 +30,14 @@ def criar_monstro(inimigo):
             defesa=20,
             velocidade=30,
             xp_atual=0,
-            level=3,
+            level=2,
             arma=Arma(nome='Bico', dano=25, critico=5),
             qnt_pocoes=0,
-            chave=random.choices([True, False], weights=[40, 60])[0]
+            chave=sorteio
         )
 
     elif inimigo == "Guardiao":
+        sorteio = random.choices([True, False], weights=[80, 20])[0]
         return Inimigo(
             nome="Guardião Elemental",
             raca="Guardião Elemental",
@@ -44,10 +47,10 @@ def criar_monstro(inimigo):
             defesa=20,
             velocidade=30,
             xp_atual=0,
-            level=5,
+            level=3,
             arma=Arma(nome='Martelo Mágico', dano=25, critico=5),
             qnt_pocoes=0,
-            chave=random.choices([True, False], weights=[80, 20])[0]
+            chave=sorteio
         )
 
     elif inimigo == "Demonio":
@@ -60,7 +63,7 @@ def criar_monstro(inimigo):
             defesa=40,
             velocidade=50,
             xp_atual=0,
-            level=7,
+            level=6,
             arma=Arma(nome='Tridente', dano=55, critico=25),
             qnt_pocoes=0,
             chave=False

@@ -483,6 +483,7 @@ class Jogo:
             f"\n{' ' * 20}([bold plum1]3[/]) - Contra Atacar"
             f"\n{' ' * 20}([bold plum1]4[/]) - Tomar poção"
             f"\n{' ' * 20}([bold plum1]5[/]) - Defender"
+            f"\n{self.inimigo.chave}"
         )
         try:
             while True:
@@ -493,4 +494,3 @@ class Jogo:
                 return escolha
         except ValueError:
             console.print(f"\n{' ' * 20}[bold red1]Escolha uma ação válida!")
-

@@ -68,8 +68,3 @@ while True:
 
     else:
         console.print(f"\n\n\n{' ' * 20}[bold red1]Opção inválida![/]", style="default")
-
-# FAZER
-
-# bufar um pouco a poção de cura ou fazer com que quando tome ela, não conte como uma ação (o inimigo não ataca de volta)
-# nerfar um pouco o boss final, mt vida slk

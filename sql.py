@@ -1,5 +1,6 @@
 import sqlite3
 
+
 conexao = sqlite3.connect('dados.db')
 cursor = conexao.cursor()
 
@@ -20,7 +21,6 @@ cursor.execute('''
     )                     
 ''')
 
-
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS Inimigos (
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,7 +30,6 @@ cursor.execute('''
         FOREIGN KEY (Personagem_ID) REFERENCES Personagens(ID) ON DELETE CASCADE
     )                            
 ''')
-
 
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS Jogos (
@@ -43,7 +42,6 @@ cursor.execute('''
         FOREIGN KEY (Inimigo_ID) REFERENCES Inimigos(ID) ON DELETE SET NULL
     )                
 ''')
-
 
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS Turnos (
@@ -59,7 +57,6 @@ cursor.execute('''
         FOREIGN KEY (Acao_ID) REFERENCES Acoes(ID)
     )
 ''')
-
 
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS Historico (
@@ -97,8 +94,6 @@ if elemento_1 is None:
         conexao.commit()
 
 
-
-
 def insert_personagem_e_retorna_id(personagem):
     cursor.execute("""
         INSERT INTO Personagens (Nome, Vida, Ataque, Defesa, Velocidade, Arma, Pocoes, Level, XP_Atual, Chave)
@@ -127,7 +122,6 @@ def carregar_dados_personagem_completo(nome):
     """, (nome,))
     return cursor.fetchone()
 
-
 def insert_inimigo_e_retorna_id(inimigo):
     
     cursor.execute("INSERT INTO Inimigos (Personagem_ID, Raca, Tipo) VALUES (?, ?, ?)", (inimigo.id, inimigo.raca, inimigo.tipo))
@@ -135,7 +129,6 @@ def insert_inimigo_e_retorna_id(inimigo):
     conexao.commit()    
     
     return cursor.lastrowid
-
 
 def insert_jogo_e_retorna_id(heroi_id, inimigo_id):
     cursor.execute("INSERT INTO Jogos (Heroi_ID, Inimigo_ID, Vencedor_ID, Vencedor_Tipo) VALUES (?, ?, ?, ?)", (heroi_id, inimigo_id, None, None))
@@ -153,13 +146,11 @@ def atualiza_vencedor_jogo(jogo_id, vencedor_id, vencedor_tipo):
     
     conexao.commit()
 
-
 def insert_turno_e_retorna_id(heroi_id, inimigo_id, acao_id, autor_id, autor_tipo, sucesso):
     cursor.execute("INSERT INTO Turnos (Heroi_ID, Inimigo_ID, Acao_ID, Autor_ID, Autor_Tipo, Sucesso) VALUES (?, ?, ?, ?, ?, ?)", (heroi_id, inimigo_id, acao_id, autor_id, autor_tipo, int(sucesso)))   
     conexao.commit()
     
     return cursor.lastrowid
-
 
 def insert_historico(jogo_id, turno_id, vida_heroi, vida_inimigo):
     cursor.execute("INSERT INTO Historico (Jogo_ID, Turno_ID, Vida_Heroi, Vida_Inimigo) VALUES (?, ?, ?, ?)", (jogo_id, turno_id, vida_heroi, vida_inimigo))
@@ -182,4 +173,3 @@ def atualiza_heroi(heroi_id, vida, ataque, defesa, velocidade, level, xp_atual, 
 def ha_jogos_salvos():
     cursor.execute("SELECT COUNT(*) FROM Jogos")
     return cursor.fetchone()[0] > 0
-
