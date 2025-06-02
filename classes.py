@@ -130,7 +130,7 @@ class Personagem:
                     '[bold bright_yellow]Defesa', 
                     '[bold dodger_blue2]Velocidade']
         
-        console.print(f"\n\n\n{' ' * 20}Pontos restantes: [bold plum1]{3 - pontos}\n", style="default")
+        console.print(f"\n\n\n{' ' * 20}Pontos restantes: [bold plum1]{pontos}\n", style="default")
         for i, atributo in enumerate(atributos, 1):
             console.print(f"{' ' * 20}([bold plum1]{i}[/]) - {atributo}", style="default")
         
@@ -283,17 +283,18 @@ class Jogo:
             console.print(f"{' ' * 20}[bold plum1]+{int((self.inimigo.level ** 1.3) * 150)} XP", style="default")
             time.sleep(3)
 
+            if self.inimigo.chave and not self.heroi.chave:
+                console.print(f"\n\n\n{' ' * 20}Você encontrou: [bold green_yellow]Chave do Boss[/]!", style="default")
+                time.sleep(3)
+                self.heroi.chave = True
+
             upou, pontos = self.heroi.receber_xp(275 * self.inimigo.level**2 - 550 * self.inimigo.level + 425)
 
             if upou:
                 console.print(f"\n\n\n{' ' * 20}[bold green_yellow]Você subiu de nível![/] Você atingiu o nível [bold plum1]{self.heroi.level}[/]!", style="default")
                 time.sleep(3)
-                for i in range(0, pontos):
+                for i in range(pontos, 0, -1):
                     self.heroi.upar_personagem(i)
-
-            if self.inimigo.chave and not self.heroi.chave:
-                console.print(f"\n\n\n{' ' * 20}Você encontrou: [bold green_yellow]Chave do Boss[/]!", style="default")
-                self.heroi.chave = True
 
             atualiza_heroi(self.heroi.id, self.heroi.vida_max, self.heroi.ataque, self.heroi.defesa_inicial, self.heroi.velocidade, self.heroi.level, self.heroi.xp_atual, self.heroi.pocoes_max, self.heroi.chave)           
             
@@ -483,7 +484,6 @@ class Jogo:
             f"\n{' ' * 20}([bold plum1]3[/]) - Contra Atacar"
             f"\n{' ' * 20}([bold plum1]4[/]) - Tomar poção"
             f"\n{' ' * 20}([bold plum1]5[/]) - Defender"
-            f"\n{self.inimigo.chave}"
         )
         try:
             while True:

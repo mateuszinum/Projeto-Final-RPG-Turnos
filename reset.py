@@ -1,6 +1,7 @@
 import time
-from classes import Personagem, Arma
 from sql import cursor
+from classes import Personagem, Arma
+
 
 def criar_personagem_novo():
 

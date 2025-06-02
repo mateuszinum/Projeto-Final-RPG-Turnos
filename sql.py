@@ -94,6 +94,7 @@ if elemento_1 is None:
         conexao.commit()
 
 
+
 def insert_personagem_e_retorna_id(personagem):
     cursor.execute("""
         INSERT INTO Personagens (Nome, Vida, Ataque, Defesa, Velocidade, Arma, Pocoes, Level, XP_Atual, Chave)
@@ -158,7 +159,7 @@ def insert_historico(jogo_id, turno_id, vida_heroi, vida_inimigo):
     conexao.commit()
 
 def personagem_existe_ou_inimigo(nome):
-    if nome in ['Mago', 'Fenix', 'Guardiao', 'Demonio']:
+    if nome in ['Mago', 'Fênix', 'Guardião Elemental', 'Demônio']:
         return False
     
     cursor.execute("SELECT ID FROM Personagens WHERE Nome = ?", (nome,))

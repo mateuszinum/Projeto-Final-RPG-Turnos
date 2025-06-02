@@ -1,8 +1,7 @@
-from classes import *
-from rich.panel import Panel
-from personagens import *
 from reset import *
-
+from classes import *
+from personagens import *
+from rich.panel import Panel
 
 
 def menu_inicial():
@@ -10,7 +9,6 @@ def menu_inicial():
         return menu_carregar_jogo()
     else:
         return menu_novo_jogo()
-
 
 def menu_carregar_jogo():
     console.clear()

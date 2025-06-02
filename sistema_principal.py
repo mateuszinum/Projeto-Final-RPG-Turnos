@@ -1,6 +1,5 @@
-from classes import *
-from rich.panel import Panel
 from menus import *
+from classes import *
 
 
 tema = Theme({
@@ -33,7 +32,6 @@ while True:
         luta_atual = Jogo(heroi, inimigo)
 
         luta_atual.executar()
-
 
         pass
 
