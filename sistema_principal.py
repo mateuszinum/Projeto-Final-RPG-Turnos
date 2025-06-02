@@ -71,8 +71,5 @@ while True:
 
 # FAZER
 
-# botar os menus iniciais
-# ver se não ficou mt tosco o que eu fiz quando o herói entra na sala do boss
 # bufar um pouco a poção de cura ou fazer com que quando tome ela, não conte como uma ação (o inimigo não ataca de volta)
 # nerfar um pouco o boss final, mt vida slk
-# Dando erro, to tentando arrumar, questao do banco de dados, amanha vvou continuar arrumando

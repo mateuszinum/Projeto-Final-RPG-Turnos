@@ -5,13 +5,7 @@ from sql import cursor
 def obter_herois():
     nomes = ["Tanque", "Cavaleiro", "Assassino"]
 
-    tanque = None
-    cavaleiro = None
-    assassino = None
-
-    heroi = {"Tanque": tanque, 
-             "Cavaleiro": cavaleiro,
-             "Assassino": assassino}
+    herois = {}
     
     for nome_base in nomes:
         cursor.execute(f"""
@@ -47,7 +41,7 @@ def obter_herois():
 
             arma = arma_padrao.get(arma_nome, Arma(arma_nome, 10, 5))
 
-            heroi[nome_base] = Personagem(
+            herois[nome_base] = Personagem(
                 nome=nome,
                 vida=vida,
                 ataque=ataque,
@@ -60,8 +54,9 @@ def obter_herois():
                 chave=bool(chave),
                 )
 
-    return tanque, cavaleiro, assassino
-    
+    return herois["Tanque"], herois["Cavaleiro"], herois["Assassino"]
+
+obter_herois()
 
 def criar_personagem_novo():
 

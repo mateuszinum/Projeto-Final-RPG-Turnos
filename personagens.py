@@ -28,7 +28,7 @@ def criar_monstro(inimigo):
             defesa=20,
             velocidade=30,
             xp_atual=0,
-            level=2,
+            level=3,
             arma=Arma(nome='Bico', dano=25, critico=5),
             qnt_pocoes=0,
             chave=random.choices([True, False], weights=[40, 60])[0]
@@ -44,7 +44,7 @@ def criar_monstro(inimigo):
             defesa=20,
             velocidade=30,
             xp_atual=0,
-            level=3,
+            level=5,
             arma=Arma(nome='Martelo Mágico', dano=25, critico=5),
             qnt_pocoes=0,
             chave=random.choices([True, False], weights=[80, 20])[0]
@@ -55,12 +55,12 @@ def criar_monstro(inimigo):
             nome="Demônio",
             raca="Demônio",
             tipo = ["Fogo", "Gelo"],
-            vida=1500,
+            vida=700,
             ataque=70,
             defesa=40,
             velocidade=50,
             xp_atual=0,
-            level=5,
+            level=7,
             arma=Arma(nome='Tridente', dano=55, critico=25),
             qnt_pocoes=0,
             chave=False
