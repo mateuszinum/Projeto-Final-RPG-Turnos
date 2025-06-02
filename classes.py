@@ -249,7 +249,7 @@ class Jogo:
 
             sucesso = self.acao_inimigo(resultado)
 
-            time.sleep(3)
+            time.sleep(2.4)
 
             turno_id = insert_turno_e_retorna_id(self.heroi.id, self.inimigo.id, 1, self.inimigo.id, "Inimigo", sucesso)
             insert_historico(self.id, turno_id, self.heroi.vida_atual, self.inimigo.vida_atual)
@@ -281,18 +281,18 @@ class Jogo:
             cena.criar_cena(self.heroi, self.inimigo)
             console.print(f"\n\n\n{' ' * 20}[bold light_goldenrod1]Inimigo derrotado!", style="default")
             console.print(f"{' ' * 20}[bold plum1]+{int((self.inimigo.level ** 1.3) * 150)} XP", style="default")
-            time.sleep(3)
+            time.sleep(2.4)
 
             if self.inimigo.chave and not self.heroi.chave:
                 console.print(f"\n\n\n{' ' * 20}Você encontrou: [bold green_yellow]Chave do Boss[/]!", style="default")
-                time.sleep(3)
+                time.sleep(2.4)
                 self.heroi.chave = True
 
             upou, pontos = self.heroi.receber_xp(275 * self.inimigo.level**2 - 550 * self.inimigo.level + 425)
 
             if upou:
                 console.print(f"\n\n\n{' ' * 20}[bold green_yellow]Você subiu de nível![/] Você atingiu o nível [bold plum1]{self.heroi.level}[/]!", style="default")
-                time.sleep(3)
+                time.sleep(2.4)
                 for i in range(pontos, 0, -1):
                     self.heroi.upar_personagem(i)
 
@@ -307,7 +307,7 @@ class Jogo:
             console.print(f"\n\n\n{' ' * 20}[bold red3]Você foi derrotado!")
             time.sleep(1)
             console.print(f"{' ' * 20}[bold light_goldenrod1]Porém a sua aventura ainda não acabou.")
-            time.sleep(3)
+            time.sleep(2.4)
             console.clear()
 
             atualiza_vencedor_jogo(self.id, self.inimigo.id, "Inimigo")
@@ -339,13 +339,13 @@ class Jogo:
 
             cena.criar_cena(self.heroi, self.inimigo)
             console.print(f"\n\n\n{' ' * 20}{msg}", style="default")
-            time.sleep(3)
+            time.sleep(2.4)
 
         elif resultado['acao'] == self.acao_jogador['tomar_pocao']:
             cena.tomarPocao_personagem(self.heroi, self.inimigo)
             cena.criar_cena(self.heroi, self.inimigo)
-            console.print(f"\n\n\n{' ' * 20}[bold green_yellow]Você tomou uma poção! [bold bright_green]+ {self.heroi.vida_max * 0.3} HP[/]")
-            time.sleep(3)
+            console.print(f"\n\n\n{' ' * 20}[bold green_yellow]Você tomou uma poção! [bold bright_green]+ {int(self.heroi.vida_max * 0.3)} HP[/]")
+            time.sleep(2.4)
         
         return resultado
             
@@ -358,7 +358,7 @@ class Jogo:
                     cena.esquiva_personagem(self.heroi, self.inimigo)
                     cena.criar_cena(self.heroi, self.inimigo)
                     console.print(f"\n\n\n{' ' * 20}Inimigo atacou, [bold bright_green]sucesso[/] na [bold dodger_blue2]esquiva[/]", style="default")
-                    time.sleep(3)
+                    time.sleep(2.4)
                     return False
                 
                 else:
@@ -371,7 +371,7 @@ class Jogo:
                     
                     else:
                         console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano_final}[/] de dano, [bold red1]falha[/] na [bold dodger_blue2]esquiva", style="default")
-                    time.sleep(3)
+                    time.sleep(2.4)
                     return True
 
             elif resultado['acao'] == self.acao_jogador['contra_atacar']:
@@ -381,7 +381,7 @@ class Jogo:
                     self.inimigo.vida_atual -= self.heroi.ataque + self.heroi.arma.dano
                     cena.criar_cena(self.heroi, self.inimigo)
                     console.print(f"\n\n\n{' ' * 20}Inimigo atacou, [bold bright_green]sucesso[/] no [bold bright_yellow]contra ataque[/], causou [bold red1]{self.heroi.ataque + self.heroi.arma.dano}[/] de dano", style="default")
-                    time.sleep(3)
+                    time.sleep(2.4)
                     return False
 
                 else:
@@ -390,7 +390,7 @@ class Jogo:
                     dano_final = self.heroi.receber_dano(dano)
                     cena.criar_cena(self.heroi, self.inimigo)
                     console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano_final}[/] de dano, [bold red1]falha[/] no [bold bright_yellow]contra ataque", style="default")
-                    time.sleep(3)
+                    time.sleep(2.4)
                     return True
 
             else:
@@ -408,7 +408,7 @@ class Jogo:
                     else:
                         console.print(f"\n\n\n{' ' * 20}Inimigo atacou, causando [bold red1]{dano_final}[/] de dano", style="default")
 
-                    time.sleep(3)
+                    time.sleep(2.4)
                     return True
 
                 else:
@@ -416,13 +416,13 @@ class Jogo:
                     cena.criar_cena(self.heroi, self.inimigo)
                     console.print(f"\n\n\n{' ' * 20}O ataque do inimigo foi bloqueado com [bold bright_green]sucesso[/]!", style="default")
 
-                    time.sleep(3)
+                    time.sleep(2.4)
                     return False
 
         else:
             cena.criar_cena(self.heroi, self.inimigo)
             console.print(f"\n\n\n{' ' * 20}Inimigo [bold red1]errou[/] o ataque", style="default")
-            time.sleep(3)
+            time.sleep(2.4)
             return False 
 
     def acao_personagem(self, acao):
@@ -459,7 +459,7 @@ class Jogo:
                 
                 else:
                     console.print(f"\n\n\n{' ' * 20}[bold red1]Você não possui nenhuma poção")
-                    time.sleep(3)
+                    time.sleep(2.4)
                     acao = self.obter_acao_personagem()
                     continue
             
@@ -469,7 +469,7 @@ class Jogo:
             
             else:
                 console.print(f"\n\n\n{' ' * 20}[bold red1]Ação inválida. Escolha novamente.")
-                time.sleep(3)
+                time.sleep(2.4)
                 acao = self.obter_acao_personagem()
 
     def obter_acao_personagem(self):

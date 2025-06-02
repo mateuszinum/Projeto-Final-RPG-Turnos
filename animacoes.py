@@ -184,13 +184,13 @@ def avanco_personagem(heroi, inimigo):
     personagem = criar_personagem_ascii()
 
     if inimigo.nome == "Mago":
-        posicoes = [100, 80, 60, 40, 20, 40, 60, 80, 100]
+        posicoes = [100, 80, 60, 40, 60, 80, 100]
     elif inimigo.nome == "Fênix":
-        posicoes = [95, 80, 60, 40, 20, 40, 60, 80, 95]
+        posicoes = [95, 80, 60, 40, 60, 80, 95]
     elif inimigo.nome == "Guardião Elemental":
-        posicoes = [90, 70, 50, 30, 10, 30, 50, 70, 90]
+        posicoes = [90, 70, 50, 30, 50, 70, 90]
     elif inimigo.nome == "Demônio":
-        posicoes = [105, 85, 65, 45, 25, 45, 65, 85, 105]
+        posicoes = [105, 85, 65, 45, 65, 85, 105]
 
     for pos in posicoes:
         
@@ -202,7 +202,7 @@ def avanco_personagem(heroi, inimigo):
             cena.append('\n')
         
         console.print(Panel(cena, title=f"[bright_green]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style="medium_orchid", width=140))
-        time.sleep(0.6)
+        time.sleep(0.4)
         console.clear()
 
 
@@ -280,16 +280,16 @@ def ataque_monstro(heroi, inimigo):
     console.clear()
 
     if inimigo.nome == "Mago":
-        posicoes = [20, 40, 60, 80]
+        posicoes = [40, 60, 80]
         num = 100
     elif inimigo.nome == "Fênix":
-        posicoes = [10, 30, 50, 70]
+        posicoes = [30, 50, 70]
         num = 95
     elif inimigo.nome == "Guardião Elemental":
-        posicoes = [20, 40, 60, 80]
+        posicoes = [40, 60, 80]
         num = 90
     elif inimigo.nome == "Demônio":
-        posicoes = [25, 45, 65, 85]
+        posicoes = [45, 65, 85]
         num = 105
 
     for pos in posicoes:
@@ -316,7 +316,7 @@ def ataque_monstro(heroi, inimigo):
                 cena.append('\n')
       
         console.print(Panel(cena, title=f"[bright_green]{vida_heroi(heroi)}", subtitle=f"[{CORES['monstro']}]{vida_monstro(inimigo)}", border_style="medium_orchid", width=140))
-        time.sleep(0.7)
+        time.sleep(0.6)
         console.clear()
 
 
